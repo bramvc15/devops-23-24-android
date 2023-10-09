@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">Template Application</string>
+    <string name="app_name">Vision Oogcenter</string>
+    <string name="bottom_navigation_home">Home</string>
+    <string name="bottom_navigation_behandelingen">Behandelingen</string>
+    <string name="bottom_navigation_afspraak">Afspraak</string>
+    <string name="news_blog_title_1">Blogpost voorbeeld 1</string>
+    <string name="news_blog_title_2">Blogpost voorbeeld 2</string>
+    <string name="news_blog_description_1">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
+    <string name="news_blog_description_2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
 </resources>
