@@ -75,4 +75,11 @@ dependencies {
 
     // Jetpack Compose Integration
     implementation("androidx.navigation:navigation-compose:$nav_version")
+
+
+    //db
+    implementation("com.microsoft.sqlserver:mssql-jdbc:9.2.1.jre11")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0")
+
 }
