@@ -1,5 +1,6 @@
 package com.example.templateapplication.data
 
+import android.util.Log
 import com.example.templateapplication.models.Doctor
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -9,12 +10,18 @@ import org.json.JSONArray
 class DoctorService {
     private val client = OkHttpClient()
 
-    fun getDoctors(): List<Doctor> {
+    fun getDoctors(): List<Doctor>{
+        Log.d("jdfkgljsdklgjsdkl", "gjskldfjgklsdf")
         val request = Request.Builder()
-            .url("http://localhost:5046/api/Doctor/GetDoctors")
+            .url("http://10.0.2.2:5046/api/Doctor/GetDoctors")
             .build()
+        Log.d("jdfkgljsdklgjsdkl", "gjskldfjgklsdf")
 
-        client.newCall(request).execute().use { response ->
+        try {
+
+            //client.newCall(request).execute().use { response ->
+            val response = client.newCall(request).execute()
+
             if (!response.isSuccessful) {
                 throw Exception("Failed to fetch doctors: ${response.code}")
             }
@@ -24,8 +31,11 @@ class DoctorService {
                 val json = responseBody.string()
                 return parseDoctorListFromJson(json)
             }
+        }catch (e:Exception){
+            throw e
         }
         throw Exception("Failed to fetch doctors")
+
     }
 
     private fun parseDoctorListFromJson(json: String): List<Doctor> {

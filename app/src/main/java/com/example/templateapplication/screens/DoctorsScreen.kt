@@ -1,5 +1,6 @@
 package com.example.templateapplication.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -24,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.templateapplication.R
+import com.example.templateapplication.data.DoctorService
 import com.example.templateapplication.models.Doctor
 import com.example.templateapplication.models.DoctorViewModel
 
@@ -31,6 +33,11 @@ import com.example.templateapplication.models.DoctorViewModel
 fun DoctorsScreen() {
 
     val viewModel: DoctorViewModel = viewModel()
+
+    //val doctes = DoctorService.getDoctors()
+    LaunchedEffect(true) {
+        viewModel.fetchDoctors()
+    }
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -48,6 +55,7 @@ fun DoctorsScreen() {
         ) {
             items(viewModel.doctors) { doctor ->
                 DoctorCard(doctor = doctor)
+                Log.d("jdfkgljsdklgjsdkl", "gjskldfjgklsdf")
             }
         }
     }
