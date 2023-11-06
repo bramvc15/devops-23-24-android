@@ -19,28 +19,18 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.draw.clip
-
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.templateapplication.R
-import com.example.templateapplication.data.fetchDataFromDatabase
 import com.example.templateapplication.models.Doctor
-import com.example.templateapplication.models.DoctorsViewModel
+import com.example.templateapplication.models.DoctorViewModel
 
-/*
 @Composable
 fun DoctorsScreen() {
-    val doctors = listOf(
-        Doctor("Dr. John Doe", "Cardiologist", 1),
 
-        Doctor("Dr. David Johnson", "Pediatrician",33),
-        Doctor("Dr. John Doe", "Cardiologist", 1),
-
-        Doctor("Dr. David Johnson", "Pediatrician",33)
-        // Add more doctor entries as needed
-    )
+    val viewModel: DoctorViewModel = viewModel()
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -56,38 +46,7 @@ fun DoctorsScreen() {
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(doctors) { doctor ->
-                DoctorCard(doctor = doctor)
-            }
-        }
-    }
-}
-*/
-
-@Composable
-fun DoctorsScreen() {
-    val viewModel = viewModel<DoctorsViewModel>()
-    val doctors = viewModel.doctors
-    //val doctors = fetchDataFromDatabase()
-    LaunchedEffect(true) {
-        viewModel.fetchDoctorsData()
-    }
-
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Text(
-            text = "Doctors",
-            fontFamily = FontFamily.Serif,
-            fontSize = 22.sp,
-            modifier = Modifier.padding(16.dp)
-        )
-
-        LazyColumn(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            items(doctors) { doctor ->
+            items(viewModel.doctors) { doctor ->
                 DoctorCard(doctor = doctor)
             }
         }
@@ -142,5 +101,4 @@ fun DoctorCard(doctor: Doctor) {
     }
 }
 
-data class Doctor(val name: String, val expertise: String, val photo: Int)
 
