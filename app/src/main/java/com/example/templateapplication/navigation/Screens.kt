@@ -3,5 +3,6 @@ package com.example.templateapplication.navigation
 enum class Screens {
     HomeScreen,
     DoctorsScreen,
-    BlogsScreen
+    BlogsScreen,
+    DoctorDetailScreen
 }

@@ -1,40 +1,43 @@
 package com.example.templateapplication.screens
 
+import android.content.Intent
 import android.util.Log
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.Alignment
-import androidx.compose.material3.Text
-import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.templateapplication.R
-import com.example.templateapplication.data.DoctorService
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import com.example.templateapplication.models.Doctor
 import com.example.templateapplication.models.DoctorViewModel
+import com.example.templateapplication.navigation.Screens
 
 @Composable
-fun DoctorsScreen() {
+fun DoctorsScreen(navController : NavHostController) {
 
     val viewModel: DoctorViewModel = viewModel()
 
-    //val doctes = DoctorService.getDoctors()
     LaunchedEffect(true) {
         viewModel.fetchDoctors()
     }
@@ -54,8 +57,7 @@ fun DoctorsScreen() {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(viewModel.doctors) { doctor ->
-                DoctorCard(doctor = doctor)
-                Log.d("jdfkgljsdklgjsdkl", "gjskldfjgklsdf")
+                DoctorCard(doctor = doctor, navController = navController)
             }
         }
     }
@@ -63,7 +65,7 @@ fun DoctorsScreen() {
 
 
 @Composable
-fun DoctorCard(doctor: Doctor) {
+fun DoctorCard(doctor: Doctor, navController : NavHostController) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(
@@ -71,15 +73,21 @@ fun DoctorCard(doctor: Doctor) {
         )
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth()
+                .wrapContentSize(Alignment.Center)
+                ,
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
-                painter = painterResource(R.drawable.oog),
+
+            AsyncImage(
+                model = doctor.image,
                 contentDescription = null,
-                modifier = Modifier
-                    .size(120.dp) // Adjust the size as needed
-                    .clip(shape = CircleShape) // Optionally round the image
+                        modifier = Modifier
+                            .size(160.dp) // Adjust the size as needed
+                            .clip(shape = CircleShape) // Optionally round the image
             )
 
             Text(
@@ -100,10 +108,18 @@ fun DoctorCard(doctor: Doctor) {
             )
 
             Button(
-                onClick = { /* Handle See More button click */ },
-                modifier = Modifier.align(Alignment.End)
+                onClick = {
+                    try {
+                        navController.navigate( "${Screens.DoctorDetailScreen.name}/${doctor.id}")
+                    } catch (e: Exception) {
+
+
+                        Log.e("boom", e.message!!)
+                    }
+                },
+                modifier = Modifier.align(Alignment.CenterHorizontally)
             ) {
-                Text(text = "See More")
+                Text(text = "See More ${doctor.id}")
             }
         }
     }
