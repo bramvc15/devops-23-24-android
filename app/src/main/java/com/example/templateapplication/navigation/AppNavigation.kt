@@ -1,5 +1,6 @@
 package com.example.templateapplication.navigation
 
+import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -16,9 +17,15 @@ import com.example.templateapplication.screens.DoctorsScreen
 import com.example.templateapplication.screens.HomeScreen
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
+import com.example.templateapplication.models.DoctorViewModel
 import com.example.templateapplication.screens.BlogsScreen
+import com.example.templateapplication.screens.DoctorDetailScreen
+
 
 @Composable
 fun AppNavigation(){
@@ -64,11 +71,36 @@ fun AppNavigation(){
                 HomeScreen()
             }
             composable(route = Screens.DoctorsScreen.name) {
-                DoctorsScreen()
+                DoctorsScreen(navController)
             }
             composable(route = Screens.BlogsScreen.name) {
                 BlogsScreen()
             }
+            composable(
+                route = "${Screens.DoctorDetailScreen.name}/{id}",
+                arguments = listOf(navArgument("id") { type = NavType.LongType })
+            ) { backStackEntry ->
+                val id = backStackEntry.arguments?.getLong("id")
+                val viewModel: DoctorViewModel = viewModel()
+
+                if (id != null) {
+                    viewModel.getDoctorById(id.toInt())
+                }
+
+                val selectedDoctor = viewModel.selectedDoctor.value
+
+                if (selectedDoctor != null) {
+                    Log.d("doctor", "${selectedDoctor.name}")
+                }
+
+                if (selectedDoctor != null) {
+                    DoctorDetailScreen( selectedDoctor = selectedDoctor)
+                }
+
+
+            }
+
+
 
         }
     }

@@ -6,6 +6,9 @@ data class Doctor (
     val name : String,
     val gender : String,
     val specialization : String,
-    val infoText : String
+    val infoOver : String,
+    val infoOpleiding : String,
+    val infoPublicaties: String,
+    val image : String
 
 )
