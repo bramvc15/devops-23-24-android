@@ -28,7 +28,7 @@ fun DoctorDetailScreen(selectedDoctor: Doctor) {
     ) {
         item {
 
-            selectedDoctor.image.takeIf { it.isNotBlank() }?.let { imageUrl ->
+            selectedDoctor.image?.let { imageUrl ->
                 AsyncImage(
                     model = selectedDoctor.image,
                     contentDescription = null,

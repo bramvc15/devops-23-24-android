@@ -1,6 +1,5 @@
 package com.example.templateapplication.screens
 
-import android.content.Intent
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -42,15 +41,28 @@ fun DoctorsScreen(navController : NavHostController) {
         viewModel.fetchDoctors()
     }
 
+
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
+        Button(
+            onClick = {
+                      navController.navigate(Screens.AddDoctorScreen.name)
+            },
+            //modifier = Modifier.align(Alignment.CenterHorizontally)
+        ) {
+            Text(text = "Add More",
+
+            )
+        }
         Text(
             text = "Doctors",
             fontFamily = FontFamily.Serif,
             fontSize = 22.sp,
             modifier = Modifier.padding(16.dp)
         )
+
+
 
         LazyColumn(
             modifier = Modifier.padding(16.dp),
@@ -60,6 +72,7 @@ fun DoctorsScreen(navController : NavHostController) {
                 DoctorCard(doctor = doctor, navController = navController)
             }
         }
+
     }
 }
 
@@ -101,8 +114,10 @@ fun DoctorCard(doctor: Doctor, navController : NavHostController) {
                 fontSize = 16.sp,
                 color = Color.Gray
             )
+            Log.d("somebody", doctor.gender)
             Text(
                 text = "Expertise: ${doctor.gender}",
+
                 fontSize = 16.sp,
                 color = Color.Gray
             )
@@ -119,7 +134,7 @@ fun DoctorCard(doctor: Doctor, navController : NavHostController) {
                 },
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             ) {
-                Text(text = "See More ${doctor.id}")
+                Text(text = "See More")
             }
         }
     }

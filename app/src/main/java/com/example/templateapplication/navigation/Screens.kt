@@ -4,5 +4,6 @@ enum class Screens {
     HomeScreen,
     DoctorsScreen,
     BlogsScreen,
-    DoctorDetailScreen
+    DoctorDetailScreen,
+    AddDoctorScreen
 }

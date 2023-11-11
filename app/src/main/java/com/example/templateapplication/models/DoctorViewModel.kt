@@ -47,5 +47,13 @@ class DoctorViewModel : ViewModel() {
             }
         }
     }
+
+    fun addDoctor(doctor : Doctor){
+        try {
+            doctorService.addDoctor(doctor);
+        } catch (e:Exception){
+            e.printStackTrace()
+        }
+    }
 }
 

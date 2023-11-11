@@ -42,7 +42,7 @@ public fun BottomNavigation(modifier: Modifier = Modifier) {
             }
         )
         NavigationBarItem(
-            selected = false,
+            selected = true,
             onClick = { /*TODO*/ },
             icon = {
                 Icon(

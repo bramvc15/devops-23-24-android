@@ -23,6 +23,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.example.templateapplication.models.DoctorViewModel
+import com.example.templateapplication.screens.AddDoctorScreen
 import com.example.templateapplication.screens.BlogsScreen
 import com.example.templateapplication.screens.DoctorDetailScreen
 
@@ -75,6 +76,9 @@ fun AppNavigation(){
             }
             composable(route = Screens.BlogsScreen.name) {
                 BlogsScreen()
+            }
+            composable(route = Screens.AddDoctorScreen.name){
+                AddDoctorScreen()
             }
             composable(
                 route = "${Screens.DoctorDetailScreen.name}/{id}",
