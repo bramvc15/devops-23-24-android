@@ -1,5 +1,6 @@
 package com.example.templateapplication.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -28,7 +29,7 @@ fun DoctorDetailScreen(selectedDoctor: Doctor) {
     ) {
         item {
 
-            selectedDoctor.image?.let { imageUrl ->
+
                 AsyncImage(
                     model = selectedDoctor.image,
                     contentDescription = null,
@@ -36,7 +37,7 @@ fun DoctorDetailScreen(selectedDoctor: Doctor) {
                         .size(160.dp) // Adjust the size as needed
                         .clip(shape = CircleShape) // Optionally round the image
                 )
-
+            Log.d("deta", "${selectedDoctor.image}")
             Text(
                 text = "${selectedDoctor.name}",
                 fontFamily = FontFamily.Serif,
@@ -54,7 +55,7 @@ fun DoctorDetailScreen(selectedDoctor: Doctor) {
             Spacer(modifier = Modifier.height(16.dp))
 
 
-            }
+
         }
     }
 }

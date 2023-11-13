@@ -1,8 +1,5 @@
 package com.example.templateapplication.models
 
-import android.net.Uri
-import java.util.Base64
-
 data class Doctor(
 
     val id: Int?,
@@ -12,6 +9,7 @@ data class Doctor(
     val infoOver: String,
     val infoOpleiding: String,
     val infoPublicaties: String,
-    val image: String?
+    val image: ByteArray?,
+    val imageBase64: String?
 
 )

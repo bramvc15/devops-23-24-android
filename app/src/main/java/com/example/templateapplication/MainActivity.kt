@@ -1,5 +1,6 @@
 package com.example.templateapplication
 
+import android.content.Context
 import android.os.Bundle
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
@@ -21,12 +22,19 @@ import com.example.templateapplication.navigation.BottomNavigation
 import com.example.templateapplication.screens.HomeScreen
 import com.example.templateapplication.ui.theme.VisionApplicationTheme
 
+
+object Constants {
+    lateinit var context: Context
+     }
+
+
+
 class MainActivity : ComponentActivity() {
 
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        Constants.context = this
         val policy = ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
 

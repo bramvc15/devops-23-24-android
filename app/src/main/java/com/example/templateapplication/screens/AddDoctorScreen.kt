@@ -1,7 +1,10 @@
 package com.example.templateapplication.screens
 
 import android.net.Uri
+import android.util.Base64
 import android.util.Log
+import android.content.ContentResolver
+import android.content.Context
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -30,12 +33,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
+import com.example.templateapplication.Constants.context
 import com.example.templateapplication.R
 import com.example.templateapplication.models.Doctor
 import com.example.templateapplication.models.DoctorViewModel
+import java.io.ByteArrayOutputStream
+import java.io.IOException
+import java.io.InputStream
+
+
 
 @Composable
 fun AddDoctorScreen() {
@@ -58,34 +68,30 @@ fun AddDoctorScreen() {
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         uri?.let {
-            // Handle the selected image URI
             selectedImageUri = it
         }
     }
 
+    Log.d("uri", "${selectedImageUri}")
+    val originalString = selectedImageUri
+    val contentResolver = LocalContext.current.contentResolver
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-
-        // Instead of image field I want i profile photo circle where I can click on it so
-        // I can choose a photo from my gallery
         Box(
             modifier = Modifier
                 .size(120.dp)
                 .background(color = Color.LightGray, shape = CircleShape)
                 .clickable {
-                    // Open the image picker when the profile photo circle is clicked
                     imagePickerLauncher.launch("image/*")
                 }
         ) {
-            // Display the selected image or a placeholder if none is chosen
             val painter: Painter = if (selectedImageUri != null) {
                 rememberImagePainter(selectedImageUri)
             } else {
-                // Placeholder or default image if no image is selected
                 rememberImagePainter(R.drawable.oog)
             }
 
@@ -136,32 +142,41 @@ fun AddDoctorScreen() {
             modifier = Modifier.fillMaxWidth()
         )
 
-        // Add more fields for additional doctor details
-
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
             onClick = {
                 val imageUriString: String? = selectedImageUri?.path
+                //val test = uriToHexadecimalString(contentResolver, selectedImageUri)
+                val uriTBA = uriToByteArray(contentResolver , selectedImageUri)
+                val uriT64 = getBase64ForUri(originalString, contentResolver)
+                val uriT642 = getBase64ForUri2(originalString, contentResolver)
+                val blob = uriToBlob(originalString, contentResolver)
+
+                val uriBy = uriToBytes(context ,selectedImageUri)
+                Log.d("test", "uri to ba : ${uriTBA}")
+                Log.d("test2", "uri 64 : ${uriT64}")
+                Log.d("test3", "uri 64 2  : ${uriT642}")
+                Log.d("test4", "blob ${blob}")
+
+                val base64String = uriT642
+                val byteArray = base64ToByteArray(base64String)
+
+                Log.d("test5", "(: ${byteArray}")
+                Log.d("test6", "(: ${uriBy}")
+
                 val newDoctor = Doctor(
                     id = null,
                     name = doctorName,
                     specialization = doctorSpecialization,
                     gender = doctorGender,
                     infoOver = doctorInfoOver,
-                    image = imageUriString,
+                    image = uriT64,
                     infoOpleiding = doctorInfoOpleiding,
-                    infoPublicaties = doctorInfoPublicaties
+                    infoPublicaties = doctorInfoPublicaties,
+                    imageBase64 = "f"
                 )
-                Log.d("foto check", "de string : ${selectedImageUri}")
-                Log.d("foto check", "de string : ${imageUriString}")
-                // Pass the newDoctor to a ViewModel or a function to add it to the list of doctors
-                // viewModel.addDoctor(newDoctor)
-               // viewModel.addDoctor(newDoctor)
-
                 viewModel.addDoctor(newDoctor)
-
-
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -169,4 +184,85 @@ fun AddDoctorScreen() {
             Text(text = "Add Doctor")
         }
     }
+}
+
+//1
+fun uriToByteArray(contentResolver: ContentResolver, imageUri: Uri?): ByteArray? {
+    if (imageUri == null) {
+        return null // Handle null URI as needed
+    }
+
+    val inputStream: InputStream? = contentResolver.openInputStream(imageUri)
+    val byteArrayOutputStream = ByteArrayOutputStream()
+
+    inputStream?.use { input ->
+        val buffer = ByteArray(1024)
+        var bytesRead: Int
+        while (input.read(buffer).also { bytesRead = it } != -1) {
+            byteArrayOutputStream.write(buffer, 0, bytesRead)
+        }
+    }
+
+    return byteArrayOutputStream.toByteArray()
+}
+
+//2
+fun getBase64ForUri(uri: Uri?, contentResolver: ContentResolver): ByteArray? {
+    try {
+        val bytes = uri?.let { contentResolver.openInputStream(it)?.readBytes() }
+        return bytes
+    } catch (error: IOException) {
+        error.printStackTrace()
+        return null // Returning null in case of an error
+    }
+}
+
+//3
+fun getBase64ForUri2(uri: Uri? , contentResolver : ContentResolver): String {
+    try {
+
+        val bytes = uri?.let { contentResolver.openInputStream (it)?.readBytes () }
+        return Base64.encodeToString (bytes, Base64.DEFAULT)
+    } catch (error: IOException) {
+        error.printStackTrace ()
+    }
+    return "hellos"
+}
+
+//4
+fun uriToBlob(uri: Uri?, contentResolver: ContentResolver): ByteArray? {
+    try {
+        uri?.let { actualUri ->
+            contentResolver.openInputStream(actualUri)?.use { inputStream ->
+                return inputStream.readBytes()
+            }
+        }
+    } catch (error: IOException) {
+        error.printStackTrace()
+    }
+    return null
+}
+
+fun base64ToByteArray(base64String: String): ByteArray {
+    return Base64.decode(base64String, Base64.URL_SAFE)
+}
+
+fun uriToBytes(context: Context, imageUri: Uri?): ByteArray {
+    val contentResolver: ContentResolver = context.contentResolver
+    val outputStream = ByteArrayOutputStream()
+
+    try {
+        val inputStream: InputStream? = imageUri?.let { contentResolver.openInputStream(it) }
+        inputStream?.use { input ->
+            val buffer = ByteArray(4 * 1024) // Adjust buffer size as necessary
+            var bytesRead: Int
+            while (input.read(buffer).also { bytesRead = it } != -1) {
+                outputStream.write(buffer, 0, bytesRead)
+            }
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+
+    return outputStream.toByteArray()
 }

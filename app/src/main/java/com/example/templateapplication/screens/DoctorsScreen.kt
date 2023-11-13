@@ -25,12 +25,12 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.templateapplication.models.Doctor
 import com.example.templateapplication.models.DoctorViewModel
 import com.example.templateapplication.navigation.Screens
+import java.util.Base64
 
 @Composable
 fun DoctorsScreen(navController : NavHostController) {
@@ -40,7 +40,6 @@ fun DoctorsScreen(navController : NavHostController) {
     LaunchedEffect(true) {
         viewModel.fetchDoctors()
     }
-
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -97,12 +96,13 @@ fun DoctorCard(doctor: Doctor, navController : NavHostController) {
 
             AsyncImage(
                 model = doctor.image,
+
                 contentDescription = null,
                         modifier = Modifier
                             .size(160.dp) // Adjust the size as needed
                             .clip(shape = CircleShape) // Optionally round the image
             )
-
+            Log.d("mieuw","${doctor.image}")
             Text(
                 text = doctor.name,
                 fontSize = 20.sp,
