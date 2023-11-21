@@ -24,7 +24,6 @@ class DoctorViewModel : ViewModel() {
                 doctors.addAll(doctorList)
 
             } catch (e: Exception) {
-                // Handle the exception, e.g., show an error message
                 e.printStackTrace()
             }
         }
@@ -42,7 +41,6 @@ class DoctorViewModel : ViewModel() {
                 }
 
             } catch (e: Exception) {
-                // Handle the exception, e.g., show an error message
                 e.printStackTrace()
             }
         }

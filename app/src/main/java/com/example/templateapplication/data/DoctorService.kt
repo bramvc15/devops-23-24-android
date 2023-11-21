@@ -3,6 +3,7 @@ package com.example.templateapplication.data
 import android.util.Base64
 import android.util.Log
 import com.example.templateapplication.models.Doctor
+
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -16,14 +17,17 @@ import okhttp3.RequestBody.Companion.toRequestBody
 class DoctorService {
     private val client = OkHttpClient()
 
+    val ip = "172.18.187.200"
+    val ip2 = "192.168.100.101"
+   // val ip3 =  "192.168.20.191"
+    val ip3 = "172.18.150.40"
+
     fun getDoctorById(id : Int) : Doctor? {
         try {
             val request = Request.Builder()
-                .url("http://192.168.100.101:5046/api/Doctor/GetDoctorById?id=${id}")
+                .url("http://${ip3}:5046/api/Doctor/GetDoctorById?id=${id}")
                 .build()
 
-
-            //client.newCall(request).execute().use { response ->
             val response = client.newCall(request).execute()
 
             if (!response.isSuccessful) {
@@ -46,12 +50,9 @@ class DoctorService {
 
         val request = Request.Builder()
             //.url("http://10.0.2.2:5046/api/Doctor/GetDoctors")
-            .url("http://192.168.100.101:5046/api/Doctor/GetDoctors")
+            .url("http://${ip3}:5046/api/Doctor/GetDoctors")
             .build()
 
-
-
-            //client.newCall(request).execute().use { response ->
             val response = client.newCall(request).execute()
 
             if (!response.isSuccessful) {
@@ -77,32 +78,24 @@ class DoctorService {
             jsonObject.put("name", doctor.name)
             jsonObject.put("gender", doctor.gender)
             jsonObject.put("specialization", doctor.specialization)
-            jsonObject.put("image", null)
+            jsonObject.put("image", (doctor.image))
             jsonObject.put("infoOver", doctor.infoOver)
             jsonObject.put("infoOpleiding", doctor.infoOpleiding)
             jsonObject.put("infoPublicaties", doctor.infoPublicaties)
             jsonObject.put("imageBase64", doctor.imageBase64)
 
-
-            Log.d("json", "${doctor.image}")
-
-            val byteArray = doctor.image
-            Log.d("bitte", "${byteArray}")
-
             val requestBody = jsonObject.toString()
             val body = requestBody.toRequestBody("application/json".toMediaTypeOrNull())
 
             val request = Request.Builder()
-                .url("http://192.168.100.101:5046/api/Doctor/AddDoctor")
+                .url("http://${ip3}:5046/api/Doctor/AddDoctor")
                 .post(body)
                 .build()
 
             val response = client.newCall(request).execute()
             val responseBody = response.body
-            // Process the response body if needed
             val json = responseBody?.string()
 
-            Log.d("json", "${json}")
             if (!response.isSuccessful) {
                 throw IOException("Failed to add doctor: ${response.code}")
             }
@@ -131,12 +124,7 @@ class DoctorService {
             val infoOpleiding = doctorObject.getString("infoOpleiding")
             val infoPublicaties = doctorObject.getString("infoPublicaties")
             val imageString = doctorObject.getString("image")
-            val imageByteArray: ByteArray = Base64.decode(imageString, Base64.DEFAULT)
-
-            Log.d("imageString" , imageString)
-            Log.d("imageString2", "${imageByteArray}")
-
-            doctors.add(Doctor(id, name, gender, specialization, infoOver, infoOpleiding, infoPublicaties, imageByteArray, null))
+            doctors.add(Doctor(id, name, gender, specialization, infoOver, infoOpleiding, infoPublicaties, imageString, null))
         }
         return doctors
     }
@@ -155,12 +143,7 @@ class DoctorService {
             val imageString = doctorObject.getString("image")
             val imageByteArray: ByteArray = Base64.decode(imageString, Base64.DEFAULT)
 
-            Log.d("imageString" , imageString)
-            Log.d("imageString2", "${imageByteArray}")
-
-
-
-            return Doctor(id, name, gender, specialization, infoOver, infoOpleiding, infoPublicaties, imageByteArray, null)
+            return Doctor(id, name, gender, specialization, infoOver, infoOpleiding, infoPublicaties, imageString, null)
         } catch (e: JSONException) {
             // Handle parsing exception
             e.printStackTrace()

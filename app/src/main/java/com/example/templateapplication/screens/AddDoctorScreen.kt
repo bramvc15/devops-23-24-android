@@ -5,6 +5,7 @@ import android.util.Base64
 import android.util.Log
 import android.content.ContentResolver
 import android.content.Context
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -27,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,11 +38,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.templateapplication.Constants.context
 import com.example.templateapplication.R
 import com.example.templateapplication.models.Doctor
 import com.example.templateapplication.models.DoctorViewModel
+import com.example.templateapplication.navigation.Screens
+import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream
@@ -48,22 +53,21 @@ import java.io.InputStream
 
 
 @Composable
-fun AddDoctorScreen() {
+fun AddDoctorScreen(navController : NavController) {
     var doctorName by remember { mutableStateOf("") }
     var doctorSpecialization by remember { mutableStateOf("") }
     var doctorGender by remember { mutableStateOf("") }
     var doctorInfoOver by remember { mutableStateOf("") }
-    var doctorImage by remember { mutableStateOf("") }
     var doctorInfoOpleiding by remember { mutableStateOf("") }
     var doctorInfoPublicaties by remember { mutableStateOf("")}
-    // Add more fields as needed for the doctor details
-    var expanded by remember { mutableStateOf(false) }
-    var selectedGender by remember { mutableStateOf("Select Gender") }
-    val genderOptions = listOf("Male", "Female")
+
+    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+
+    val originalString = selectedImageUri
+    val contentResolver = LocalContext.current.contentResolver
 
     val viewModel: DoctorViewModel = viewModel()
 
-    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     val imagePickerLauncher: ActivityResultLauncher<String> = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
@@ -72,9 +76,6 @@ fun AddDoctorScreen() {
         }
     }
 
-    Log.d("uri", "${selectedImageUri}")
-    val originalString = selectedImageUri
-    val contentResolver = LocalContext.current.contentResolver
 
     Column(
         modifier = Modifier
@@ -144,39 +145,42 @@ fun AddDoctorScreen() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        val coroutineScope = rememberCoroutineScope()
+
         Button(
             onClick = {
-                val imageUriString: String? = selectedImageUri?.path
-                //val test = uriToHexadecimalString(contentResolver, selectedImageUri)
-                val uriTBA = uriToByteArray(contentResolver , selectedImageUri)
-                val uriT64 = getBase64ForUri(originalString, contentResolver)
-                val uriT642 = getBase64ForUri2(originalString, contentResolver)
-                val blob = uriToBlob(originalString, contentResolver)
+                try {
+                    val uriT642 = getBase64ForUri2(originalString, contentResolver)
 
-                val uriBy = uriToBytes(context ,selectedImageUri)
-                Log.d("test", "uri to ba : ${uriTBA}")
-                Log.d("test2", "uri 64 : ${uriT64}")
-                Log.d("test3", "uri 64 2  : ${uriT642}")
-                Log.d("test4", "blob ${blob}")
+                    val newDoctor = Doctor(
+                        id = null,
+                        name = doctorName,
+                        specialization = doctorSpecialization,
+                        gender = doctorGender,
+                        infoOver = doctorInfoOver,
+                        image = uriT642,
+                        infoOpleiding = doctorInfoOpleiding,
+                        infoPublicaties = doctorInfoPublicaties,
+                        imageBase64 = null
+                    )
 
-                val base64String = uriT642
-                val byteArray = base64ToByteArray(base64String)
+                    viewModel.addDoctor(newDoctor)
 
-                Log.d("test5", "(: ${byteArray}")
-                Log.d("test6", "(: ${uriBy}")
+                    // Use CoroutineScope to launch a coroutine
+                    coroutineScope.launch {
+                        // Show a toast message
+                        Toast.makeText(
+                            context,
+                            "Doctor added successfully",
+                            Toast.LENGTH_SHORT
+                        ).show()
 
-                val newDoctor = Doctor(
-                    id = null,
-                    name = doctorName,
-                    specialization = doctorSpecialization,
-                    gender = doctorGender,
-                    infoOver = doctorInfoOver,
-                    image = uriT64,
-                    infoOpleiding = doctorInfoOpleiding,
-                    infoPublicaties = doctorInfoPublicaties,
-                    imageBase64 = "f"
-                )
-                viewModel.addDoctor(newDoctor)
+                        // Navigate to DoctorScreen
+                        navController.navigate(Screens.DoctorsScreen.name)
+                    }
+                } catch (e: Exception) {
+
+                }
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -184,40 +188,9 @@ fun AddDoctorScreen() {
             Text(text = "Add Doctor")
         }
     }
+
 }
 
-//1
-fun uriToByteArray(contentResolver: ContentResolver, imageUri: Uri?): ByteArray? {
-    if (imageUri == null) {
-        return null // Handle null URI as needed
-    }
-
-    val inputStream: InputStream? = contentResolver.openInputStream(imageUri)
-    val byteArrayOutputStream = ByteArrayOutputStream()
-
-    inputStream?.use { input ->
-        val buffer = ByteArray(1024)
-        var bytesRead: Int
-        while (input.read(buffer).also { bytesRead = it } != -1) {
-            byteArrayOutputStream.write(buffer, 0, bytesRead)
-        }
-    }
-
-    return byteArrayOutputStream.toByteArray()
-}
-
-//2
-fun getBase64ForUri(uri: Uri?, contentResolver: ContentResolver): ByteArray? {
-    try {
-        val bytes = uri?.let { contentResolver.openInputStream(it)?.readBytes() }
-        return bytes
-    } catch (error: IOException) {
-        error.printStackTrace()
-        return null // Returning null in case of an error
-    }
-}
-
-//3
 fun getBase64ForUri2(uri: Uri? , contentResolver : ContentResolver): String {
     try {
 
@@ -225,44 +198,9 @@ fun getBase64ForUri2(uri: Uri? , contentResolver : ContentResolver): String {
         return Base64.encodeToString (bytes, Base64.DEFAULT)
     } catch (error: IOException) {
         error.printStackTrace ()
+        Toast.makeText(context, "Error while processing image", Toast.LENGTH_SHORT).show()
     }
-    return "hellos"
+    return ""
 }
 
-//4
-fun uriToBlob(uri: Uri?, contentResolver: ContentResolver): ByteArray? {
-    try {
-        uri?.let { actualUri ->
-            contentResolver.openInputStream(actualUri)?.use { inputStream ->
-                return inputStream.readBytes()
-            }
-        }
-    } catch (error: IOException) {
-        error.printStackTrace()
-    }
-    return null
-}
 
-fun base64ToByteArray(base64String: String): ByteArray {
-    return Base64.decode(base64String, Base64.URL_SAFE)
-}
-
-fun uriToBytes(context: Context, imageUri: Uri?): ByteArray {
-    val contentResolver: ContentResolver = context.contentResolver
-    val outputStream = ByteArrayOutputStream()
-
-    try {
-        val inputStream: InputStream? = imageUri?.let { contentResolver.openInputStream(it) }
-        inputStream?.use { input ->
-            val buffer = ByteArray(4 * 1024) // Adjust buffer size as necessary
-            var bytesRead: Int
-            while (input.read(buffer).also { bytesRead = it } != -1) {
-                outputStream.write(buffer, 0, bytesRead)
-            }
-        }
-    } catch (e: Exception) {
-        e.printStackTrace()
-    }
-
-    return outputStream.toByteArray()
-}

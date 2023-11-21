@@ -9,7 +9,7 @@ data class Doctor(
     val infoOver: String,
     val infoOpleiding: String,
     val infoPublicaties: String,
-    val image: ByteArray?,
+    val image: String?,
     val imageBase64: String?
 
 )

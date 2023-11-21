@@ -2,7 +2,12 @@ package com.example.templateapplication.navigation
 
 import android.util.Log
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -17,11 +22,13 @@ import com.example.templateapplication.screens.DoctorsScreen
 import com.example.templateapplication.screens.HomeScreen
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.example.templateapplication.R
 import com.example.templateapplication.models.DoctorViewModel
 import com.example.templateapplication.screens.AddDoctorScreen
 import com.example.templateapplication.screens.BlogsScreen
@@ -47,6 +54,7 @@ fun AppNavigation(){
                         onClick = { navController.navigate(navItem.route){
                                     popUpTo(navController.graph.findStartDestination().id){
                                         saveState = true
+                                        inclusive = true
                                     }
                                     launchSingleTop = true
                                     restoreState = true
@@ -60,7 +68,9 @@ fun AppNavigation(){
                     )
                 }
             }
+           // BottomNavigation()
         }
+
     ) {paddingValues ->
         NavHost (
             navController = navController,
@@ -78,7 +88,7 @@ fun AppNavigation(){
                 BlogsScreen()
             }
             composable(route = Screens.AddDoctorScreen.name){
-                AddDoctorScreen()
+                AddDoctorScreen(navController)
             }
             composable(
                 route = "${Screens.DoctorDetailScreen.name}/{id}",
@@ -109,4 +119,7 @@ fun AppNavigation(){
         }
     }
 
+
 }
+
+

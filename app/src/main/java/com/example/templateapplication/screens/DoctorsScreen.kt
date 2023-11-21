@@ -1,6 +1,9 @@
 package com.example.templateapplication.screens
 
+import android.graphics.BitmapFactory
+import android.util.Base64
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -19,18 +21,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import coil.compose.AsyncImage
 import com.example.templateapplication.models.Doctor
 import com.example.templateapplication.models.DoctorViewModel
 import com.example.templateapplication.navigation.Screens
-import java.util.Base64
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.asImageBitmap
+
 
 @Composable
 fun DoctorsScreen(navController : NavHostController) {
@@ -76,8 +80,11 @@ fun DoctorsScreen(navController : NavHostController) {
 }
 
 
+
+
 @Composable
 fun DoctorCard(doctor: Doctor, navController : NavHostController) {
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(
@@ -94,15 +101,26 @@ fun DoctorCard(doctor: Doctor, navController : NavHostController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            AsyncImage(
-                model = doctor.image,
+           /* AsyncImage(
+                model = "data:image/png;base64,${doctor.image}",
 
                 contentDescription = null,
                         modifier = Modifier
-                            .size(160.dp) // Adjust the size as needed
-                            .clip(shape = CircleShape) // Optionally round the image
+                            .size(160.dp)
+                            .clip(shape = CircleShape)
+            )*/
+
+            val base64String = doctor.image
+            val byteArray = Base64.decode(base64String, Base64.DEFAULT)
+            val bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+
+            Image(bitmap = bitmap.asImageBitmap(),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(160.dp)
+                    .clip(shape = CircleShape)
             )
-            Log.d("mieuw","${doctor.image}")
+
             Text(
                 text = doctor.name,
                 fontSize = 20.sp,
@@ -128,8 +146,6 @@ fun DoctorCard(doctor: Doctor, navController : NavHostController) {
                         navController.navigate( "${Screens.DoctorDetailScreen.name}/${doctor.id}")
                     } catch (e: Exception) {
 
-
-                        Log.e("boom", e.message!!)
                     }
                 },
                 modifier = Modifier.align(Alignment.CenterHorizontally)

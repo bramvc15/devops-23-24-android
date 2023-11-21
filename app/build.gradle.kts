@@ -92,4 +92,13 @@ dependencies {
 
     implementation("io.coil-kt:coil-compose:2.5.0")
 
+
+    implementation("androidx.core:core-ktx:1.6.0")
+    implementation("androidx.compose.foundation:foundation:1.0.5")
+    implementation("androidx.compose.ui:ui:1.0.5")
+    implementation("androidx.compose.ui:ui-tooling:1.0.5")
+    implementation("androidx.compose.material:material:1.0.5")
+    implementation("androidx.activity:activity-compose:1.4.0")
+
+
 }

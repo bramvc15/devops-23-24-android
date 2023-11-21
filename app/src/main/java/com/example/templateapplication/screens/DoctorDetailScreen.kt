@@ -1,5 +1,7 @@
 package com.example.templateapplication.screens
 
+import android.graphics.BitmapFactory
+import android.util.Base64
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -11,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
@@ -30,14 +33,17 @@ fun DoctorDetailScreen(selectedDoctor: Doctor) {
         item {
 
 
-                AsyncImage(
-                    model = selectedDoctor.image,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(160.dp) // Adjust the size as needed
-                        .clip(shape = CircleShape) // Optionally round the image
-                )
-            Log.d("deta", "${selectedDoctor.image}")
+            val base64String = selectedDoctor.image
+            val byteArray = Base64.decode(base64String, Base64.DEFAULT)
+            val bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+
+            Image(bitmap = bitmap.asImageBitmap(),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(160.dp)
+                    .clip(shape = CircleShape)
+            )
+
             Text(
                 text = "${selectedDoctor.name}",
                 fontFamily = FontFamily.Serif,

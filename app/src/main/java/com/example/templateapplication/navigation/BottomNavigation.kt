@@ -20,7 +20,7 @@ import com.example.templateapplication.navigation.Screens
 
 
 @Composable
-public fun BottomNavigation(modifier: Modifier = Modifier) {
+fun BottomNavigation(modifier: Modifier = Modifier) {
     val navController : NavHostController = rememberNavController()
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
@@ -52,25 +52,11 @@ public fun BottomNavigation(modifier: Modifier = Modifier) {
             },
             label = {
                 Text(
-                    text = stringResource(R.string.bottom_navigation_behandelingen)
+                    text = stringResource(R.string.bottom_navigation_home)
                 )
             }
         )
-        NavigationBarItem(
-            selected = false,
-            onClick = { /*TODO*/ },
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.DateRange,
-                    contentDescription = null
-                )
-            },
-            label = {
-                Text(
-                    text = stringResource(R.string.bottom_navigation_afspraak)
-                )
-            }
-        )
+
         NavigationBarItem(
             selected = false,
             onClick = { navController.navigate(Screens.DoctorsScreen.name) },
