@@ -45,7 +45,7 @@ fun generateFlights(): List<Flight> = buildList {
                 date.atTime(13, 20),
                 Airport("Ibadan", "IBA"),
                 Airport("Benin", "BNI"),
-                R.color.white,
+                R.color.purple_700,
             ),
         )
         add(
@@ -53,7 +53,83 @@ fun generateFlights(): List<Flight> = buildList {
                 date.atTime(17, 40),
                 Airport("Sokoto", "SKO"),
                 Airport("Ilorin", "ILR"),
-                R.color.teal_200,
+                R.color.black,
+            ),
+        )
+    }
+    currentMonth.atDay(3).also { date ->
+        add(
+            Flight(
+                date.atTime(19, 0),
+                Airport("Makurdi", "MDI"),
+                Airport("Calabar", "CBQ"),
+                R.color.black,
+            ),
+        )
+    }
+
+    currentMonth.atDay(3).also { date ->
+        add(
+            Flight(
+                date.atTime(19, 0),
+                Airport("Makurdi", "MDI"),
+                Airport("Calabar", "CBQ"),
+                R.color.black,
+            ),
+        )
+    }
+
+    currentMonth.atDay(3).also { date ->
+        add(
+            Flight(
+                date.atTime(19, 15),
+                Airport("Makurdi", "MDI"),
+                Airport("Calabar", "CBQ"),
+                R.color.black,
+            ),
+        )
+    }
+
+    currentMonth.atDay(3).also { date ->
+        add(
+            Flight(
+                date.atTime(19, 30),
+                Airport("Makurdi", "MDI"),
+                Airport("Calabar", "CBQ"),
+                R.color.black,
+            ),
+        )
+    }
+
+    currentMonth.atDay(3).also { date ->
+        add(
+            Flight(
+                date.atTime(19, 40),
+                Airport("Makurdi", "MDI"),
+                Airport("Calabar", "CBQ"),
+                R.color.black,
+            ),
+        )
+    }
+
+    currentMonth.atDay(3).also { date ->
+        add(
+            Flight(
+                date.atTime(19, 45),
+                Airport("Makurdi", "MDI"),
+                Airport("Calabar", "CBQ"),
+                R.color.black,
+            ),
+        )
+    }
+
+    currentMonth.atDay(3).also { date ->
+        add(
+            Flight(
+                date.atTime(19, 50),
+                Airport("Makurdi", "MDI"),
+                Airport("Calabar", "CBQ"),
+                R.color.black,
             ),
         )
     }
@@ -64,7 +140,7 @@ fun generateFlights(): List<Flight> = buildList {
                 date.atTime(20, 0),
                 Airport("Makurdi", "MDI"),
                 Airport("Calabar", "CBQ"),
-                R.color.teal_700,
+                R.color.black,
             ),
         )
     }
@@ -75,7 +151,7 @@ fun generateFlights(): List<Flight> = buildList {
                 date.atTime(18, 15),
                 Airport("Kaduna", "KAD"),
                 Airport("Jos", "JOS"),
-                R.color.teal_200,
+                R.color.purple_700,
             ),
         )
     }
@@ -94,7 +170,7 @@ fun generateFlights(): List<Flight> = buildList {
                 date.atTime(10, 50),
                 Airport("Minna", "MXJ"),
                 Airport("Zaria", "ZAR"),
-                R.color.teal_200,
+                R.color.purple_200,
             ),
         )
     }
@@ -105,7 +181,7 @@ fun generateFlights(): List<Flight> = buildList {
                 date.atTime(20, 15),
                 Airport("Asaba", "ABB"),
                 Airport("Port Harcourt", "PHC"),
-                R.color.white,
+                R.color.purple_200,
             ),
         )
     }

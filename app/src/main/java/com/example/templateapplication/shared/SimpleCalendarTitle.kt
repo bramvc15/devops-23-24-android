@@ -40,7 +40,7 @@ fun SimpleCalendarTitle(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         CalendarNavigationIcon(
-            icon = painterResource(id = R.drawable.oog),
+            icon = painterResource(id = R.drawable.ic_launcher_foreground),
             contentDescription = "Previous",
             onClick = goToPrevious,
         )
@@ -54,7 +54,7 @@ fun SimpleCalendarTitle(
             fontWeight = FontWeight.Medium,
         )
         CalendarNavigationIcon(
-            icon = painterResource(id = R.drawable.oog),
+            icon = painterResource(id = R.drawable.ic_launcher_foreground),
             contentDescription = "Next",
             onClick = goToNext,
         )
