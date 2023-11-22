@@ -1,17 +1,15 @@
 package com.example.templateapplication.data
 
 import android.util.Base64
-import android.util.Log
 import com.example.templateapplication.models.Doctor
-
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
-import okhttp3.RequestBody.Companion.toRequestBody
 
 
 class DoctorService {
@@ -109,8 +107,6 @@ class DoctorService {
         throw Exception("Failed to add doctor")
     }
 
-
-
     private fun parseDoctorListFromJson(json: String): List<Doctor> {
         val doctors = mutableListOf<Doctor>()
         val jsonArray = JSONArray(json)
@@ -128,7 +124,6 @@ class DoctorService {
         }
         return doctors
     }
-
 
     private fun parseDoctorFromJson(json: String): Doctor? {
         try {

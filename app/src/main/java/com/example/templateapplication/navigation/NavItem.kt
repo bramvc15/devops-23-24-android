@@ -1,11 +1,10 @@
 package com.example.templateapplication.navigation
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.ui.graphics.vector.ImageVector
 data class NavItem(
     val label: String,
     val icon: ImageVector,
@@ -27,5 +26,10 @@ val listOfNavItems : List<NavItem> = listOf(
         label = "Blogs",
         icon = Icons.Default.Person,
         route = Screens.BlogsScreen.name
-)
+    ),
+    NavItem(
+        label = "Calender",
+        icon = Icons.Default.Close,
+        route = Screens.CalenderScreen.name
+    )
 )
