@@ -11,7 +11,6 @@ private typealias Airport = Flight.Airport
 data class Flight(
     val time: LocalDateTime,
     val departure: Airport,
-    val destination: Airport,
     @ColorRes val color: Int,
 ) {
     data class Airport(val city: String, val code: String)
@@ -25,7 +24,6 @@ fun generateFlights(): List<Flight> = buildList {
             Flight(
                 date.atTime(14, 0),
                 Airport("Lagos", "LOS"),
-                Airport("Abuja", "ABV"),
                 R.color.black,
             ),
         )
@@ -33,7 +31,6 @@ fun generateFlights(): List<Flight> = buildList {
             Flight(
                 date.atTime(21, 30),
                 Airport("Enugu", "ENU"),
-                Airport("Owerri", "QOW"),
                 R.color.purple_200,
             ),
         )
@@ -44,7 +41,6 @@ fun generateFlights(): List<Flight> = buildList {
             Flight(
                 date.atTime(13, 20),
                 Airport("Ibadan", "IBA"),
-                Airport("Benin", "BNI"),
                 R.color.purple_700,
             ),
         )
@@ -52,7 +48,6 @@ fun generateFlights(): List<Flight> = buildList {
             Flight(
                 date.atTime(17, 40),
                 Airport("Sokoto", "SKO"),
-                Airport("Ilorin", "ILR"),
                 R.color.black,
             ),
         )
@@ -62,7 +57,6 @@ fun generateFlights(): List<Flight> = buildList {
             Flight(
                 date.atTime(19, 0),
                 Airport("Makurdi", "MDI"),
-                Airport("Calabar", "CBQ"),
                 R.color.black,
             ),
         )
@@ -73,7 +67,6 @@ fun generateFlights(): List<Flight> = buildList {
             Flight(
                 date.atTime(19, 0),
                 Airport("Makurdi", "MDI"),
-                Airport("Calabar", "CBQ"),
                 R.color.black,
             ),
         )
@@ -84,7 +77,6 @@ fun generateFlights(): List<Flight> = buildList {
             Flight(
                 date.atTime(19, 15),
                 Airport("Makurdi", "MDI"),
-                Airport("Calabar", "CBQ"),
                 R.color.black,
             ),
         )
@@ -95,7 +87,6 @@ fun generateFlights(): List<Flight> = buildList {
             Flight(
                 date.atTime(19, 30),
                 Airport("Makurdi", "MDI"),
-                Airport("Calabar", "CBQ"),
                 R.color.black,
             ),
         )
@@ -106,7 +97,6 @@ fun generateFlights(): List<Flight> = buildList {
             Flight(
                 date.atTime(19, 40),
                 Airport("Makurdi", "MDI"),
-                Airport("Calabar", "CBQ"),
                 R.color.black,
             ),
         )
@@ -117,7 +107,6 @@ fun generateFlights(): List<Flight> = buildList {
             Flight(
                 date.atTime(19, 45),
                 Airport("Makurdi", "MDI"),
-                Airport("Calabar", "CBQ"),
                 R.color.black,
             ),
         )
@@ -128,7 +117,6 @@ fun generateFlights(): List<Flight> = buildList {
             Flight(
                 date.atTime(19, 50),
                 Airport("Makurdi", "MDI"),
-                Airport("Calabar", "CBQ"),
                 R.color.black,
             ),
         )
@@ -139,7 +127,6 @@ fun generateFlights(): List<Flight> = buildList {
             Flight(
                 date.atTime(20, 0),
                 Airport("Makurdi", "MDI"),
-                Airport("Calabar", "CBQ"),
                 R.color.black,
             ),
         )
@@ -150,7 +137,6 @@ fun generateFlights(): List<Flight> = buildList {
             Flight(
                 date.atTime(18, 15),
                 Airport("Kaduna", "KAD"),
-                Airport("Jos", "JOS"),
                 R.color.purple_700,
             ),
         )
@@ -161,7 +147,6 @@ fun generateFlights(): List<Flight> = buildList {
             Flight(
                 date.atTime(7, 30),
                 Airport("Kano", "KAN"),
-                Airport("Akure", "AKR"),
                 R.color.black,
             ),
         )
@@ -169,7 +154,6 @@ fun generateFlights(): List<Flight> = buildList {
             Flight(
                 date.atTime(10, 50),
                 Airport("Minna", "MXJ"),
-                Airport("Zaria", "ZAR"),
                 R.color.purple_200,
             ),
         )
@@ -180,7 +164,6 @@ fun generateFlights(): List<Flight> = buildList {
             Flight(
                 date.atTime(20, 15),
                 Airport("Asaba", "ABB"),
-                Airport("Port Harcourt", "PHC"),
                 R.color.purple_200,
             ),
         )

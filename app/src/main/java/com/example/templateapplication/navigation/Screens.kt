@@ -6,5 +6,6 @@ enum class Screens {
     BlogsScreen,
     DoctorDetailScreen,
     AddDoctorScreen,
-    CalenderScreen
+    CalenderScreen,
+    Calender
 }

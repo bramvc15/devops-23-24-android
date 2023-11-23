@@ -1,7 +1,6 @@
 package com.example.templateapplication.screens
 
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -39,7 +38,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -70,9 +68,9 @@ private val flights = generateFlights().groupBy { it.time.toLocalDate() }
 private val pageBackgroundColor: Color @Composable get() = colorResource(R.color.teal_200)
 private val itemBackgroundColor: Color @Composable get() = colorResource(R.color.white)
 private val toolbarColor: Color @Composable get() = colorResource(R.color.black)
-private val selectedItemColor: Color @Composable get() = colorResource(R.color.purple_700)
+private val selectedItemColor: Color @Composable get() = colorResource(R.color.lightgray)
 private val inActiveTextColor: Color @Composable get() = colorResource(R.color.purple_200)
-
+private val darkerGray: Color @Composable get() = colorResource(R.color.darkergray)
 @Composable
 fun CalenderScreen() {
     val currentMonth = remember { YearMonth.now() }
@@ -91,7 +89,7 @@ fun CalenderScreen() {
         modifier = Modifier
             .fillMaxSize()
             //.background(pageBackgroundColor),
-            .background(Color.LightGray)
+            .background(Color.Black)
     ) {
         val state = rememberCalendarState(
             startMonth = startMonth,
@@ -111,7 +109,7 @@ fun CalenderScreen() {
         CompositionLocalProvider(LocalContentColor provides darkColors().onSurface) {
             SimpleCalendarTitle(
                 modifier = Modifier
-                    .background(toolbarColor)
+                    .background(darkerGray)
                     .padding(horizontal = 8.dp, vertical = 12.dp),
                 currentMonth = visibleMonth.yearMonth,
                 goToPrevious = {
@@ -170,23 +168,23 @@ private fun Day(
 ) {
     Box(
         modifier = Modifier
-            .aspectRatio(1f) // This is important for square-sizing!
+            .aspectRatio(1f)
             .border(
                 width = if (isSelected) 1.dp else 0.dp,
-                color = if (isSelected) selectedItemColor else Color.Gray,
+                color = if (isSelected) selectedItemColor else Color.Black,
             )
             .padding(1.dp)
-            .background(color = itemBackgroundColor)
-           // .background(color = Color.Gray)
-            // Disable clicks on inDates/outDates
+            .background(color = darkerGray )
+
+
             .clickable(
                 enabled = day.position == DayPosition.MonthDate,
                 onClick = { onClick(day) },
             ),
     ) {
         val textColor = when (day.position) {
-            DayPosition.MonthDate -> Color.Unspecified
-            DayPosition.InDate, DayPosition.OutDate -> inActiveTextColor
+            DayPosition.MonthDate -> Color.White
+            DayPosition.InDate, DayPosition.OutDate -> Color.Gray
         }
         Text(
             modifier = Modifier
@@ -227,7 +225,7 @@ private fun MonthHeader(
                 modifier = Modifier.weight(1f),
                 textAlign = TextAlign.Center,
                 fontSize = 12.sp,
-                color = Color.Black,
+                color = Color.White,
                 text = dayOfWeek.displayText(uppercase = true),
                 fontWeight = FontWeight.Black,
             )
@@ -259,22 +257,14 @@ private fun LazyItemScope.FlightInformation(flight: Flight) {
         }
         Box(
             modifier = Modifier
-                .background(color = itemBackgroundColor)
+                .background(color = darkerGray)
                 .weight(1f)
                 .fillMaxHeight(),
         ) {
             AirportInformation(flight.departure, isDeparture = true)
         }
-        Box(
-            modifier = Modifier
-                .background(color = itemBackgroundColor)
-                .weight(1f)
-                .fillMaxHeight(),
-        ) {
-            AirportInformation(flight.destination, isDeparture = false)
-        }
     }
-    Divider(color = pageBackgroundColor, thickness = 2.dp)
+    //Divider(color = pageBackgroundColor, thickness = 2.dp)
 }
 // deze functie is voor de velden op de dag the bekijken
 @Composable
@@ -284,11 +274,6 @@ private fun AirportInformation(airport: Flight.Airport, isDeparture: Boolean) {
             .fillMaxWidth()
             .fillMaxHeight(),
     ) {
-        val resource = if (isDeparture) {
-            R.drawable.oog
-        } else {
-            R.drawable.oog
-        }
         Box(
             modifier = Modifier
                 .weight(0.3f)
@@ -296,7 +281,7 @@ private fun AirportInformation(airport: Flight.Airport, isDeparture: Boolean) {
                 .fillMaxHeight(),
             contentAlignment = Alignment.CenterEnd,
         ) {
-           Image(painter = painterResource(resource), contentDescription = null)
+           //Image(painter = painterResource(), contentDescription = null)
         }
         Column(
             modifier = Modifier

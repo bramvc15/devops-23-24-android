@@ -23,6 +23,7 @@ import androidx.navigation.navArgument
 import com.example.templateapplication.models.DoctorViewModel
 import com.example.templateapplication.screens.AddDoctorScreen
 import com.example.templateapplication.screens.BlogsScreen
+import com.example.templateapplication.screens.Calendar
 import com.example.templateapplication.screens.CalenderScreen
 import com.example.templateapplication.screens.DoctorDetailScreen
 import com.example.templateapplication.screens.DoctorsScreen
@@ -85,6 +86,10 @@ fun AppNavigation(){
             }
             composable(route = Screens.CalenderScreen.name){
                 CalenderScreen()
+            }
+
+            composable(route = Screens.Calender.name){
+                Calendar()
             }
             composable(
                 route = "${Screens.DoctorDetailScreen.name}/{id}",

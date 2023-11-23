@@ -23,9 +23,9 @@ val listOfNavItems : List<NavItem> = listOf(
         route = Screens.DoctorsScreen.name
     ),
     NavItem(
-        label = "Blogs",
+        label = "CAl2",
         icon = Icons.Default.Person,
-        route = Screens.BlogsScreen.name
+        route = Screens.Calender.name
     ),
     NavItem(
         label = "Calender",
