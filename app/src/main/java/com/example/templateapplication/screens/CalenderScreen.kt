@@ -1,6 +1,5 @@
 package com.example.templateapplication.screens
 
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -62,6 +61,7 @@ import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.YearMonth
 import java.util.Locale
+
 
 private val flights = generateFlights().groupBy { it.time.toLocalDate() }
 
@@ -266,7 +266,6 @@ private fun LazyItemScope.FlightInformation(flight: Flight) {
     }
     //Divider(color = pageBackgroundColor, thickness = 2.dp)
 }
-// deze functie is voor de velden op de dag the bekijken
 @Composable
 private fun AirportInformation(airport: Flight.Airport, isDeparture: Boolean) {
     Row(
