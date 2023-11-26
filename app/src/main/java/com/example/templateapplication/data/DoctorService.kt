@@ -1,17 +1,6 @@
 package com.example.templateapplication.data
 
-import android.util.Base64
-import com.example.templateapplication.models.Doctor
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody.Companion.toRequestBody
-import org.json.JSONArray
-import org.json.JSONException
-import org.json.JSONObject
-import java.io.IOException
-
-
+/*
 class DoctorService {
     private val client = OkHttpClient()
 
@@ -80,7 +69,7 @@ class DoctorService {
             jsonObject.put("infoOver", doctor.infoOver)
             jsonObject.put("infoOpleiding", doctor.infoOpleiding)
             jsonObject.put("infoPublicaties", doctor.infoPublicaties)
-            jsonObject.put("imageBase64", doctor.imageBase64)
+
 
             val requestBody = jsonObject.toString()
             val body = requestBody.toRequestBody("application/json".toMediaTypeOrNull())
@@ -120,7 +109,8 @@ class DoctorService {
             val infoOpleiding = doctorObject.getString("infoOpleiding")
             val infoPublicaties = doctorObject.getString("infoPublicaties")
             val imageString = doctorObject.getString("image")
-            doctors.add(Doctor(id, name, gender, specialization, infoOver, infoOpleiding, infoPublicaties, imageString, null))
+            val password = doctorObject.getString("password")
+            doctors.add(Doctor(id, name, gender, specialization, infoOver, infoOpleiding, infoPublicaties, imageString, password))
         }
         return doctors
     }
@@ -136,13 +126,13 @@ class DoctorService {
             val infoOpleiding = doctorObject.getString("infoOpleiding")
             val infoPublicaties = doctorObject.getString("infoPublicaties")
             val imageString = doctorObject.getString("image")
-            val imageByteArray: ByteArray = Base64.decode(imageString, Base64.DEFAULT)
+            val password = doctorObject.getString("password")
 
-            return Doctor(id, name, gender, specialization, infoOver, infoOpleiding, infoPublicaties, imageString, null)
+            return Doctor(id, name, gender, specialization, infoOver, infoOpleiding, infoPublicaties, password)
         } catch (e: JSONException) {
             // Handle parsing exception
             e.printStackTrace()
         }
         return null
     }
-}
+}*/

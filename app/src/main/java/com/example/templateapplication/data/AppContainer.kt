@@ -10,10 +10,10 @@ interface AppContainer {
     val doctorsRepository: DoctorsRepository
 }
 
-//container that takes care of dependencies
+
 class DefaultAppContainer(): AppContainer{
 
-    private val baseUrl = "http://10.0.2.2:3000"
+    private val baseUrl = "http://192.168.100.101:5046"
     private val retrofit = Retrofit.Builder()
         .addConverterFactory(
             Json.asConverterFactory("application/json".toMediaType())

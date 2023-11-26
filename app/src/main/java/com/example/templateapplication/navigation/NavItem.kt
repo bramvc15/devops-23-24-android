@@ -15,21 +15,28 @@ val listOfNavItems : List<NavItem> = listOf(
     NavItem(
         label = "Home",
         icon = Icons.Default.Home,
-        route = Screens.HomeScreen.name
-    ),
-    NavItem(
-        label = "Doctors",
-        icon = Icons.Default.Person,
-        route = Screens.DoctorsScreen.name
+        route = Screens.NoteScreen.name
     ),
     NavItem(
         label = "CAl2",
         icon = Icons.Default.Person,
-        route = Screens.Calender.name
+        route = Screens.CalenderWeekScreen.name
     ),
     NavItem(
         label = "Calender",
         icon = Icons.Default.Close,
-        route = Screens.CalenderScreen.name
+        route = Screens.CalenderMonthScreen.name
+    ),
+    NavItem(
+        label = "test",
+        icon = Icons.Default.Close,
+        route = Screens.DoctorSelectionScreen.name
+    ),
+    NavItem(
+        label = "test2",
+        icon = Icons.Default.Close,
+        route = Screens.PasswordScreen.name
     )
+
+
 )

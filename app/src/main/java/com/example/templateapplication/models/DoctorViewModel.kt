@@ -1,57 +1,26 @@
 package com.example.templateapplication.models
 
-import android.util.Log
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
-import com.example.templateapplication.data.DoctorService
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.templateapplication.MainActivity
+import com.example.templateapplication.data.DoctorsRepository
 
 
-class DoctorViewModel : ViewModel() {
-    val doctors = mutableStateListOf<Doctor>()
-    val selectedDoctor = mutableStateOf<Doctor?>(null)
+class DoctorViewModel(private val doctorsRepository: DoctorsRepository) : ViewModel()  {
 
-    private val doctorService = DoctorService()
-    fun fetchDoctors() {
-
-        viewModelScope.launch {
-            try {
-
-                val doctorList = doctorService.getDoctors()
-                doctors.clear()
-                doctors.addAll(doctorList)
-
-            } catch (e: Exception) {
-                e.printStackTrace()
+    companion object {
+        val Factory : ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val application = (this[APPLICATION_KEY] as MainActivity)
+                val doctorsRepository = application.container.doctorsRepository
+                DoctorViewModel(doctorsRepository = doctorsRepository)
             }
         }
     }
 
-    fun getDoctorById(id : Int){
-        viewModelScope.launch {
-            try {
 
-                val doctor = doctorService.getDoctorById(id)
-
-
-                if (doctor != null) {
-                    selectedDoctor.value = doctor
-                }
-
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-    }
-
-    fun addDoctor(doctor : Doctor){
-        try {
-            doctorService.addDoctor(doctor);
-        } catch (e:Exception){
-            e.printStackTrace()
-        }
-    }
 }
 

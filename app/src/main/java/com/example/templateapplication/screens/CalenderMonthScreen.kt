@@ -42,12 +42,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.templateapplication.R
-import com.example.templateapplication.shared.Flight
+import com.example.templateapplication.shared.Appointment
 import com.example.templateapplication.shared.SimpleCalendarTitle
 import com.example.templateapplication.shared.StatusBarColorUpdateEffect
+import com.example.templateapplication.shared.appointmentDateTimeFormatter
 import com.example.templateapplication.shared.displayText
-import com.example.templateapplication.shared.flightDateTimeFormatter
-import com.example.templateapplication.shared.generateFlights
+import com.example.templateapplication.shared.generateAppointments
 import com.example.templateapplication.shared.rememberFirstCompletelyVisibleMonth
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
@@ -62,34 +62,35 @@ import java.time.DayOfWeek
 import java.time.YearMonth
 import java.util.Locale
 
+private val appointments = generateAppointments().groupBy { it.time.toLocalDate() }
+private val toolbarColor: Color @Composable get() = colorResource(R.color.colorPrimary)
+private val topAppColor: Color @Composable get() = colorResource(R.color.colorPrimary)
+private val backgroundColor: Color @Composable get() = colorResource(R.color.white)
+private val daysOfweekFontColor: Color @Composable get() = colorResource(R.color.black)
+private val daysColor: Color @Composable get() = colorResource(R.color.lightgray)
+private val selectedItemColor: Color @Composable get() = colorResource(R.color.purple_200)
+private val appointmentField: Color @Composable get() = colorResource(R.color.white7)
+private val informationColor: Color @Composable get() = colorResource(R.color.black)
 
-private val flights = generateFlights().groupBy { it.time.toLocalDate() }
 
-private val pageBackgroundColor: Color @Composable get() = colorResource(R.color.teal_200)
-private val itemBackgroundColor: Color @Composable get() = colorResource(R.color.white)
-private val toolbarColor: Color @Composable get() = colorResource(R.color.black)
-private val selectedItemColor: Color @Composable get() = colorResource(R.color.lightgray)
-private val inActiveTextColor: Color @Composable get() = colorResource(R.color.purple_200)
-private val darkerGray: Color @Composable get() = colorResource(R.color.darkergray)
 @Composable
-fun CalenderScreen() {
+fun CalenderMonthScreen() {
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth.minusMonths(500) }
     val endMonth = remember { currentMonth.plusMonths(500) }
     var selection by remember { mutableStateOf<CalendarDay?>(null) }
     val daysOfWeek = remember { daysOfWeek() }
-    val flightsInSelectedDate = remember {
+    val appointmentsInSelectedDate = remember {
         derivedStateOf {
             val date = selection?.date
-            if (date == null) emptyList() else flights[date].orEmpty()
+            if (date == null) emptyList() else appointments[date].orEmpty()
         }
     }
-    StatusBarColorUpdateEffect(toolbarColor)
+    StatusBarColorUpdateEffect(topAppColor)
     Column(
         modifier = Modifier
             .fillMaxSize()
-            //.background(pageBackgroundColor),
-            .background(Color.Black)
+            .background(backgroundColor)
     ) {
         val state = rememberCalendarState(
             startMonth = startMonth,
@@ -101,15 +102,13 @@ fun CalenderScreen() {
         val coroutineScope = rememberCoroutineScope()
         val visibleMonth = rememberFirstCompletelyVisibleMonth(state)
         LaunchedEffect(visibleMonth) {
-            // Clear selection if we scroll to a new month.
             selection = null
         }
 
-        // Draw light content on dark background.
         CompositionLocalProvider(LocalContentColor provides darkColors().onSurface) {
             SimpleCalendarTitle(
                 modifier = Modifier
-                    .background(darkerGray)
+                    .background(toolbarColor)
                     .padding(horizontal = 8.dp, vertical = 12.dp),
                 currentMonth = visibleMonth.yearMonth,
                 goToPrevious = {
@@ -129,7 +128,7 @@ fun CalenderScreen() {
                 dayContent = { day ->
                     CompositionLocalProvider(LocalRippleTheme provides Example3RippleTheme) {
                         val colors = if (day.position == DayPosition.MonthDate) {
-                            flights[day.date].orEmpty().map { colorResource(it.color) }
+                            appointments[day.date].orEmpty().map { colorResource(it.color) }
                         } else {
                             emptyList()
                         }
@@ -149,10 +148,9 @@ fun CalenderScreen() {
                     )
                 },
             )
-            Divider(color = pageBackgroundColor)
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                items(items = flightsInSelectedDate.value) { flight ->
-                    FlightInformation(flight)
+                items(items = appointmentsInSelectedDate.value) { appointment ->
+                    AppointmentInformation(appointment = appointment)
                 }
             }
         }
@@ -171,10 +169,10 @@ private fun Day(
             .aspectRatio(1f)
             .border(
                 width = if (isSelected) 1.dp else 0.dp,
-                color = if (isSelected) selectedItemColor else Color.Black,
+                color = if (isSelected) selectedItemColor else Color.White,
             )
             .padding(1.dp)
-            .background(color = darkerGray )
+            .background(color = daysColor)
 
 
             .clickable(
@@ -183,7 +181,7 @@ private fun Day(
             ),
     ) {
         val textColor = when (day.position) {
-            DayPosition.MonthDate -> Color.White
+            DayPosition.MonthDate -> Color.Black
             DayPosition.InDate, DayPosition.OutDate -> Color.Gray
         }
         Text(
@@ -213,7 +211,6 @@ private fun Day(
     }
 }
 
-// dit is de rij met de dagen van de week
 @Composable
 private fun MonthHeader(
     modifier: Modifier = Modifier,
@@ -225,7 +222,7 @@ private fun MonthHeader(
                 modifier = Modifier.weight(1f),
                 textAlign = TextAlign.Center,
                 fontSize = 12.sp,
-                color = Color.White,
+                color = daysOfweekFontColor,
                 text = dayOfWeek.displayText(uppercase = true),
                 fontWeight = FontWeight.Black,
             )
@@ -234,7 +231,7 @@ private fun MonthHeader(
 }
 
 @Composable
-private fun LazyItemScope.FlightInformation(flight: Flight) {
+private fun LazyItemScope.AppointmentInformation(appointment: Appointment) {
     Row(
         modifier = Modifier
             .fillParentMaxWidth()
@@ -243,13 +240,13 @@ private fun LazyItemScope.FlightInformation(flight: Flight) {
     ) {
         Box(
             modifier = Modifier
-                .background(color = colorResource(flight.color))
+                .background(color = colorResource(appointment.color))
                 .fillParentMaxWidth(1 / 7f)
                 .aspectRatio(1f),
             contentAlignment = Alignment.Center,
         ) {
             Text(
-                text = flightDateTimeFormatter.format(flight.time).uppercase(Locale.ENGLISH),
+                text = appointmentDateTimeFormatter.format(appointment.time).uppercase(Locale.ENGLISH),
                 textAlign = TextAlign.Center,
                 lineHeight = 17.sp,
                 fontSize = 12.sp,
@@ -257,17 +254,18 @@ private fun LazyItemScope.FlightInformation(flight: Flight) {
         }
         Box(
             modifier = Modifier
-                .background(color = darkerGray)
+                .background(color = appointmentField)
                 .weight(1f)
                 .fillMaxHeight(),
         ) {
-            AirportInformation(flight.departure, isDeparture = true)
+            AppointmentInformation(appointment.doctor, appointment.patient)
+            Divider(color = toolbarColor)
         }
+
     }
-    //Divider(color = pageBackgroundColor, thickness = 2.dp)
 }
 @Composable
-private fun AirportInformation(airport: Flight.Airport, isDeparture: Boolean) {
+private fun AppointmentInformation(doctor: Appointment.Doctor, patient: Appointment.Patient) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -280,7 +278,6 @@ private fun AirportInformation(airport: Flight.Airport, isDeparture: Boolean) {
                 .fillMaxHeight(),
             contentAlignment = Alignment.CenterEnd,
         ) {
-           //Image(painter = painterResource(), contentDescription = null)
         }
         Column(
             modifier = Modifier
@@ -291,23 +288,24 @@ private fun AirportInformation(airport: Flight.Airport, isDeparture: Boolean) {
         ) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = airport.code,
+                text = patient.name,
                 textAlign = TextAlign.Center,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Black,
+                color = informationColor
             )
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = airport.city,
+                text = doctor.name,
                 textAlign = TextAlign.Center,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Light,
+                color = informationColor
             )
         }
     }
 }
 
-// The default dark them ripple is too bright so we tone it down.
 private object Example3RippleTheme : RippleTheme {
     @Composable
     override fun defaultColor() = RippleTheme.defaultRippleColor(Color.Gray, lightTheme = false)

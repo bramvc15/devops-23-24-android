@@ -32,10 +32,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.templateapplication.R
-import com.example.templateapplication.shared.Flight
-import com.example.templateapplication.shared.NavigationIcon
+import com.example.templateapplication.shared.Appointment
+import com.example.templateapplication.shared.StatusBarColorUpdateEffect
 import com.example.templateapplication.shared.displayText
-import com.example.templateapplication.shared.generateFlights
+import com.example.templateapplication.shared.generateAppointments
 import com.example.templateapplication.shared.getWeekPageTitle
 import com.example.templateapplication.shared.rememberFirstVisibleWeekAfterScroll
 import com.kizitonwose.calendar.compose.WeekCalendar
@@ -43,14 +43,15 @@ import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
+private val topAppColor: Color @Composable get() = colorResource(R.color.colorPrimary)
 
 @Composable
-fun Calendar(close: () -> Unit = {}) {
+fun CalendarWeekScreen() {
     val currentDate = remember { LocalDate.now() }
     val startDate = remember { currentDate.minusDays(500) }
     val endDate = remember { currentDate.plusDays(500) }
     var selection by remember { mutableStateOf(currentDate) }
-    val appointments = generateFlights()
+    val appointments = generateAppointments()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -65,8 +66,9 @@ fun Calendar(close: () -> Unit = {}) {
         TopAppBar(
             elevation = 0.dp,
             title = { Text(text = getWeekPageTitle(visibleWeek)) },
-            navigationIcon = { NavigationIcon(onBackClick = close) },
+
         )
+        StatusBarColorUpdateEffect(topAppColor)
         WeekCalendar(
             modifier = Modifier.background(color = colorResource(R.color.colorPrimary)),
             state = state,
@@ -78,8 +80,8 @@ fun Calendar(close: () -> Unit = {}) {
                 }
             },
         )
-        val selectedFlights = appointments.filter { it.time.toLocalDate() == selection }
-        if (selectedFlights.isNotEmpty()) {
+        val selectedAppointment = appointments.filter { it.time.toLocalDate() == selection }
+        if (selectedAppointment.isNotEmpty()) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -97,8 +99,8 @@ fun Calendar(close: () -> Unit = {}) {
                         .fillMaxWidth()
                         .weight(1f)
                 ) {
-                    items(selectedFlights) { flight ->
-                        FlightItem(flight)
+                    items(selectedAppointment) { appointment ->
+                        AppointmentItem(appointment = appointment)
                     }
                 }
             }
@@ -137,8 +139,10 @@ fun Calendar(close: () -> Unit = {}) {
         }
     }}
 }
+
 @Composable
-private fun FlightItem(flight: Flight) {
+private fun AppointmentItem(appointment: Appointment) {
+    var isExpanded by remember { mutableStateOf(false) }
 
     Card(
         modifier = Modifier
@@ -146,7 +150,7 @@ private fun FlightItem(flight: Flight) {
             .padding(8.dp),
         elevation = 8.dp,
         shape = MaterialTheme.shapes.medium,
-        backgroundColor = colorResource(id = flight.color)
+        backgroundColor = colorResource(id = appointment.color)
     ) {
         Column(
             modifier = Modifier
@@ -154,21 +158,53 @@ private fun FlightItem(flight: Flight) {
                 .padding(16.dp)
         ) {
             Text(
-                text = "${flight.departure.city} (${flight.departure.code})",
+                text = "name:  ${appointment.patient.name} ",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Departure Time: ${flight.time.format(DateTimeFormatter.ofPattern("HH:mm"))}",
+                text = "Appointment Time: ${appointment.time.format(DateTimeFormatter.ofPattern("HH:mm"))}",
                 fontSize = 14.sp,
                 color = Color.White
             )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Doctor: ${appointment.doctor.name}",
+                fontSize = 14.sp,
+                color = Color.White
+            )
+
+            // Add a clickable area to toggle expansion
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        isExpanded = !isExpanded
+                    }
+            ) {
+                Text(
+                    text = if (isExpanded) "Click to collapse" else "Click for more details",
+                    fontSize = 14.sp,
+                    color = colorResource(id = R.color.example_7_yellow),
+                    fontWeight = FontWeight.Bold,
+                )
+            }
+
+            // Conditionally display additional information when expanded
+            if (isExpanded) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Reason: ${appointment.reason}",
+                    fontSize = 14.sp,
+                    color = Color.White
+                )
+            }
         }
     }
-
 }
+
 
 private val dateFormatter = DateTimeFormatter.ofPattern("dd")
 

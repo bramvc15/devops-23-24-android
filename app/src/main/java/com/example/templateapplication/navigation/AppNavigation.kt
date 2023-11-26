@@ -1,6 +1,5 @@
 package com.example.templateapplication.navigation
 
-import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -10,28 +9,23 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.example.templateapplication.models.DoctorViewModel
-import com.example.templateapplication.screens.AddDoctorScreen
-import com.example.templateapplication.screens.BlogsScreen
-import com.example.templateapplication.screens.Calendar
-import com.example.templateapplication.screens.CalenderScreen
-import com.example.templateapplication.screens.DoctorDetailScreen
-import com.example.templateapplication.screens.DoctorsScreen
-import com.example.templateapplication.screens.HomeScreen
+import com.example.templateapplication.screens.CalendarWeekScreen
+import com.example.templateapplication.screens.CalenderMonthScreen
+import com.example.templateapplication.screens.DoctorSelectionScreen
+import com.example.templateapplication.screens.NoteScreen
+import com.example.templateapplication.screens.PasswordScreen
 
 
 @Composable
-fun AppNavigation(){
+fun AppNavigation(doctorViewModel: DoctorViewModel) {
 
     val navController : NavHostController = rememberNavController()
 
@@ -68,59 +62,27 @@ fun AppNavigation(){
     ) {paddingValues ->
         NavHost (
             navController = navController,
-            startDestination = Screens.HomeScreen.name,
+            startDestination = Screens.DoctorSelectionScreen.name,
             modifier = Modifier
                 .padding(paddingValues)
         ){
-            composable(route = Screens.HomeScreen.name) {
-                HomeScreen()
+            composable(route = Screens.NoteScreen.name) {
+                NoteScreen()
             }
-            composable(route = Screens.DoctorsScreen.name) {
-                DoctorsScreen(navController)
-            }
-            composable(route = Screens.BlogsScreen.name) {
-                BlogsScreen()
-            }
-            composable(route = Screens.AddDoctorScreen.name){
-                AddDoctorScreen(navController)
-            }
-            composable(route = Screens.CalenderScreen.name){
-                CalenderScreen()
+            composable(route = Screens.CalenderMonthScreen.name){
+                CalenderMonthScreen()
             }
 
-            composable(route = Screens.Calender.name){
-                Calendar()
+            composable(route = Screens.CalenderWeekScreen.name){
+                CalendarWeekScreen()
             }
-            composable(
-                route = "${Screens.DoctorDetailScreen.name}/{id}",
-                arguments = listOf(navArgument("id") { type = NavType.LongType })
-            ) { backStackEntry ->
-                val id = backStackEntry.arguments?.getLong("id")
-                val viewModel: DoctorViewModel = viewModel()
+            composable(route = Screens.DoctorSelectionScreen.name){
 
-                if (id != null) {
-                    viewModel.getDoctorById(id.toInt())
-                }
-
-                val selectedDoctor = viewModel.selectedDoctor.value
-
-                if (selectedDoctor != null) {
-                    Log.d("doctor", "${selectedDoctor.name}")
-                }
-
-                if (selectedDoctor != null) {
-                    DoctorDetailScreen( selectedDoctor = selectedDoctor)
-                }
-
-
+                DoctorSelectionScreen(navController)
             }
-
-
-
+            composable(route = Screens.PasswordScreen.name){
+                PasswordScreen(navController)
+            }
         }
     }
-
-
 }
-
-

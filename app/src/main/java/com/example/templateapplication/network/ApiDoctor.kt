@@ -13,14 +13,12 @@ data class ApiDoctor(
     val infoOpleiding: String,
     val infoPublicaties: String,
     val image: String?,
-    val imageBase64: String?
+    val password: String
 )
 
-
-//extension function for an ApiDoctor List to convert is to a Domain Doctor List
 fun List<ApiDoctor>.asDomainObjects(): List<Doctor> {
-    var domainList = this.map {
-        Doctor(it.id, it.name, it.gender, it.specialization, it.infoOver, it.infoOpleiding, it.infoPublicaties, it.image, it.imageBase64)
+    val domainList = this.map {
+        Doctor(it.id, it.name, it.gender, it.specialization, it.infoOver, it.infoOpleiding, it.infoPublicaties, it.image, it.password)
     }
     return domainList
 }
