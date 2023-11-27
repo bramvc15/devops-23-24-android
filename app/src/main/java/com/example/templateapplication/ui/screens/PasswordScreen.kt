@@ -20,12 +20,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import com.example.templateapplication.shared.AppPreferences
+import androidx.navigation.compose.rememberNavController
+import com.example.templateapplication.navigation.Screens
 
 @Composable
-fun PasswordScreen() {
+fun PasswordScreen(
+) {
     var password by remember { mutableStateOf("") }
 
+    val navController = rememberNavController()
 
     Column(
         modifier = Modifier
@@ -33,7 +36,7 @@ fun PasswordScreen() {
             .padding(16.dp)
     ) {
         Text(
-            text = "Doctor: ${AppPreferences.Companion}",
+            text = "Doctor: ",
             color = Color.Black
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -57,11 +60,8 @@ fun PasswordScreen() {
 
         Button(
             onClick = {
-                if (password.isNotEmpty()) {
-                    //onPasswordSet(password)
-                } else {
-                    // Handle password mismatch or empty password
-                }
+
+                navController.navigate(Screens.CalenderWeekScreen.name)
             },
             modifier = Modifier.fillMaxWidth()
         ) {

@@ -26,42 +26,8 @@ interface DoctorApiService {
     suspend fun getDoctors(): List<Doctor>
 }
 
-/**
- * A public Api object that exposes the lazy-initialized Retrofit service
- */
 object DoctorApi {
     val retrofitService: DoctorApiService by lazy {
         retrofit.create(DoctorApiService::class.java)
     }
 }
-
-
-
-/*
-
-interface ApiServiceDoctor {
-    @GET("Doctor/getDoctors")
-    suspend fun getDoctors(): List<ApiDoctor>
-}
-
-
-
-class DoctorApiService {
-
-    private val retrofit = Retrofit.Builder()
-        .baseUrl("http://192.168.100.101:5046/api/")
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    private val apiService = retrofit.create(ApiServiceDoctor::class.java)
-
-    suspend fun getDoctors(): List<ApiDoctor> {
-        try {
-            return apiService.getDoctors()
-        } catch (e: Exception) {
-            throw Exception("Failed to fetch doctors", e)
-        }
-    }
-}
-
- */

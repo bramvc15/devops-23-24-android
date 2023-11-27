@@ -86,6 +86,7 @@ fun CalenderMonthScreen() {
             if (date == null) emptyList() else appointments[date].orEmpty()
         }
     }
+
     StatusBarColorUpdateEffect(topAppColor)
     Column(
         modifier = Modifier

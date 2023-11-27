@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import coil.network.HttpException
 import com.example.templateapplication.model.Doctor
 import com.example.templateapplication.network.DoctorApi
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.io.IOException
 
@@ -26,23 +28,31 @@ class DoctorViewModel() : ViewModel()  {
     var doctorUiState : DoctorUiState  by mutableStateOf(DoctorUiState.Loading)
         private set
 
+    private val _doctors = MutableStateFlow<List<Doctor>>(emptyList())
+    val doctors: StateFlow<List<Doctor>> get() = _doctors
+
+    private fun setDoctors(newDoctors: List<Doctor>) {
+        _doctors.value = newDoctors
+    }
+
     init {
         getDoctors()
     }
 
+
     fun getDoctors() {
         viewModelScope.launch {
             doctorUiState = DoctorUiState.Loading
-            doctorUiState = try {
+            try {
                 val listResult = DoctorApi.retrofitService.getDoctors()
-                DoctorUiState.Success(
-                    listResult
-                )
+                setDoctors(listResult)
+                doctorUiState = DoctorUiState.Success(listResult)
             } catch (e: IOException) {
-                DoctorUiState.Error
+                doctorUiState = DoctorUiState.Error
             } catch (e: HttpException) {
-                DoctorUiState.Error
+                doctorUiState = DoctorUiState.Error
             }
+
         }
     }
 
