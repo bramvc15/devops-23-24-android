@@ -1,4 +1,4 @@
-package com.example.templateapplication.models
+package com.example.templateapplication.model
 
 data class Note (
     val id: Int?,

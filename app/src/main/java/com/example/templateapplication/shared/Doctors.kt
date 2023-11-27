@@ -1,9 +1,6 @@
 package com.example.templateapplication.shared
 
-import com.example.templateapplication.models.Doctor
-import java.time.YearMonth
-
-
+/*
 fun generateDoctors(): List<Doctor> = buildList {
 
     val currentMonth = YearMonth.now()
@@ -38,3 +35,5 @@ fun generateDoctors(): List<Doctor> = buildList {
     }
 
 }
+
+ */

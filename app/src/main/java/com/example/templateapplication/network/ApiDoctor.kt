@@ -1,6 +1,6 @@
 package com.example.templateapplication.network
 
-import com.example.templateapplication.models.Doctor
+import com.example.templateapplication.model.Doctor
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -12,13 +12,12 @@ data class ApiDoctor(
     val infoOver: String,
     val infoOpleiding: String,
     val infoPublicaties: String,
-    val image: String?,
-    val password: String
+    val image: String,
 )
 
 fun List<ApiDoctor>.asDomainObjects(): List<Doctor> {
     val domainList = this.map {
-        Doctor(it.id, it.name, it.gender, it.specialization, it.infoOver, it.infoOpleiding, it.infoPublicaties, it.image, it.password)
+        Doctor(it.id, it.name, it.gender, it.specialization, it.infoOver, it.infoOpleiding, it.infoPublicaties, it.image)
     }
     return domainList
 }

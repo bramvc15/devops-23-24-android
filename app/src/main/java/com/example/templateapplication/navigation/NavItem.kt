@@ -27,6 +27,7 @@ val listOfNavItems : List<NavItem> = listOf(
         icon = Icons.Default.Close,
         route = Screens.CalenderMonthScreen.name
     ),
+    /*
     NavItem(
         label = "test",
         icon = Icons.Default.Close,
@@ -37,6 +38,6 @@ val listOfNavItems : List<NavItem> = listOf(
         icon = Icons.Default.Close,
         route = Screens.PasswordScreen.name
     )
-
+    */
 
 )

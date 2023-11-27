@@ -1,6 +1,6 @@
 package com.example.templateapplication.shared
 
-import com.example.templateapplication.models.Note
+import com.example.templateapplication.model.Note
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 

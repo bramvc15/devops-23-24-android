@@ -1,11 +1,6 @@
 package com.example.templateapplication.data
 
-import com.example.templateapplication.network.DoctorApiService
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaType
-import retrofit2.Retrofit
-
+/*
 interface AppContainer {
     val doctorsRepository: DoctorsRepository
 }
@@ -13,7 +8,7 @@ interface AppContainer {
 
 class DefaultAppContainer(): AppContainer{
 
-    private val baseUrl = "http://192.168.100.101:5046"
+    private val baseUrl = "http://192.168.100.101:5046/api/"
     private val retrofit = Retrofit.Builder()
         .addConverterFactory(
             Json.asConverterFactory("application/json".toMediaType())
@@ -31,3 +26,5 @@ class DefaultAppContainer(): AppContainer{
     }
 
 }
+
+ */

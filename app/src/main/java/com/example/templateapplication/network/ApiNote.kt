@@ -1,6 +1,6 @@
 package com.example.templateapplication.network
 
-import com.example.templateapplication.models.Note
+import com.example.templateapplication.model.Note
 
 data class ApiNote(
     val id: Int?,

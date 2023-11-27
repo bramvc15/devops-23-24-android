@@ -1,4 +1,4 @@
-package com.example.templateapplication.screens
+package com.example.templateapplication.ui.screens
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -22,7 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.templateapplication.models.Note
+import com.example.templateapplication.model.Note
 import com.example.templateapplication.shared.generateNotes
 import java.text.SimpleDateFormat
 import java.util.Locale

@@ -1,53 +1,49 @@
 package com.example.templateapplication.navigation
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.templateapplication.models.DoctorViewModel
-import com.example.templateapplication.screens.CalendarWeekScreen
-import com.example.templateapplication.screens.CalenderMonthScreen
-import com.example.templateapplication.screens.DoctorSelectionScreen
-import com.example.templateapplication.screens.NoteScreen
-import com.example.templateapplication.screens.PasswordScreen
-
+import com.example.templateapplication.ui.screens.CalendarWeekScreen
+import com.example.templateapplication.ui.screens.CalenderMonthScreen
+import com.example.templateapplication.ui.screens.DoctorSelectionScreen
+import com.example.templateapplication.ui.screens.ErrorScreen
+import com.example.templateapplication.ui.screens.LoadingScreen
+import com.example.templateapplication.ui.screens.NoteScreen
+import com.example.templateapplication.ui.screens.PasswordScreen
+import com.example.templateapplication.ui.views.DoctorUiState
 
 @Composable
-fun AppNavigation(doctorViewModel: DoctorViewModel) {
+fun AppNavigation(doctorUiState: DoctorUiState, modifier :Modifier) {
 
-    val navController : NavHostController = rememberNavController()
+    val navController: NavHostController = rememberNavController()
 
+    // Scaffold with NavigationBar
     Scaffold(
+        /*
         bottomBar = {
             NavigationBar {
-
-
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination
 
                 listOfNavItems.forEach { navItem ->
                     NavigationBarItem(
-                        selected = currentDestination?.hierarchy?.any { it.route == navItem.route} == true,
-                        onClick = { navController.navigate(navItem.route){
-                                    popUpTo(navController.graph.findStartDestination().id){
-                                        saveState = true
-                                        inclusive = true
-                                    }
-                                    launchSingleTop = true
-                                    restoreState = true
-                        } },
+                        selected = currentDestination?.hierarchy?.any { it.route == navItem.route } == true,
+                        onClick = {
+                            navController.navigate(navItem.route) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                    inclusive = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        },
                         icon = {
                             Icon(imageVector = navItem.icon, contentDescription = null)
                         },
@@ -59,30 +55,42 @@ fun AppNavigation(doctorViewModel: DoctorViewModel) {
             }
         }
 
-    ) {paddingValues ->
-        NavHost (
+         */
+    ) {
+            paddingValues ->
+        // NavHost for screens with bottom bar
+        NavHost(
             navController = navController,
             startDestination = Screens.DoctorSelectionScreen.name,
             modifier = Modifier
                 .padding(paddingValues)
-        ){
+        ) {
             composable(route = Screens.NoteScreen.name) {
                 NoteScreen()
             }
-            composable(route = Screens.CalenderMonthScreen.name){
+            composable(route = Screens.CalenderMonthScreen.name) {
                 CalenderMonthScreen()
             }
 
-            composable(route = Screens.CalenderWeekScreen.name){
+            composable(route = Screens.CalenderWeekScreen.name) {
                 CalendarWeekScreen()
             }
-            composable(route = Screens.DoctorSelectionScreen.name){
 
-                DoctorSelectionScreen(navController)
+            composable(route = Screens.DoctorSelectionScreen.name) {
+
+                when (doctorUiState) {
+                    is DoctorUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
+                    is DoctorUiState.Success -> DoctorSelectionScreen(
+                        doctorUiState.doctors
+                    )
+                    is DoctorUiState.Error -> ErrorScreen(modifier = modifier.fillMaxSize())
+                }
+
             }
-            composable(route = Screens.PasswordScreen.name){
-                PasswordScreen(navController)
+            composable(route = Screens.PasswordScreen.name) {
+                PasswordScreen()
             }
+
         }
     }
 }

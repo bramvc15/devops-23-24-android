@@ -1,7 +1,6 @@
 package com.example.templateapplication.data
 
-import com.example.templateapplication.models.Doctor
-
+/*
 object DoctorSampler {
     val doctorList = mutableListOf(
         Doctor(1, "Dr. Smith", "Male", "Cardiologist", "Expert in heart-related issues"
@@ -20,3 +19,5 @@ object DoctorSampler {
         list
     }
 }
+
+ */

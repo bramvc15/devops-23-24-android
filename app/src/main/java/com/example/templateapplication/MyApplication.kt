@@ -1,6 +1,8 @@
-package com.example.templateapplication.data
-
+package com.example.templateapplication
+/*
 import android.app.Application
+import com.example.templateapplication.data.AppContainer
+import com.example.templateapplication.data.DefaultAppContainer
 
 class MyApplication : Application() {
 
@@ -11,3 +13,5 @@ class MyApplication : Application() {
         container = DefaultAppContainer()
     }
 }
+
+ */

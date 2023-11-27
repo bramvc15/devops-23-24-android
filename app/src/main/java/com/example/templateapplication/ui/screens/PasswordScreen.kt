@@ -1,4 +1,4 @@
-package com.example.templateapplication.screens
+package com.example.templateapplication.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,20 +14,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.example.templateapplication.shared.AppPreferences
 
 @Composable
-fun PasswordScreen(navController: NavController) {
+fun PasswordScreen() {
     var password by remember { mutableStateOf("") }
-    val doctorName by rememberUpdatedState(newValue = navController.previousBackStackEntry?.arguments?.getString("doctorName"))
+
 
     Column(
         modifier = Modifier
