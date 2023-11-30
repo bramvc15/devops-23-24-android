@@ -25,7 +25,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.example.templateapplication.model.Doctor
@@ -36,11 +35,10 @@ import com.example.templateapplication.ui.views.DoctorViewModel
 @Composable
 fun DoctorSelectionScreen(
     doctorViewModel : DoctorViewModel  = viewModel(),
-    onNextButtonClicked: (Doctor) -> Unit
+    onNextButtonClicked: (Doctor) -> Unit,
     ) {
 
     val appPreferences = AppPreferences(LocalContext.current)
-    val navController = rememberNavController()
 
     val doctors by doctorViewModel.doctors.collectAsState()
 
@@ -49,10 +47,11 @@ fun DoctorSelectionScreen(
             .fillMaxSize()
     ) {
         items(doctors) { doctor ->
-            DoctorItem(doctor = doctor, onNextButtonClicked = {
+            DoctorItem(doctor = doctor)
+            {
                 appPreferences.doctorId = doctor.id.toString()
                 onNextButtonClicked(doctor)
-            })
+            }
             Spacer(modifier = Modifier.height(16.dp))
         }
 
@@ -61,12 +60,14 @@ fun DoctorSelectionScreen(
 
 
 @Composable
-private fun DoctorItem(doctor: Doctor, onNextButtonClicked: (Doctor) -> Unit) {
+private fun DoctorItem(doctor : Doctor, onNextButtonClicked: (Doctor) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .clickable { onNextButtonClicked(doctor) },
+            .clickable {
+                onNextButtonClicked(doctor)
+            },
         elevation = 8.dp,
     ) {
         Column(
@@ -74,9 +75,8 @@ private fun DoctorItem(doctor: Doctor, onNextButtonClicked: (Doctor) -> Unit) {
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            // Load the doctor's image using Coil
             val painter = rememberImagePainter(
-                data = doctor.image, // Replace with the actual property for the doctor's image URL
+                data = doctor.image,
                 builder = {
                     transformations(CircleCropTransformation())
                 }
@@ -86,7 +86,7 @@ private fun DoctorItem(doctor: Doctor, onNextButtonClicked: (Doctor) -> Unit) {
                 painter = painter,
                 contentDescription = null,
                 modifier = Modifier
-                    .height(220.dp) // Adjust the height as needed
+                    .height(220.dp)
                     .fillMaxWidth()
                     .clip(CircleShape),
                 contentScale = ContentScale.Inside,

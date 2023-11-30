@@ -31,8 +31,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.compose.rememberNavController
 import com.example.templateapplication.R
+import com.example.templateapplication.component.NavigationBarComp
 import com.example.templateapplication.shared.Appointment
 import com.example.templateapplication.shared.StatusBarColorUpdateEffect
 import com.example.templateapplication.shared.displayText
@@ -53,6 +53,8 @@ fun CalendarWeekScreen() {
     val endDate = remember { currentDate.plusDays(500) }
     var selection by remember { mutableStateOf(currentDate) }
     val appointments = generateAppointments()
+
+    NavigationBarComp()
 
     Column(
         modifier = Modifier

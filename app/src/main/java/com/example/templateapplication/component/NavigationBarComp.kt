@@ -24,7 +24,7 @@ import com.example.templateapplication.ui.screens.NoteScreen
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun NavigationBar() {
+fun NavigationBarComp() {
     val navController: NavHostController = rememberNavController()
     Scaffold(
     bottomBar = {
@@ -77,3 +77,4 @@ fun NavigationBar() {
             }
     }
 }
+
