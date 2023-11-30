@@ -1,8 +1,9 @@
 package com.example.templateapplication.navigation
 
 enum class Screens {
-    HomeScreen,
-    DoctorsScreen,
-    BlogsScreen,
-    DoctorDetailScreen
+    NoteScreen,
+    CalenderWeekScreen,
+    CalenderMonthScreen,
+    DoctorSelectionScreen,
+    PasswordScreen
 }
