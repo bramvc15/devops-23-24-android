@@ -1,10 +1,12 @@
 package com.example.templateapplication.network
 
-import com.example.templateapplication.model.Doctor
+import com.example.templateapplication.model.Appointment
+import com.example.templateapplication.model.PatientDTO
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
+import retrofit2.http.Body
 import retrofit2.http.GET
 
 private const val BASE_URL =
@@ -21,13 +23,13 @@ private val retrofit = Retrofit.Builder()
 /**
  * Retrofit service object for creating api calls
  */
-interface DoctorApiService {
-    @GET("doctor")
-    suspend fun getDoctors(): List<Doctor>
+interface AppointmentApiService {
+    @GET("appointment")
+    suspend fun getAppointments(@Body body: PatientDTO): List<Appointment>
 }
 
-object DoctorApi {
-    val retrofitService: DoctorApiService by lazy {
-        retrofit.create(DoctorApiService::class.java)
+object AppointmentApi {
+    val retrofitService: AppointmentApiService by lazy {
+        retrofit.create(AppointmentApiService::class.java)
     }
 }

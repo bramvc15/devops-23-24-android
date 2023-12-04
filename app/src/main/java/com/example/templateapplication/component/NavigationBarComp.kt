@@ -21,10 +21,11 @@ import com.example.templateapplication.navigation.listOfNavItems
 import com.example.templateapplication.ui.screens.CalendarWeekScreen
 import com.example.templateapplication.ui.screens.CalenderMonthScreen
 import com.example.templateapplication.ui.screens.NoteScreen
+import com.example.templateapplication.ui.views.DoctorViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun NavigationBarComp() {
+fun NavigationBarComp(doctorViewModel: DoctorViewModel) {
     val navController: NavHostController = rememberNavController()
     Scaffold(
     bottomBar = {
@@ -72,7 +73,7 @@ fun NavigationBarComp() {
                 }
 
                 composable(route = Screens.CalenderWeekScreen.name) {
-                    CalendarWeekScreen()
+                    CalendarWeekScreen(doctorViewModel = doctorViewModel)
                 }
             }
     }

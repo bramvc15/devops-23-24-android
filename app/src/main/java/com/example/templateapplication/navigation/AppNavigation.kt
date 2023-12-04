@@ -1,6 +1,7 @@
 package com.example.templateapplication.navigation
 
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -22,9 +23,10 @@ import com.example.templateapplication.ui.screens.CalenderMonthScreen
 import com.example.templateapplication.ui.screens.DoctorSelectionScreen
 import com.example.templateapplication.ui.screens.NoteScreen
 import com.example.templateapplication.ui.screens.PasswordScreen
+import com.example.templateapplication.ui.views.DoctorViewModel
 
 @Composable
-fun AppNavigation() {
+fun AppNavigation(doctorViewModel: DoctorViewModel) {
     val navController: NavHostController = rememberNavController()
 
     Scaffold(
@@ -59,7 +61,7 @@ fun AppNavigation() {
             composable(route = Screens.CalenderWeekScreen.name) {
 
                 GetNavigationBar(navController = navController)
-                CalendarWeekScreen()
+                CalendarWeekScreen(doctorViewModel = doctorViewModel)
             }
 
             composable(route = Screens.DoctorSelectionScreen.name) {
@@ -67,10 +69,12 @@ fun AppNavigation() {
                 DoctorSelectionScreen(
                     onNextButtonClicked = { doctor ->
 
+                        doctorViewModel.selectedDoctor = doctor
+
                         navController.navigate(
                             "${Screens.PasswordScreen.name}/${Uri.encode(doctor.name)}/${
                                 Uri.encode(
-                                    doctor.image
+                                    doctor.imageLink
                                 )
                             }"
                         )
@@ -86,7 +90,6 @@ fun AppNavigation() {
                     doctorName = Uri.decode(doctorName),
                     doctorImage = Uri.decode(doctorImage),
                     onNextButtonClicked = {
-
                         navController.navigate(Screens.CalenderWeekScreen.name)
                     }
                 )

@@ -76,7 +76,7 @@ private fun DoctorItem(doctor : Doctor, onNextButtonClicked: (Doctor) -> Unit) {
                 .padding(16.dp)
         ) {
             val painter = rememberImagePainter(
-                data = doctor.image,
+                data = doctor.imageLink,
                 builder = {
                     transformations(CircleCropTransformation())
                 }

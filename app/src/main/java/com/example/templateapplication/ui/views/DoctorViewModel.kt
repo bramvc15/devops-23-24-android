@@ -1,5 +1,6 @@
 package com.example.templateapplication.ui.views
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -30,6 +31,8 @@ class DoctorViewModel() : ViewModel()  {
 
     private val _doctors = MutableStateFlow<List<Doctor>>(emptyList())
     val doctors: StateFlow<List<Doctor>> get() = _doctors
+
+    var selectedDoctor: Doctor? = null
 
     private fun setDoctors(newDoctors: List<Doctor>) {
         _doctors.value = newDoctors

@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
+import com.example.templateapplication.ui.views.DoctorViewModel
 
 @Composable
 fun PasswordScreen(doctorName : String, doctorImage : String,  onNextButtonClicked: () -> Unit) {
