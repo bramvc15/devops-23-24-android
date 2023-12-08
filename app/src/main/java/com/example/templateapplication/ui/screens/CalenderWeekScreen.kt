@@ -32,9 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.templateapplication.R
-import com.example.templateapplication.component.NavigationBarComp
 import com.example.templateapplication.model.TimeSlot
 import com.example.templateapplication.shared.StatusBarColorUpdateEffect
 import com.example.templateapplication.shared.displayText
@@ -50,16 +48,13 @@ import java.time.format.DateTimeFormatter
 private val topAppColor: Color @Composable get() = colorResource(R.color.colorPrimary)
 
 @Composable
-fun CalendarWeekScreen(doctorViewModel: DoctorViewModel) {
+fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : TimeSlotViewModel) {
     val currentDate = remember { LocalDate.now() }
     val startDate = remember { currentDate.minusDays(500) }
     val endDate = remember { currentDate.plusDays(500) }
     var selection by remember { mutableStateOf(currentDate) }
-    var timeslotViewModel = TimeSlotViewModel(doctorViewModel)
-    timeslotViewModel.getTimeSlots(doctorViewModel.selectedDoctor!!)
+    //val timeslotViewModel = TimeSlotViewModel(doctorViewModel)
     val timeslots by timeslotViewModel.timeslots.collectAsState()
-
-        NavigationBarComp(doctorViewModel = doctorViewModel)
 
     Column(
         modifier = Modifier
@@ -170,19 +165,19 @@ private fun AppointmentItem(timeslot: TimeSlot, doctorViewModel: DoctorViewModel
                 text = "name: ${timeslot.appointmentDTO?.patientDTO?.name ?: "N/A"}",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.White
+                color = Color.Black
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "Appointment Time: ${timeslot.dateTime.format(DateTimeFormatter.ofPattern("HH:mm"))}",
                 fontSize = 14.sp,
-                color = Color.White
+                color = Color.Black
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "Doctor: ${doctorViewModel.selectedDoctor?.name}",
                 fontSize = 14.sp,
-                color = Color.White
+                color = Color.Black
             )
 
             // Add a clickable area to toggle expansion
@@ -207,7 +202,7 @@ private fun AppointmentItem(timeslot: TimeSlot, doctorViewModel: DoctorViewModel
                 Text(
                     text = "Reason: ${timeslot.appointmentDTO?.reason}",
                     fontSize = 14.sp,
-                    color = Color.White
+                    color = Color.Black
                 )
             }
         }

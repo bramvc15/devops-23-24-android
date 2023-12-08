@@ -8,19 +8,14 @@ import retrofit2.Retrofit
 import retrofit2.http.GET
 
 private const val BASE_URL =
-    "http://192.168.0.227:5046/api/"
+    "http://192.168.100.101:5001/api/"
 
-/**
- * Use the Retrofit builder to build a retrofit object using a kotlinx.serialization converter
- */
+
 private val retrofit = Retrofit.Builder()
     .baseUrl(BASE_URL)
     .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
     .build()
 
-/**
- * Retrofit service object for creating api calls
- */
 interface DoctorApiService {
     @GET("doctor")
     suspend fun getDoctors(): List<Doctor>

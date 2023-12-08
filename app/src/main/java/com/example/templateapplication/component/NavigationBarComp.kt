@@ -18,8 +18,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.templateapplication.navigation.Screens
 import com.example.templateapplication.navigation.listOfNavItems
-import com.example.templateapplication.ui.screens.CalendarWeekScreen
-import com.example.templateapplication.ui.screens.CalenderMonthScreen
 import com.example.templateapplication.ui.screens.NoteScreen
 import com.example.templateapplication.ui.views.DoctorViewModel
 
@@ -69,11 +67,11 @@ fun NavigationBarComp(doctorViewModel: DoctorViewModel) {
                     NoteScreen()
                 }
                 composable(route = Screens.CalenderMonthScreen.name) {
-                    CalenderMonthScreen()
+                    //CalenderMonthScreen()
                 }
 
                 composable(route = Screens.CalenderWeekScreen.name) {
-                    CalendarWeekScreen(doctorViewModel = doctorViewModel)
+                  //  CalendarWeekScreen(doctorViewModel = doctorViewModel, timeslotViewModel = )
                 }
             }
     }

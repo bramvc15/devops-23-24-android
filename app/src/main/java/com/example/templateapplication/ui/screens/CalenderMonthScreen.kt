@@ -49,6 +49,8 @@ import com.example.templateapplication.shared.appointmentDateTimeFormatter
 import com.example.templateapplication.shared.displayText
 import com.example.templateapplication.shared.generateAppointments
 import com.example.templateapplication.shared.rememberFirstCompletelyVisibleMonth
+import com.example.templateapplication.ui.views.DoctorViewModel
+import com.example.templateapplication.ui.views.TimeSlotViewModel
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
@@ -74,7 +76,7 @@ private val informationColor: Color @Composable get() = colorResource(R.color.bl
 
 
 @Composable
-fun CalenderMonthScreen() {
+fun CalenderMonthScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : TimeSlotViewModel) {
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth.minusMonths(500) }
     val endMonth = remember { currentMonth.plusMonths(500) }

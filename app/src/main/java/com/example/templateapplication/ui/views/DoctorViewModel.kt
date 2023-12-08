@@ -16,49 +16,50 @@ import java.io.IOException
 
 
 sealed interface DoctorUiState {
-
-
-    data class Success(val doctors: List<Doctor>) : DoctorUiState
-    object Error : DoctorUiState
+    data class Success(val doctors: List<Doctor>, val selectedDoctor: Doctor?) : DoctorUiState
+    data class Error(val errorMessage: String) : DoctorUiState
     object Loading : DoctorUiState
 }
 
 
+
 class DoctorViewModel() : ViewModel()  {
 
-    var doctorUiState : DoctorUiState  by mutableStateOf(DoctorUiState.Loading)
-        private set
+
+    private var doctorUiState: DoctorUiState by mutableStateOf(DoctorUiState.Loading)
 
     private val _doctors = MutableStateFlow<List<Doctor>>(emptyList())
     val doctors: StateFlow<List<Doctor>> get() = _doctors
 
-    var selectedDoctor: Doctor? = null
+    var selectedDoctor: Doctor? by mutableStateOf(null)
 
     private fun setDoctors(newDoctors: List<Doctor>) {
         _doctors.value = newDoctors
+    }
+
+    fun selectDoctor(doctor: Doctor) {
+        selectedDoctor = doctor
     }
 
     init {
         getDoctors()
     }
 
-
-    fun getDoctors() {
+    private fun getDoctors() {
         viewModelScope.launch {
             doctorUiState = DoctorUiState.Loading
-            try {
+            doctorUiState = try {
                 val listResult = DoctorApi.retrofitService.getDoctors()
                 setDoctors(listResult)
-                doctorUiState = DoctorUiState.Success(listResult)
+                DoctorUiState.Success(listResult, selectedDoctor)
             } catch (e: IOException) {
-                doctorUiState = DoctorUiState.Error
+                Log.d("here", "here")
+                DoctorUiState.Error("Network error: ${e.message}")
             } catch (e: HttpException) {
-                doctorUiState = DoctorUiState.Error
+                DoctorUiState.Error("HTTP error: ${e.message}")
             }
-
         }
     }
-
     /*
     companion object {
         val Factory : ViewModelProvider.Factory = viewModelFactory {

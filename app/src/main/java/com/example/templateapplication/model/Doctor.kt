@@ -9,7 +9,7 @@ data class Doctor(
     @field:Json(name = "name") val name: String,
     val specialization: String,
     val gender: Int,
-    val biograph: String,
+    val biograph: String?,
     val isAvailable: Boolean,
     @field:Json(name = "imageLink") val imageLink: String,
 )

@@ -1,7 +1,6 @@
 package com.example.templateapplication.navigation
 
 import android.net.Uri
-import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -11,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -24,10 +24,14 @@ import com.example.templateapplication.ui.screens.DoctorSelectionScreen
 import com.example.templateapplication.ui.screens.NoteScreen
 import com.example.templateapplication.ui.screens.PasswordScreen
 import com.example.templateapplication.ui.views.DoctorViewModel
+import com.example.templateapplication.ui.views.TimeSlotViewModel
 
 @Composable
-fun AppNavigation(doctorViewModel: DoctorViewModel) {
+fun AppNavigation() {
     val navController: NavHostController = rememberNavController()
+    val doctorViewModel: DoctorViewModel = viewModel()
+    val timeslotViewModel = TimeSlotViewModel(doctorViewModel)
+
 
     Scaffold(
         bottomBar = {
@@ -48,20 +52,16 @@ fun AppNavigation(doctorViewModel: DoctorViewModel) {
             modifier = Modifier.padding(paddingValues)
         ) {
             composable(route = Screens.NoteScreen.name) {
-
-        
                 NoteScreen()
             }
             composable(route = Screens.CalenderMonthScreen.name) {
-
-
-                CalenderMonthScreen()
+                CalenderMonthScreen(doctorViewModel = doctorViewModel, timeslotViewModel = timeslotViewModel)
             }
 
             composable(route = Screens.CalenderWeekScreen.name) {
 
                 GetNavigationBar(navController = navController)
-                CalendarWeekScreen(doctorViewModel = doctorViewModel)
+                CalendarWeekScreen(doctorViewModel = doctorViewModel, timeslotViewModel = timeslotViewModel)
             }
 
             composable(route = Screens.DoctorSelectionScreen.name) {
@@ -98,6 +98,8 @@ fun AppNavigation(doctorViewModel: DoctorViewModel) {
     }
 
 }
+
+
 
 @Composable
 fun GetNavigationBar(navController: NavHostController) {

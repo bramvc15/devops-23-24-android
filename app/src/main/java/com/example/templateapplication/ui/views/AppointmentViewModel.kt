@@ -1,6 +1,5 @@
 package com.example.templateapplication.ui.views
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -10,7 +9,6 @@ import coil.network.HttpException
 import com.example.templateapplication.model.Appointment
 import com.example.templateapplication.model.PatientDTO
 import com.example.templateapplication.network.AppointmentApi
-import com.example.templateapplication.network.DoctorApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
