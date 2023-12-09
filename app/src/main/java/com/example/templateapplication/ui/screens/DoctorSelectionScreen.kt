@@ -47,7 +47,7 @@ fun DoctorSelectionScreen(
     ) {
         items(doctors) { doctor ->
             DoctorItem(doctor = doctor) {
-                doctorViewModel.selectDoctor(doctor) // Save the chosen doctor in the ViewModel
+                doctorViewModel.selectDoctor(doctor)
                 onNextButtonClicked(doctor)
             }
             Spacer(modifier = Modifier.height(16.dp))

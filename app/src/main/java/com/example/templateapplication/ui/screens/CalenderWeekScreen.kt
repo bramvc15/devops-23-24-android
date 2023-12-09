@@ -53,7 +53,6 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : Tim
     val startDate = remember { currentDate.minusDays(500) }
     val endDate = remember { currentDate.plusDays(500) }
     var selection by remember { mutableStateOf(currentDate) }
-    //val timeslotViewModel = TimeSlotViewModel(doctorViewModel)
     val timeslots by timeslotViewModel.timeslots.collectAsState()
 
     Column(
@@ -154,7 +153,7 @@ private fun AppointmentItem(timeslot: TimeSlot, doctorViewModel: DoctorViewModel
             .padding(8.dp),
         elevation = 8.dp,
         shape = MaterialTheme.shapes.medium,
-        //backgroundColor = colorResource(id = appointment.color)
+        backgroundColor = colorResource(id = R.color.lightgray )
     ) {
         Column(
             modifier = Modifier

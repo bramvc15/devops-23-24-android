@@ -1,6 +1,7 @@
 package com.example.templateapplication.navigation
 
 import android.net.Uri
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -18,6 +19,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.templateapplication.component.BackConfirmationDialog
 import com.example.templateapplication.ui.screens.CalendarWeekScreen
 import com.example.templateapplication.ui.screens.CalenderMonthScreen
 import com.example.templateapplication.ui.screens.DoctorSelectionScreen
@@ -32,17 +34,19 @@ fun AppNavigation() {
     val doctorViewModel: DoctorViewModel = viewModel()
     val timeslotViewModel = TimeSlotViewModel(doctorViewModel)
 
-
     Scaffold(
         bottomBar = {
 
-            if (navController.currentDestination?.route !in listOf(
-                    Screens.DoctorSelectionScreen.name,
-                    Screens.PasswordScreen.name
-                )
+            if (navController.currentDestination?.hierarchy?.any {
+                    it.route in listOf(
+                        Screens.DoctorSelectionScreen.name,
+                        Screens.PasswordScreen.name
+                    )
+                } == false
             ) {
                 GetNavigationBar(navController = navController)
             }
+
         }
     ) { paddingValues ->
 
@@ -52,15 +56,46 @@ fun AppNavigation() {
             modifier = Modifier.padding(paddingValues)
         ) {
             composable(route = Screens.NoteScreen.name) {
+                LocalOnBackPressedDispatcherOwner.current?.let { it1 ->
+                    BackConfirmationDialog(
+                        onBackPressedDispatcher = it1.onBackPressedDispatcher,
+                        onConfirmed = {
+                            navController.navigate(Screens.DoctorSelectionScreen.name)
+                        },
+                        onCancel = {
+
+                        }
+                    )
+                }
                 NoteScreen()
             }
             composable(route = Screens.CalenderMonthScreen.name) {
+                LocalOnBackPressedDispatcherOwner.current?.let { it1 ->
+                    BackConfirmationDialog(
+                        onBackPressedDispatcher = it1.onBackPressedDispatcher,
+                        onConfirmed = {
+                            navController.navigate(Screens.DoctorSelectionScreen.name)
+                        },
+                        onCancel = {
+
+                        }
+                    )
+                }
                 CalenderMonthScreen(doctorViewModel = doctorViewModel, timeslotViewModel = timeslotViewModel)
             }
 
             composable(route = Screens.CalenderWeekScreen.name) {
+                LocalOnBackPressedDispatcherOwner.current?.let { it1 ->
+                    BackConfirmationDialog(
+                        onBackPressedDispatcher = it1.onBackPressedDispatcher,
+                        onConfirmed = {
+                            navController.navigate(Screens.DoctorSelectionScreen.name)
+                        },
+                        onCancel = {
 
-                GetNavigationBar(navController = navController)
+                        }
+                    )
+                }
                 CalendarWeekScreen(doctorViewModel = doctorViewModel, timeslotViewModel = timeslotViewModel)
             }
 
@@ -85,7 +120,6 @@ fun AppNavigation() {
             composable(route = Screens.PasswordScreen.name + "/{doctorName}/{doctorImage}") { backStackEntry ->
                 val doctorName = backStackEntry.arguments?.getString("doctorName") ?: ""
                 val doctorImage = backStackEntry.arguments?.getString("doctorImage") ?: ""
-
                 PasswordScreen(
                     doctorName = Uri.decode(doctorName),
                     doctorImage = Uri.decode(doctorImage),
@@ -98,8 +132,6 @@ fun AppNavigation() {
     }
 
 }
-
-
 
 @Composable
 fun GetNavigationBar(navController: NavHostController) {
