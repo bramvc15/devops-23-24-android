@@ -7,7 +7,6 @@ import com.example.templateapplication.navigation.AppNavigation
 
 
 @Composable
-fun VisionApp(){
-
+fun VisionApp() {
     AppNavigation()
 }

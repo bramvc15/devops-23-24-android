@@ -5,12 +5,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Doctor(
-    val id: Int?,
+    val id: Int,
     @field:Json(name = "name") val name: String,
-    val gender: String,
     val specialization: String,
-    val infoOver: String,
-    val infoOpleiding: String,
-    val infoPublicaties: String,
-    @field:Json(name = "image") val image: String,
+    val gender: Int,
+    val biograph: String?,
+    val isAvailable: Boolean,
+    @field:Json(name = "imageLink") val imageLink: String,
 )

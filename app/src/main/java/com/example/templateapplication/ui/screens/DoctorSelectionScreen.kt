@@ -34,7 +34,7 @@ import com.example.templateapplication.ui.views.DoctorViewModel
 
 @Composable
 fun DoctorSelectionScreen(
-    doctorViewModel : DoctorViewModel  = viewModel(),
+    doctorViewModel: DoctorViewModel = viewModel(),
     onNextButtonClicked: (Doctor) -> Unit,
     ) {
 
@@ -43,18 +43,15 @@ fun DoctorSelectionScreen(
     val doctors by doctorViewModel.doctors.collectAsState()
 
     LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
         items(doctors) { doctor ->
-            DoctorItem(doctor = doctor)
-            {
-                appPreferences.doctorId = doctor.id.toString()
+            DoctorItem(doctor = doctor) {
+                doctorViewModel.selectDoctor(doctor)
                 onNextButtonClicked(doctor)
             }
             Spacer(modifier = Modifier.height(16.dp))
         }
-
     }
 }
 
@@ -76,7 +73,7 @@ private fun DoctorItem(doctor : Doctor, onNextButtonClicked: (Doctor) -> Unit) {
                 .padding(16.dp)
         ) {
             val painter = rememberImagePainter(
-                data = doctor.image,
+                data = doctor.imageLink,
                 builder = {
                     transformations(CircleCropTransformation())
                 }

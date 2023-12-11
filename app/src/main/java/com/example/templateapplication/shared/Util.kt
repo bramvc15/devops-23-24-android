@@ -54,7 +54,7 @@ fun Modifier.clickable(
 
 @Composable
 fun StatusBarColorUpdateEffect(color: Color) {
-    if (LocalInspectionMode.current) return // findActivity() will not work in preview.
+    if (LocalInspectionMode.current) return
     val activity = LocalContext.current.findActivity()
     val lifecycleOwner = LocalLifecycleOwner.current
     val observer = remember {
@@ -93,8 +93,6 @@ fun NavigationIcon(onBackClick: () -> Unit) {
 @Composable
 fun rememberFirstCompletelyVisibleMonth(state: CalendarState): CalendarMonth {
     val visibleMonth = remember(state) { mutableStateOf(state.firstVisibleMonth) }
-    // Only take non-null values as null will be produced when the
-    // list is mid-scroll as no index will be completely visible.
     LaunchedEffect(state) {
         snapshotFlow { state.layoutInfo.completelyVisibleMonths.firstOrNull() }
             .filterNotNull()
