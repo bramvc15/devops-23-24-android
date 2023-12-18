@@ -1,6 +1,10 @@
 package com.example.templateapplication.data.TimeSlots
 
 import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.example.templateapplication.MyApplication
+import com.example.templateapplication.data.AppContainer
+import com.example.templateapplication.data.Appointments.AppointmentDao
 import com.example.templateapplication.data.Appointments.asDbAppointment
 import com.example.templateapplication.data.Appointments.asDomainAppointment
 import com.example.templateapplication.data.Appointments.dbAppointment
@@ -8,6 +12,7 @@ import com.example.templateapplication.model.TimeSlot
 
 @Entity(tableName = "timeslots")
 data class dbTimeSlot (
+    @PrimaryKey
     val id: Int,
     val doctorId: Int,
     val appointmentType: Int,

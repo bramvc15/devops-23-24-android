@@ -6,7 +6,7 @@ import com.example.templateapplication.model.Patient
 
 @Entity(tableName = "patients")
 data class dbPatient (
-    @PrimaryKey()
+    @PrimaryKey
     val id: Int,
     val name: String,
     val email: String,
