@@ -11,6 +11,7 @@ abstract class VisionDatabase : RoomDatabase() {
     companion object {
         @Volatile
         private var Instance: VisionDatabase? = null
+
         fun getDatabase(context: Context): VisionDatabase {
             return Instance ?: synchronized(this) {
                 Room.databaseBuilder(context, VisionDatabase::class.java, "vision_database").fallbackToDestructiveMigration()

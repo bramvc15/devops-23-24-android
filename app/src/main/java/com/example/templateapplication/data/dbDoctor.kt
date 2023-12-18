@@ -36,7 +36,7 @@ fun Doctor.asDbDoctor(): dbDoctor {
         imageLink = this.imageLink)
 }
 
-fun List<dbDoctor>.asDomainDoctors(): List<Doctor>{
+fun List<dbDoctor>.asDomainDoctors(): List<Doctor> {
     var doctorList = this.map {
         Doctor(it.id, it.name, it.specialization, it.gender, it.biograph, it.isAvailable, it.imageLink)
     }
