@@ -1,21 +1,13 @@
 package com.example.templateapplication.model
 
-import kotlinx.serialization.Contextual
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.Serializer
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.Date
+import java.sql.Timestamp
 
-@Serializable
 data class PatientDTO(
     val id: Int,
     val name: String,
     val email: String,
     val phoneNumber: String,
-    @Serializable(with = LocalDateTimeSerializer::class) val dateOfBirth: LocalDateTime,
+    val dateOfBirth: Timestamp,
     val gender: Int,
     val bloodType: Int,
 )
