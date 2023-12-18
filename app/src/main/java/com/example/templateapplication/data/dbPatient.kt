@@ -12,7 +12,7 @@ data class dbPatient (
     val name: String,
     val email: String,
     val phoneNumber: String,
-    val dateOfBirth: Timestamp,
+    val dateOfBirth: String,
     val gender: Int,
     val bloodType: Int,
 )

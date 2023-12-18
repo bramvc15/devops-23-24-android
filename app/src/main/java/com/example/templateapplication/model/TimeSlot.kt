@@ -1,12 +1,20 @@
 package com.example.templateapplication.model
 
-import java.sql.Timestamp
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class TimeSlot(
+    @SerialName(value = "id")
     val id: Int,
-    val duration: Int,
-    val appointmentType: Int,
-    val dateTime: Timestamp,
-    val appointment: Appointment?,
+    @SerialName(value = "doctorId")
     val doctorId: Int,
+    @SerialName(value = "appointmentType")
+    val appointmentType: Int,
+    @SerialName(value = "dateTime")
+    val dateTime: String,
+    @SerialName(value = "duration")
+    val duration: Int,
+    @SerialName(value = "appointmentDTO")
+    val appointment: Appointment,
 )
