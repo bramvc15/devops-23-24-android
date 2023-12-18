@@ -174,7 +174,7 @@ private fun AppointmentItem(timeslot: TimeSlot, doctorViewModel: DoctorViewModel
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Doctor: ${doctorViewModel.selectedDoctor?.name}",
+                text = "dbDoctor.kt: ${doctorViewModel.selectedDoctor?.name}",
                 fontSize = 14.sp,
                 color = Color.Black
             )

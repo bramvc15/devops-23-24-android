@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.10"
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -11,7 +12,7 @@ android {
     defaultConfig {
         applicationId = "com.example.templateapplication"
         minSdk = 31
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -32,14 +33,14 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
         // Enable support for the new language APIs
 
 
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -112,6 +113,17 @@ dependencies {
     implementation("com.squareup.moshi:moshi:1.14.0")
     implementation("com.squareup.moshi:moshi-kotlin:1.14.0")
 
-
-
+    // Room
+    val room_version = "2.5.0"
+    //noinspection GradleDependency
+    implementation("androidx.room:room-runtime:$room_version")
+    //noinspection GradleDependency
+    implementation("androidx.room:room-ktx:$room_version")
+    //noinspection GradleDependency
+    ksp("androidx.room:room-compiler:$room_version")
+    // optional - Test helpers
+    //noinspection GradleDependency
+    testImplementation("androidx.room:room-testing:$room_version")
+    //noinspection GradleDependency
+    annotationProcessor("androidx.room:room-compiler:$room_version")
 }

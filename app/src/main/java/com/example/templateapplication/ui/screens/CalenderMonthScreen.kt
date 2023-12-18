@@ -257,7 +257,7 @@ private fun MonthHeader(
 //    }
 //}
 //@Composable
-//private fun AppointmentInformation(doctor: Appointment.Doctor, patient: Appointment.Patient) {
+//private fun AppointmentInformation(doctor: Appointment.dbDoctor.kt, patient: Appointment.Patient) {
 //    Row(
 //        modifier = Modifier
 //            .fillMaxWidth()
