@@ -61,6 +61,7 @@ class PatientViewModel(private val patientRepository: PatientRepository) : ViewM
             }
         }
     }
+
     /**
      * Factory for [PatientViewModel] that takes [PatientRepository] as a dependency
      */

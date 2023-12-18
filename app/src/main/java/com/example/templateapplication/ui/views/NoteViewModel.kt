@@ -1,6 +1,5 @@
 package com.example.templateapplication.ui.views
 
-import android.text.Spannable.Factory
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -12,13 +11,12 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import coil.network.HttpException
 import com.example.templateapplication.MyApplication
-import com.example.templateapplication.data.AppointmentRepository
 import com.example.templateapplication.data.NoteRepository
-import com.example.templateapplication.data.PatientRepository
 import com.example.templateapplication.model.Note
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.io.IOException
 
 sealed interface NoteUiState {
     data class Success(val notes: List<Note>) : NoteUiState
@@ -44,7 +42,7 @@ class NoteViewModel(private val noteRepository: NoteRepository) : ViewModel() {
                 val notes = noteRepository.getNotes()
                 _notes.value = notes
                 NoteUiState.Success(notes)
-            } catch (e: Exception) {
+            } catch (e: IOException) {
                 Log.d("NoteViewModel", "IOException")
                 Log.d("NoteViewModel", e.message.toString())
                 Log.d("NoteViewModel", e.stackTraceToString())
@@ -62,6 +60,7 @@ class NoteViewModel(private val noteRepository: NoteRepository) : ViewModel() {
             }
         }
     }
+
     /**
      * Factory for [NoteViewModel] that takes [NoteRepository] as a dependency
      */
