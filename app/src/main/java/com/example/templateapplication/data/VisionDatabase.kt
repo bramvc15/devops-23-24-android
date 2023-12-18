@@ -8,6 +8,7 @@ import androidx.room.RoomDatabase
 @Database(entities = [dbDoctor::class], version = 1, exportSchema = false)
 abstract class VisionDatabase : RoomDatabase() {
     abstract fun doctorDao(): DoctorDao
+    abstract fun noteDao(): NoteDao
     companion object {
         @Volatile
         private var Instance: VisionDatabase? = null

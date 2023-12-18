@@ -3,6 +3,7 @@ package com.example.templateapplication.data
 import android.content.Context
 import com.example.templateapplication.network.AppointmentApiService
 import com.example.templateapplication.network.DoctorApiService
+import com.example.templateapplication.network.NoteApiService
 import com.example.templateapplication.network.PatientApiService
 import com.example.templateapplication.network.TimeSlotApiService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -18,6 +19,7 @@ interface AppContainer {
     val appointmentRepository: AppointmentRepository
     val timeSlotRepository: TimeSlotRepository
     val patientRepository: PatientRepository
+    val noteRepository: NoteRepository
 }
 
 /**
@@ -73,6 +75,16 @@ class DefaultAppContainer(private val context: Context): AppContainer {
         NetworkPatientRepository(
             //VisionDatabase.getDatabase(context = context).appointmentDao(),
             retrofit.create(PatientApiService::class.java)
+        )
+    }
+
+    /**
+     * DI implementation for Note repository
+     */
+    override val noteRepository: NoteRepository by lazy {
+        NetworkNoteRepository(
+            VisionDatabase.getDatabase(context = context).noteDao(),
+            retrofit.create(NoteApiService::class.java)
         )
     }
 }
