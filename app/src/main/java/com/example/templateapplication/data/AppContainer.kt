@@ -63,7 +63,7 @@ class DefaultAppContainer(private val context: Context): AppContainer {
      */
     override val appointmentRepository: AppointmentRepository by lazy {
         NetworkAppointmentRepository(
-            //VisionDatabase.getDatabase(context = context).appointmentDao(),
+            VisionDatabase.getDatabase(context = context).appointmentDao(),
             retrofit.create(AppointmentApiService::class.java)
         )
     }
@@ -73,7 +73,7 @@ class DefaultAppContainer(private val context: Context): AppContainer {
      */
     override val timeSlotRepository: TimeSlotRepository by lazy {
         NetworkTimeSlotRepository(
-            //VisionDatabase.getDatabase(context = context).appointmentDao(),
+            VisionDatabase.getDatabase(context = context).timeSlotDao(),
             retrofit.create(TimeSlotApiService::class.java)
         )
     }
@@ -83,7 +83,7 @@ class DefaultAppContainer(private val context: Context): AppContainer {
      */
     override val patientRepository: PatientRepository by lazy {
         NetworkPatientRepository(
-            //VisionDatabase.getDatabase(context = context).appointmentDao(),
+            VisionDatabase.getDatabase(context = context).patientDao(),
             retrofit.create(PatientApiService::class.java)
         )
     }

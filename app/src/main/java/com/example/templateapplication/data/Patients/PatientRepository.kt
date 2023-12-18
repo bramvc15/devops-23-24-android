@@ -8,7 +8,7 @@ interface PatientRepository {
 }
 
 class NetworkPatientRepository(
-    //private val patientDao: PatientDao,
+    private val patientDao: PatientDao,
     private val patientApiService: PatientApiService
 ): PatientRepository {
     override suspend fun getPatients(): List<Patient> {
