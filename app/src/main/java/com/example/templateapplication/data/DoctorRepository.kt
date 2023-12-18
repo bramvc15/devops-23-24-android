@@ -1,15 +1,26 @@
 package com.example.templateapplication.data
 
-/*
-interface DoctorsRepository {
-    suspend fun getDoctors(): List<dbDoctor.kt>
+import com.example.templateapplication.model.Doctor
+import com.example.templateapplication.network.DoctorApiService
+
+interface DoctorRepository {
+    suspend fun getDoctors(): List<Doctor>
+
+    /**
+     * Insert doctor in the data source
+     */
+    suspend fun insertDoctor(doctor: Doctor)
 }
 
-class ApiDoctorsRepository(
+class NetworkDoctorRepository(
+    private val doctorDao: DoctorDao,
     private val doctorApiService: DoctorApiService
-): DoctorsRepository {
-    override suspend fun getDoctors(): List<dbDoctor.kt> =
-        doctorApiService.getDoctors().asDomainObjects()
+): DoctorRepository {
+    override suspend fun getDoctors(): List<Doctor> {
+        return doctorApiService.getDoctors()
+    }
 
+    override suspend fun insertDoctor(doctor: Doctor) {
+        doctorDao.insert(doctor.asDbDoctor())
+    }
 }
- */

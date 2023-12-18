@@ -5,11 +5,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import coil.network.HttpException
+import com.example.templateapplication.MyApplication
+import com.example.templateapplication.data.TimeSlotRepository
 import com.example.templateapplication.model.Doctor
 import com.example.templateapplication.model.TimeSlot
-import com.example.templateapplication.network.TimeSlotApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -18,52 +22,58 @@ import java.io.IOException
 
 sealed interface TimeSlotUiState {
     data class Success(val timeslots: List<TimeSlot>) : TimeSlotUiState
-    object Error : TimeSlotUiState
+    data class Error(val errorMessage: String) : TimeSlotUiState
     object Loading : TimeSlotUiState
 }
 
-class TimeSlotViewModel(doctorViewModel: DoctorViewModel) : ViewModel() {
-
-    private var timeSlotUiState: TimeSlotUiState by mutableStateOf(TimeSlotUiState.Loading)
+class TimeSlotViewModel(private val timeSlotRepository: TimeSlotRepository) : ViewModel() {
+    var timeSlotUiState: TimeSlotUiState by mutableStateOf(TimeSlotUiState.Loading)
+        private set
 
     private val _timeslots = MutableStateFlow<List<TimeSlot>>(emptyList())
     val timeslots: StateFlow<List<TimeSlot>> get() = _timeslots
 
-    private fun setTimeSlots(newTimeSlots: List<TimeSlot>) {
-        _timeslots.value = newTimeSlots
-    }
-
     init {
-        doctorViewModel.selectedDoctor?.let { selectedDoctor ->
-            Log.d("doctor3", "${selectedDoctor}")
-            getTimeSlots(selectedDoctor)
-        }
+
     }
 
     private fun getTimeSlots(doctor: Doctor) {
         viewModelScope.launch {
             timeSlotUiState = TimeSlotUiState.Loading
             timeSlotUiState = try {
-                val listResult = TimeSlotApi.retrofitService.getTimeSlots(id = doctor.id)
-                setTimeSlots(listResult)
-                TimeSlotUiState.Success(listResult)
+                val timeslots = timeSlotRepository.getTimeSlots(doctor.id)
+                _timeslots.value = timeslots
+                TimeSlotUiState.Success(timeslots)
             } catch (e: IOException) {
-                TimeSlotUiState.Error
+                Log.d("TimeSlotViewModel", "IOException")
+                Log.d("TimeSlotViewModel", e.message.toString())
+                Log.d("TimeSlotViewModel", e.stackTraceToString())
+                TimeSlotUiState.Error("IOException error: ${e.message}")
             } catch (e: HttpException) {
-                TimeSlotUiState.Error
+                Log.d("TimeSlotViewModel", "HttpException")
+                Log.d("TimeSlotViewModel", e.message.toString())
+                Log.d("TimeSlotViewModel", e.stackTraceToString())
+                TimeSlotUiState.Error("HttpException error: ${e.message}")
+            } catch (e: Exception) {
+                Log.d("TimeSlotViewModel", "Exception")
+                Log.d("TimeSlotViewModel", e.message.toString())
+                Log.d("TimeSlotViewModel", e.stackTraceToString())
+                TimeSlotUiState.Error("Exception error: ${e.message}")
             }
         }
     }
-    /*
+    /**
+     * Factory for [TimeSlotViewModel] that takes [TimeSlotRepository] as a dependency
+     */
     companion object {
-        val Factory : ViewModelProvider.Factory = viewModelFactory {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val application = this[APPLICATION_KEY] as MyApplication
-                val doctorsRepository = application.container.doctorsRepository
-                DoctorViewModel(doctorsRepository = doctorsRepository)
+                val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as MyApplication)
+                val timeSlotRepository = application.container.timeSlotRepository
+                TimeSlotViewModel(timeSlotRepository = timeSlotRepository)
             }
         }
-    }*/
+    }
 }
 
 

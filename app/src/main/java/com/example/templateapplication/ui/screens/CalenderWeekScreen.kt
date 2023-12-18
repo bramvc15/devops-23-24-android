@@ -32,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.templateapplication.R
 import com.example.templateapplication.model.TimeSlot
 import com.example.templateapplication.shared.StatusBarColorUpdateEffect
@@ -48,7 +49,7 @@ import java.time.format.DateTimeFormatter
 private val topAppColor: Color @Composable get() = colorResource(R.color.colorPrimary)
 
 @Composable
-fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : TimeSlotViewModel) {
+fun CalendarWeekScreen(timeslotViewModel: TimeSlotViewModel = viewModel(factory = TimeSlotViewModel.Factory)) {
     val currentDate = remember { LocalDate.now() }
     val startDate = remember { currentDate.minusDays(500) }
     val endDate = remember { currentDate.plusDays(500) }
@@ -103,7 +104,7 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : Tim
                         .weight(1f)
                 ) {
                     items(selectedAppointment) { appointment ->
-                        AppointmentItem(timeslot = appointment, doctorViewModel = doctorViewModel)
+                        AppointmentItem(timeslot = appointment, timeslotViewModel = timeslotViewModel)
                     }
                 }
             }
@@ -144,7 +145,7 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : Tim
 }
 
 @Composable
-private fun AppointmentItem(timeslot: TimeSlot, doctorViewModel: DoctorViewModel) {
+private fun AppointmentItem(timeslot: TimeSlot, timeslotViewModel: TimeSlotViewModel) {
     var isExpanded by remember { mutableStateOf(false) }
 
     Card(
@@ -174,7 +175,8 @@ private fun AppointmentItem(timeslot: TimeSlot, doctorViewModel: DoctorViewModel
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "dbDoctor.kt: ${doctorViewModel.selectedDoctor?.name}",
+                //text = "dbDoctor.kt: ${doctorViewModel.selectedDoctor?.name}",
+                text = "dbDoctor.kt: ",
                 fontSize = 14.sp,
                 color = Color.Black
             )

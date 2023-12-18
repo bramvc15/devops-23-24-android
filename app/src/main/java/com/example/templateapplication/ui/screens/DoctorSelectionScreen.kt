@@ -34,7 +34,7 @@ import com.example.templateapplication.ui.views.DoctorViewModel
 
 @Composable
 fun DoctorSelectionScreen(
-    doctorViewModel: DoctorViewModel = viewModel(),
+    doctorViewModel: DoctorViewModel = viewModel(factory = DoctorViewModel.Factory),
     onNextButtonClicked: (Doctor) -> Unit,
     ) {
 
