@@ -2,7 +2,7 @@ package com.example.templateapplication.model
 
 import java.sql.Timestamp
 
-data class PatientDTO(
+data class Patient(
     val id: Int,
     val name: String,
     val email: String,

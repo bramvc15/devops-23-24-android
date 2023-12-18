@@ -4,6 +4,6 @@ data class Appointment(
     val timeSlotId: Int,
     val reason: String,
     val note: String?,
-    val patient: PatientDTO?,
+    val patient: Patient?,
     val patientId: Int,
 )
