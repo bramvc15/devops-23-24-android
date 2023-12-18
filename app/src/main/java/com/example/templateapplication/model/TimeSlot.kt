@@ -7,6 +7,6 @@ data class TimeSlot(
     val duration: Int,
     val appointmentType: Int,
     val dateTime: Timestamp,
-    val appointmentDTO: Appointment?,
+    val appointment: Appointment?,
     val doctorId: Int,
 )
