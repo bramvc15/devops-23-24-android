@@ -34,12 +34,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.templateapplication.R
+import com.example.templateapplication.data.GlobalDoctor
 import com.example.templateapplication.model.TimeSlot
 import com.example.templateapplication.shared.StatusBarColorUpdateEffect
 import com.example.templateapplication.shared.displayText
 import com.example.templateapplication.shared.getWeekPageTitle
 import com.example.templateapplication.shared.rememberFirstVisibleWeekAfterScroll
-import com.example.templateapplication.ui.views.DoctorViewModel
 import com.example.templateapplication.ui.views.TimeSlotViewModel
 import com.kizitonwose.calendar.compose.WeekCalendar
 import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
@@ -175,8 +175,7 @@ private fun AppointmentItem(timeslot: TimeSlot, timeslotViewModel: TimeSlotViewM
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                //text = "dbDoctor.kt: ${doctorViewModel.selectedDoctor?.name}",
-                text = "dbDoctor.kt: ",
+                text = "dbDoctor.kt: ${GlobalDoctor.doctor?.name ?: "N/A"}",
                 fontSize = 14.sp,
                 color = Color.Black
             )

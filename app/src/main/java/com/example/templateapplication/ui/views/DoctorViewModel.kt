@@ -12,12 +12,11 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import coil.network.HttpException
 import com.example.templateapplication.MyApplication
 import com.example.templateapplication.data.DoctorRepository
+import com.example.templateapplication.data.GlobalDoctor
 import com.example.templateapplication.model.Doctor
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.IOException
 
 
@@ -64,17 +63,9 @@ class DoctorViewModel(private val doctorRepository: DoctorRepository) : ViewMode
         }
     }
 
-    // Niet zeker of dit al oke is
+    // Niet zeker of dit oke is
     fun selectDoctor(doctor: Doctor) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                doctorRepository.insertDoctor(doctor)
-            }
-        }
-    }
-
-    fun getSelectedDoctor(): Doctor? {
-        TODO("Not yet implemented")
+        GlobalDoctor.doctor = doctor
     }
 
     /**
