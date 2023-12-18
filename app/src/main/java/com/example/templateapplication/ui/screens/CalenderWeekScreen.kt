@@ -2,12 +2,12 @@ package com.example.templateapplication.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,9 +17,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.Card
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
@@ -61,6 +64,10 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : Tim
     var selection by remember { mutableStateOf(currentDate) }
     val timeslots by timeslotViewModel.timeslots.collectAsState()
 
+    var isAddingAppointment by remember { mutableStateOf(false) }
+    var selectedType by remember { mutableStateOf("Consultation") }
+    var dropdownExpanded by remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -83,7 +90,9 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : Tim
                 }
 
                 FloatingActionButton(
-                    onClick = { /*TODO*/ }
+                    onClick = {
+                        isAddingAppointment = true
+                    }
                 ) {
                     Icon(Icons.Filled.Add, "Add appointment")
                 }
@@ -102,6 +111,96 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : Tim
             },
         )
         val selectedAppointment = timeslots.filter { it.dateTime.toLocalDate() == selection }
+
+        if(isAddingAppointment) {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                elevation = 8.dp
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                ) {
+                    Text(text = "Maak een afspraak op ${selection.format(DateTimeFormatter.ofPattern("dd MMMM"))}",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp,
+                        color = Color.Black
+                    )
+
+                    OutlinedTextField(
+                        value = "",
+                        onValueChange = {  },
+                        label = { Text(text = "Naam") },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp)
+                    )
+
+                    OutlinedTextField(
+                        value = "",
+                        onValueChange = {  },
+                        label = { Text(text = "Reden") },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp)
+                    )
+
+                    OutlinedTextField(
+                        value = "",
+                        onValueChange = {  },
+                        label = { Text(text = "Note") },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp)
+                    )
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 16.dp)
+                            .clickable { dropdownExpanded = true }
+                            .border(
+                                width = 1.dp,
+                                color = Color.Gray,
+                                shape = MaterialTheme.shapes.small
+                            )
+                    ) {
+                        Spacer(modifier = Modifier.height(4.dp))
+                        DropdownMenu(
+                            expanded = dropdownExpanded,
+                            onDismissRequest = { dropdownExpanded = false },
+                            modifier = Modifier
+                                .background(Color.White)
+                        ) {
+                            DropdownMenuItem(onClick = { selectedType = "Consultatie" }) {
+                                Text(text = "Consultatie")
+                            }
+                            DropdownMenuItem(onClick = { selectedType = "Operatie"}) {
+                                Text(text = "Operatie")
+                            }
+                        }
+                        Text(selectedType, modifier = Modifier.padding(8.dp))
+                    }
+
+                    Button(onClick = {
+                        isAddingAppointment = false
+                    },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp)
+                            .padding(top = 16.dp)
+                    ) {
+                        Text(text = "Afspraak maken")
+                    }
+
+
+
+                }
+            }
+        }
         if (selectedAppointment.isNotEmpty()) {
             Column(
                 modifier = Modifier
