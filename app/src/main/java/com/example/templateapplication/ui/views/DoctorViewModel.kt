@@ -11,7 +11,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import coil.network.HttpException
 import com.example.templateapplication.MyApplication
-import com.example.templateapplication.data.DoctorRepository
+import com.example.templateapplication.data.Doctors.DoctorRepository
 import com.example.templateapplication.data.GlobalDoctor
 import com.example.templateapplication.model.Doctor
 import kotlinx.coroutines.flow.MutableStateFlow

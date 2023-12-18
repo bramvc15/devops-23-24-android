@@ -1,4 +1,4 @@
-package com.example.templateapplication.data
+package com.example.templateapplication.data.Appointments
 
 import androidx.room.Dao
 import androidx.room.Delete

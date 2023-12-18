@@ -11,7 +11,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import coil.network.HttpException
 import com.example.templateapplication.MyApplication
-import com.example.templateapplication.data.TimeSlotRepository
+import com.example.templateapplication.data.TimeSlots.TimeSlotRepository
 import com.example.templateapplication.model.Doctor
 import com.example.templateapplication.model.TimeSlot
 import kotlinx.coroutines.flow.MutableStateFlow

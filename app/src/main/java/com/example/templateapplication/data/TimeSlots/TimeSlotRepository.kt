@@ -1,4 +1,4 @@
-package com.example.templateapplication.data
+package com.example.templateapplication.data.TimeSlots
 
 import com.example.templateapplication.model.TimeSlot
 import com.example.templateapplication.network.TimeSlotApiService

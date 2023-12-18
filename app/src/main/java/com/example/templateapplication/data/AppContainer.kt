@@ -1,6 +1,16 @@
 package com.example.templateapplication.data
 
 import android.content.Context
+import com.example.templateapplication.data.Appointments.AppointmentRepository
+import com.example.templateapplication.data.Appointments.NetworkAppointmentRepository
+import com.example.templateapplication.data.Doctors.DoctorRepository
+import com.example.templateapplication.data.Doctors.NetworkDoctorRepository
+import com.example.templateapplication.data.Notes.NetworkNoteRepository
+import com.example.templateapplication.data.Notes.NoteRepository
+import com.example.templateapplication.data.Patients.NetworkPatientRepository
+import com.example.templateapplication.data.Patients.PatientRepository
+import com.example.templateapplication.data.TimeSlots.NetworkTimeSlotRepository
+import com.example.templateapplication.data.TimeSlots.TimeSlotRepository
 import com.example.templateapplication.network.AppointmentApiService
 import com.example.templateapplication.network.DoctorApiService
 import com.example.templateapplication.network.NoteApiService

@@ -1,9 +1,10 @@
-package com.example.templateapplication.data
+package com.example.templateapplication.data.Doctors
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.example.templateapplication.data.Doctors.dbDoctor
 import kotlinx.coroutines.flow.Flow
 
 @Dao

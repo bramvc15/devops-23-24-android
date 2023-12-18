@@ -1,9 +1,8 @@
-package com.example.templateapplication.data
+package com.example.templateapplication.data.Patients
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.templateapplication.model.Patient
-import java.sql.Timestamp
 
 @Entity(tableName = "patients")
 data class dbPatient (

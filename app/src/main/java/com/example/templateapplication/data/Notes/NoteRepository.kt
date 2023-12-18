@@ -1,4 +1,4 @@
-package com.example.templateapplication.data
+package com.example.templateapplication.data.Notes
 
 import com.example.templateapplication.model.Note
 import com.example.templateapplication.network.NoteApiService

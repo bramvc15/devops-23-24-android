@@ -1,7 +1,10 @@
-package com.example.templateapplication.data
+package com.example.templateapplication.data.Appointments
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.templateapplication.data.Patients.asDbPatient
+import com.example.templateapplication.data.Patients.asDomainPatient
+import com.example.templateapplication.data.Patients.dbPatient
 import com.example.templateapplication.model.Appointment
 
 @Entity(tableName = "appointments")

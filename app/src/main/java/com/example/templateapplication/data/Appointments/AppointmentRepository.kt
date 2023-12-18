@@ -1,4 +1,4 @@
-package com.example.templateapplication.data
+package com.example.templateapplication.data.Appointments
 
 import com.example.templateapplication.model.Appointment
 import com.example.templateapplication.model.Patient

@@ -1,9 +1,10 @@
-package com.example.templateapplication.data
+package com.example.templateapplication.data.TimeSlots
 
 import androidx.room.Entity
-import com.example.templateapplication.model.Appointment
+import com.example.templateapplication.data.Appointments.asDbAppointment
+import com.example.templateapplication.data.Appointments.asDomainAppointment
+import com.example.templateapplication.data.Appointments.dbAppointment
 import com.example.templateapplication.model.TimeSlot
-import java.sql.Timestamp
 
 @Entity(tableName = "timeslots")
 data class dbTimeSlot (
