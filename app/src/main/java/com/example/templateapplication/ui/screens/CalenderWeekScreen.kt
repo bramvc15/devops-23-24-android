@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -14,10 +15,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Button
 import androidx.compose.material.Card
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -69,7 +75,19 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : Tim
         TopAppBar(
             elevation = 0.dp,
             title = { Text(text = getWeekPageTitle(visibleWeek)) },
+            actions = {
+                Button(onClick = {
+                    selection = LocalDate.now()
+                }) {
+                    Text(text = "Vandaag")
+                }
 
+                FloatingActionButton(
+                    onClick = { /*TODO*/ }
+                ) {
+                    Icon(Icons.Filled.Add, "Add appointment")
+                }
+            },
         )
         StatusBarColorUpdateEffect(topAppColor)
         WeekCalendar(
@@ -119,7 +137,8 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : Tim
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,
                     color = Color.Black
-                )}
+                )
+            }
 
             Column(
                 modifier = Modifier
@@ -139,8 +158,9 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : Tim
                     color = Color.Black,
                     modifier = Modifier.padding(top = 8.dp)
                 )
+            }
         }
-    }}
+    }
 }
 
 @Composable

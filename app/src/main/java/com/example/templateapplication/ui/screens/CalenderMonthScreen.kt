@@ -8,12 +8,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Button
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.Text
 import androidx.compose.material.darkColors
@@ -53,7 +55,7 @@ import com.kizitonwose.calendar.core.previousMonth
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.YearMonth
-
+import java.time.format.DateTimeFormatter
 private val toolbarColor: Color @Composable get() = colorResource(R.color.colorPrimary)
 private val topAppColor: Color @Composable get() = colorResource(R.color.colorPrimary)
 private val backgroundColor: Color @Composable get() = colorResource(R.color.white)
@@ -65,7 +67,10 @@ private val informationColor: Color @Composable get() = colorResource(R.color.bl
 
 
 @Composable
-fun CalenderMonthScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : TimeSlotViewModel) {
+fun CalenderMonthScreen(
+    doctorViewModel: DoctorViewModel,
+    timeslotViewModel : TimeSlotViewModel
+) {
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth.minusMonths(500) }
     val endMonth = remember { currentMonth.plusMonths(500) }
@@ -140,6 +145,55 @@ fun CalenderMonthScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : Ti
                     )
                 },
             )
+
+            selection?.let { selectedDate ->
+                if(/*appointmentsInSelectedDate.value.isEmpty()*/ false){
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    ) {
+                        Text(
+                            text = "Geen afspraken op ${selectedDate.date.format(DateTimeFormatter.ofPattern("dd MMMM"))}",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp,
+                            color = Color.Black
+                        )
+                    }
+                } else {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    ) {
+                        Text(
+                            text = "Afspraken op ${
+                                selectedDate.date.format(
+                                    DateTimeFormatter.ofPattern(
+                                        "dd MMMM"
+                                    )
+                                )
+                            }",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp,
+                            color = Color.Black
+                        )
+                    }
+                    Column (
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight()
+                            .padding(16.dp),
+                        verticalArrangement = Arrangement.Bottom
+
+                    ) {
+                        Button(onClick = { /*TODO*/ }) {
+                            Text(text = "Afspraak maken")
+                        }
+                    }
+                }
+            }
+
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
 //                items(items = appointmentsInSelectedDate.value) { appointment ->
 //                    AppointmentInformation(appointment = appointment)
