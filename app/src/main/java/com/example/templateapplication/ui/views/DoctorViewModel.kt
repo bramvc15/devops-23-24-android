@@ -16,7 +16,6 @@ import com.example.templateapplication.data.GlobalDoctor
 import com.example.templateapplication.model.Doctor
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.io.IOException
 
@@ -39,24 +38,16 @@ class DoctorViewModel(private val doctorRepository: DoctorRepository) : ViewMode
     }
 
     private fun getDoctors() {
-        Log.d("THOAMS", "${doctors}")
         viewModelScope.launch {
             doctorUiState = DoctorUiState.Loading
             doctorUiState = try {
                 val doctorsFlow = doctorRepository.getAllDoctorsStream()
-                Log.d("GUILLAUME", "${doctorsFlow}")
 
-                val doctors: MutableList<Doctor> = mutableListOf()
-                doctorsFlow.map { doc ->
-                    Log.d("test", "${doc}")
-                    doctors.addAll(doc)
+                doctorsFlow.collect { doc ->
+                   _doctors.value = doc
                 }
-                Log.d("test2", "${doctors}")
 
-                _doctors.value = doctors
-
-                Log.d("WOUT", "${doctors}")
-                DoctorUiState.Success(doctors)
+                DoctorUiState.Success(doctors = doctors.value)
             } catch (e: IOException) {
                 Log.d("DoctorViewModel", "IOException")
                 Log.d("DoctorViewModel", e.message.toString())
