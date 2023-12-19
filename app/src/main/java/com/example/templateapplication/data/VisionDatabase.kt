@@ -15,7 +15,7 @@ import com.example.templateapplication.data.Patients.dbPatient
 import com.example.templateapplication.data.TimeSlots.TimeSlotDao
 import com.example.templateapplication.data.TimeSlots.dbTimeSlot
 
-@Database(entities = [dbDoctor::class, dbNote::class, dbAppointment::class, dbPatient::class, dbTimeSlot::class], version = 2, exportSchema = false)
+@Database(entities = [dbDoctor::class, dbNote::class, dbPatient::class,dbAppointment::class, dbTimeSlot::class], version = 2, exportSchema = false)
 abstract class VisionDatabase : RoomDatabase() {
     abstract fun doctorDao(): DoctorDao
     abstract fun noteDao(): NoteDao

@@ -6,7 +6,7 @@ import com.example.templateapplication.model.Note
 
 @Entity(tableName = "notes")
 data class dbNote(
-    @PrimaryKey
+    @PrimaryKey()
     val id: Int,
     val title: String,
     val content: String

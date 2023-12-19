@@ -16,5 +16,5 @@ data class TimeSlot(
     @SerialName(value = "duration")
     val duration: Int,
     @SerialName(value = "appointmentDTO")
-    val appointment: Appointment?,
+    val appointment: Appointment,
 )

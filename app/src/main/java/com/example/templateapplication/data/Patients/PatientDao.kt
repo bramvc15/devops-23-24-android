@@ -5,7 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Transaction
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -13,21 +13,15 @@ interface PatientDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(patient: dbPatient)
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertPatients(patients: List<dbPatient>): List<Long>
+    @Update
+    suspend fun update(patient: dbPatient)
+
+    @Delete
+    suspend fun delete(patient: dbPatient)
 
     @Query("SELECT * from patients")
     fun getAllPatients(): Flow<List<dbPatient>>
 
     @Query("SELECT * from patients WHERE patient_id = :id")
     fun getPatient(id: Int): Flow<dbPatient>
-
-    @Query("DELETE from patients")
-    suspend fun deleteAllPatients()
-
-    @Transaction
-    suspend fun deleteAndInsert(patients: List<dbPatient>) {
-        deleteAllPatients()
-        insertPatients(patients)
-    }
 }

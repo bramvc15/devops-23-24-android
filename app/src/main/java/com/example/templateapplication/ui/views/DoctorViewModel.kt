@@ -41,7 +41,7 @@ class DoctorViewModel(private val doctorRepository: DoctorRepository) : ViewMode
         viewModelScope.launch {
             doctorUiState = DoctorUiState.Loading
             doctorUiState = try {
-                val doctors = doctorRepository.getAllDoctorsStream()
+                val doctors = doctorRepository.getDoctors()
                 _doctors.value = doctors
                 DoctorUiState.Success(doctors)
             } catch (e: IOException) {

@@ -4,10 +4,10 @@ import android.content.Context
 import com.example.templateapplication.data.Appointments.AppointmentRepository
 import com.example.templateapplication.data.Appointments.NetworkAppointmentRepository
 import com.example.templateapplication.data.Doctors.DoctorRepository
-import com.example.templateapplication.data.Doctors.OfflineFirstDoctorRepository
+import com.example.templateapplication.data.Doctors.NetworkDoctorRepository
+import com.example.templateapplication.data.Notes.NetworkNoteRepository
 import com.example.templateapplication.data.Notes.NoteRepository
-import com.example.templateapplication.data.Notes.OfflineFirstNoteRepository
-import com.example.templateapplication.data.Patients.OfflineFirstPatientRepository
+import com.example.templateapplication.data.Patients.NetworkPatientRepository
 import com.example.templateapplication.data.Patients.PatientRepository
 import com.example.templateapplication.data.TimeSlots.NetworkTimeSlotRepository
 import com.example.templateapplication.data.TimeSlots.TimeSlotRepository
@@ -38,7 +38,7 @@ interface AppContainer {
  * Variables are initialized lazily and the same instance is shared across the whole app.
  */
 class DefaultAppContainer(private val context: Context): AppContainer {
-    private val baseUrl = "http://10.0.2.2:5001/api/"
+    private val baseUrl = "http://192.168.100.101:5001/api/"
 
     /**
      * Use the Retrofit builder to build a retrofit object using a kotlinx.serialization converter
@@ -52,9 +52,10 @@ class DefaultAppContainer(private val context: Context): AppContainer {
      * DI implementation for Doctor repository
      */
     override val doctorRepository: DoctorRepository by lazy {
-        OfflineFirstDoctorRepository(
-            VisionDatabase.getDatabase(context).doctorDao(),
-            retrofit.create(DoctorApiService::class.java))
+        NetworkDoctorRepository(
+            VisionDatabase.getDatabase(context = context).doctorDao(),
+            retrofit.create(DoctorApiService::class.java)
+        )
     }
 
     /**
@@ -81,8 +82,8 @@ class DefaultAppContainer(private val context: Context): AppContainer {
      * DI implementation for Patient repository
      */
     override val patientRepository: PatientRepository by lazy {
-        OfflineFirstPatientRepository(
-            VisionDatabase.getDatabase(context).patientDao(),
+        NetworkPatientRepository(
+            VisionDatabase.getDatabase(context = context).patientDao(),
             retrofit.create(PatientApiService::class.java)
         )
     }
@@ -91,8 +92,8 @@ class DefaultAppContainer(private val context: Context): AppContainer {
      * DI implementation for Note repository
      */
     override val noteRepository: NoteRepository by lazy {
-        OfflineFirstNoteRepository(
-            VisionDatabase.getDatabase(context).noteDao(),
+        NetworkNoteRepository(
+            VisionDatabase.getDatabase(context = context).noteDao(),
             retrofit.create(NoteApiService::class.java)
         )
     }
