@@ -95,7 +95,7 @@ dependencies {
     //db
     implementation("com.microsoft.sqlserver:mssql-jdbc:9.2.1.jre11")
     implementation("io.coil-kt:coil-compose:2.5.0")
-
+    implementation("androidx.compose.material3:material3-window-size-class")
 
 
     implementation("androidx.compose.foundation:foundation:1.5.4")
