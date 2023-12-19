@@ -83,7 +83,6 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-
     // Jetpack Compose Integration
     implementation("androidx.navigation:navigation-compose:$nav_version")
     androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
@@ -96,6 +95,8 @@ dependencies {
     //db
     implementation("com.microsoft.sqlserver:mssql-jdbc:9.2.1.jre11")
     implementation("io.coil-kt:coil-compose:2.5.0")
+
+
     implementation("androidx.compose.material3:material3-window-size-class")
 
 
