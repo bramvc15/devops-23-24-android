@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -29,58 +30,71 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun AppointmentItem(timeslot: TimeSlot, doctorViewModel: DoctorViewModel) {
     var isExpanded by remember { mutableStateOf(false) }
-
-    Card(
-            modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-                    .clickable { isExpanded = !isExpanded },
-            elevation = 8.dp,
-            shape = MaterialTheme.shapes.medium,
-            backgroundColor = colorResource(id = R.color.lightgray )
-    ) {
-        Column(
+    var isEditing by remember { mutableStateOf(false) }
+    if(!isEditing) {
+        Card(
                 modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp)
+                        .padding(8.dp)
+                        .clickable { isExpanded = !isExpanded },
+                elevation = 8.dp,
+                shape = MaterialTheme.shapes.medium,
+                backgroundColor = colorResource(id = R.color.lightgray)
         ) {
-            Text(
-                    text = "${timeslot.dateTime.format(DateTimeFormatter.ofPattern("HH:mm"))} - ${timeslot.dateTime.plusMinutes(timeslot.duration.toLong()).format(DateTimeFormatter.ofPattern("HH:mm"))}",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                    text = "${timeslot.appointmentDTO?.patientDTO?.name ?: "N/A"}",
-                    fontSize = 16.sp,
-                    color = Color.Black
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                    text = "Doctor: ${doctorViewModel.selectedDoctor?.name}",
-                    fontSize = 14.sp,
-                    color = Color.Black
-            )
-
-            // Conditionally display additional information when expanded
-            if (isExpanded) {
-                Spacer(modifier = Modifier.height(8.dp))
+            Column(
+                    modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+            ) {
                 Text(
-                        text = "Reason: ${timeslot.appointmentDTO?.reason}",
-                        fontSize = 14.sp,
+                        text = "${timeslot.dateTime.format(DateTimeFormatter.ofPattern("HH:mm"))} - ${timeslot.dateTime.plusMinutes(timeslot.duration.toLong()).format(DateTimeFormatter.ofPattern("HH:mm"))}",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
                         color = Color.Black
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                Button(
-                        onClick = { /*TODO*/ },
-                        modifier = Modifier
-                                .fillMaxWidth()
-                                .height(50.dp)
-                ) {
-                    Text(text = "Annuleer")
+                Text(
+                        text = "${timeslot.appointmentDTO?.patientDTO?.name ?: "N/A"}",
+                        fontSize = 16.sp,
+                        color = Color.Black
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                        text = "Doctor: ${doctorViewModel.selectedDoctor?.name}",
+                        fontSize = 14.sp,
+                        color = Color.Black
+                )
+
+                // Conditionally display additional information when expanded
+                if (isExpanded) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                            text = "Reason: ${timeslot.appointmentDTO?.reason}",
+                            fontSize = 14.sp,
+                            color = Color.Black
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Button(onClick = { /*TODO*/ },
+                            modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(50.dp)
+                    ) {
+                        Text(text = "Bewerk")
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Button(
+                            onClick = { /*TODO*/ },
+                            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red, contentColor = Color.White),
+                            modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(50.dp)
+                    ) {
+                        Text(text = "Annuleer")
+                    }
                 }
             }
         }
+    } else {
+
     }
 }
