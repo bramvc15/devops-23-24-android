@@ -8,7 +8,7 @@ import retrofit2.Retrofit
 import retrofit2.http.GET
 
 private const val BASE_URL =
-    "http://192.168.100.101:5001/api/"
+    "http://192.168.0.123:5001/api/"
 
 
 private val retrofit = Retrofit.Builder()

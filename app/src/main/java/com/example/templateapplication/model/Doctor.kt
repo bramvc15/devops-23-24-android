@@ -12,4 +12,5 @@ data class Doctor(
     val biograph: String?,
     val isAvailable: Boolean,
     @field:Json(name = "imageLink") val imageLink: String,
+    val auth0Id: String
 )
