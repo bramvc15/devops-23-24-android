@@ -2,14 +2,14 @@ package com.example.templateapplication.data
 
 import android.content.Context
 import com.example.templateapplication.data.Appointments.AppointmentRepository
-import com.example.templateapplication.data.Appointments.NetworkAppointmentRepository
+import com.example.templateapplication.data.Appointments.OfflineFirstAppointmentRepository
 import com.example.templateapplication.data.Doctors.DoctorRepository
 import com.example.templateapplication.data.Doctors.OfflineFirstDoctorRepository
 import com.example.templateapplication.data.Notes.NoteRepository
 import com.example.templateapplication.data.Notes.OfflineFirstNoteRepository
 import com.example.templateapplication.data.Patients.OfflineFirstPatientRepository
 import com.example.templateapplication.data.Patients.PatientRepository
-import com.example.templateapplication.data.TimeSlots.NetworkTimeSlotRepository
+import com.example.templateapplication.data.TimeSlots.OfflineFirstTimeSlotRepository
 import com.example.templateapplication.data.TimeSlots.TimeSlotRepository
 import com.example.templateapplication.network.AppointmentApiService
 import com.example.templateapplication.network.DoctorApiService
@@ -61,8 +61,8 @@ class DefaultAppContainer(private val context: Context): AppContainer {
      * DI implementation for Appointment repository
      */
     override val appointmentRepository: AppointmentRepository by lazy {
-        NetworkAppointmentRepository(
-            VisionDatabase.getDatabase(context = context).appointmentDao(),
+        OfflineFirstAppointmentRepository(
+            VisionDatabase.getDatabase(context).appointmentDao(),
             retrofit.create(AppointmentApiService::class.java)
         )
     }
@@ -71,8 +71,8 @@ class DefaultAppContainer(private val context: Context): AppContainer {
      * DI implementation for TimeSlot repository
      */
     override val timeSlotRepository: TimeSlotRepository by lazy {
-        NetworkTimeSlotRepository(
-            VisionDatabase.getDatabase(context = context).timeSlotDao(),
+        OfflineFirstTimeSlotRepository(
+            VisionDatabase.getDatabase(context).timeSlotDao(),
             retrofit.create(TimeSlotApiService::class.java)
         )
     }

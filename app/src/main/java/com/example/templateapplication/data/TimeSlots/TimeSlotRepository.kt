@@ -1,17 +1,12 @@
 package com.example.templateapplication.data.TimeSlots
 
 import com.example.templateapplication.model.TimeSlot
-import com.example.templateapplication.network.TimeSlotApiService
+import kotlinx.coroutines.flow.Flow
 
 interface TimeSlotRepository {
-    suspend fun getTimeSlots(id: Int): List<TimeSlot>
-}
-
-class NetworkTimeSlotRepository(
-    private val timeSlotDao: TimeSlotDao,
-    private val timeSlotApiService: TimeSlotApiService
-): TimeSlotRepository {
-    override suspend fun getTimeSlots(id: Int): List<TimeSlot> {
-        return timeSlotApiService.getTimeSlots(id)
-    }
+    fun getTimeSlotsStream(doctorId: Int): Flow<List<TimeSlot>>
+    suspend fun insertTimeSlot(timeSlot: TimeSlot)
+    suspend fun updateTimeSlot(timeSlot: TimeSlot)
+    suspend fun deleteTimeSlot(timeSlot: TimeSlot)
+    suspend fun refreshTimeSlots()
 }

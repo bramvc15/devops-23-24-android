@@ -17,13 +17,13 @@ interface NoteApiService {
        @Body note: Note
     ) : Note
 
-    @DELETE("note")
-    suspend fun deleteNote(
-        @Body note: Note
-    ) : Response<Unit>
-
     @POST("note")
     suspend fun createNote(
         @Body note: Note
     ) : Note
+
+    @DELETE("note")
+    suspend fun deleteNote(
+        @Body note: Note
+    ) : Response<Unit>
 }
