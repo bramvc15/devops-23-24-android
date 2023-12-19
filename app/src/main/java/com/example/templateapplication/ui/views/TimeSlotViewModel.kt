@@ -13,6 +13,7 @@ import coil.network.HttpException
 import com.example.templateapplication.MyApplication
 import com.example.templateapplication.data.TimeSlots.TimeSlotRepository
 import com.example.templateapplication.model.Doctor
+import com.example.templateapplication.model.Note
 import com.example.templateapplication.model.TimeSlot
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -41,7 +42,13 @@ class TimeSlotViewModel(private val timeSlotRepository: TimeSlotRepository) : Vi
         viewModelScope.launch {
             timeSlotUiState = TimeSlotUiState.Loading
             timeSlotUiState = try {
-                val timeslots = timeSlotRepository.getTimeSlots(doctor.id)
+                val timeslotsFlow = timeSlotRepository.getTimeSlotsStream(doctor.id)
+
+                val timeslots: MutableList<TimeSlot> = mutableListOf()
+                timeslotsFlow.collect { ts ->
+                    timeslots.addAll(ts)
+                }
+
                 _timeslots.value = timeslots
                 TimeSlotUiState.Success(timeslots)
             } catch (e: IOException) {

@@ -13,6 +13,7 @@ import coil.network.HttpException
 import com.example.templateapplication.MyApplication
 import com.example.templateapplication.data.Appointments.AppointmentRepository
 import com.example.templateapplication.model.Appointment
+import com.example.templateapplication.model.Doctor
 import com.example.templateapplication.model.Patient
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -42,7 +43,13 @@ class AppointmentViewModel(private val appointmentRepository: AppointmentReposit
         viewModelScope.launch {
             appointmentUiState = AppointmentUiState.Loading
             appointmentUiState = try {
-                val appointments = appointmentRepository.getAppointments(patient)
+                val appointmentsFlow = appointmentRepository.getAppointments()
+
+                val appointments: MutableList<Appointment> = mutableListOf()
+                appointmentsFlow.collect { app ->
+                    appointments.addAll(app)
+                }
+
                 _appointments.value = appointments
                 AppointmentUiState.Success(appointments)
             } catch (e: IOException) {

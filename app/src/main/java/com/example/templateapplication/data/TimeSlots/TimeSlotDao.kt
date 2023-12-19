@@ -26,7 +26,7 @@ interface TimeSlotDao {
     @Query("SELECT * from timeslots WHERE doctorId = :doctorId")
     fun getAllTimeSlots(doctorId: Int): Flow<List<dbTimeSlot>>
 
-    @Query("SELECT * from timeslots WHERE id = :id")
+    @Query("SELECT * from timeslots WHERE timeslotId = :id")
     fun getTimeSlot(id: Int): Flow<dbTimeSlot>
 
     @Query("DELETE from timeslots")

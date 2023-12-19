@@ -12,6 +12,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import coil.network.HttpException
 import com.example.templateapplication.MyApplication
 import com.example.templateapplication.data.Patients.PatientRepository
+import com.example.templateapplication.model.Appointment
 import com.example.templateapplication.model.Patient
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -40,7 +41,13 @@ class PatientViewModel(private val patientRepository: PatientRepository) : ViewM
         viewModelScope.launch {
             patientUiState = PatientUiState.Loading
             patientUiState = try {
-                val patients = patientRepository.getPatients()
+                val patientsFlow = patientRepository.getPatientsStream()
+
+                val patients: MutableList<Patient> = mutableListOf()
+                patientsFlow.collect { pa ->
+                    patients.addAll(pa)
+                }
+
                 _patients.value = patients
                 PatientUiState.Success(patients)
             } catch (e: IOException) {

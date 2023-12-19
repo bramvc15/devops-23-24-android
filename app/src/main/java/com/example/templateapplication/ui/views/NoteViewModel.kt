@@ -12,6 +12,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import coil.network.HttpException
 import com.example.templateapplication.MyApplication
 import com.example.templateapplication.data.Notes.NoteRepository
+import com.example.templateapplication.model.Appointment
 import com.example.templateapplication.model.Note
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -39,7 +40,13 @@ class NoteViewModel(private val noteRepository: NoteRepository) : ViewModel() {
         viewModelScope.launch {
             noteUiState = NoteUiState.Loading
             noteUiState = try {
-                val notes = noteRepository.getNotes()
+                val notesFlow = noteRepository.getAllNotesStream()
+
+                val notes: MutableList<Note> = mutableListOf()
+                notesFlow.collect { note ->
+                    notes.addAll(note)
+                }
+
                 _notes.value = notes
                 NoteUiState.Success(notes)
             } catch (e: IOException) {

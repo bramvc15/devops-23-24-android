@@ -12,7 +12,7 @@ import com.example.templateapplication.model.TimeSlot
 @Entity(tableName = "timeslots")
 data class dbTimeSlot (
     @PrimaryKey
-    val id: Int,
+    val timeslotId: Int,
     val doctorId: Int,
     val appointmentType: Int,
     val dateTime: String,
@@ -27,7 +27,7 @@ fun dbTimeSlot.asDomainTimeSlot(): TimeSlot {
     if (this.appointment != null) {
         a = this.appointment.asDomainAppointment()
     }
-    return TimeSlot(id = this.id,
+    return TimeSlot(id = this.timeslotId,
         doctorId = this.doctorId,
         appointmentType = this.appointmentType,
         dateTime = this.dateTime,
@@ -43,7 +43,7 @@ fun TimeSlot.asDbTimeSlot(): dbTimeSlot {
         a = this.appointment.asDbAppointment()
     }
 
-    return dbTimeSlot(id = this.id,
+    return dbTimeSlot(timeslotId = this.id,
         doctorId = this.doctorId,
         appointmentType = this.appointmentType,
         dateTime = this.dateTime,
@@ -60,7 +60,7 @@ fun List<dbTimeSlot>.asDomainTimeSlots(): List<TimeSlot> {
             a = it.appointment.asDomainAppointment()
         }
 
-        TimeSlot(it.id, it.doctorId, it.appointmentType, it.dateTime, it.duration, a)
+        TimeSlot(it.timeslotId, it.doctorId, it.appointmentType, it.dateTime, it.duration, a)
     }
     return timeSlotList
 }
