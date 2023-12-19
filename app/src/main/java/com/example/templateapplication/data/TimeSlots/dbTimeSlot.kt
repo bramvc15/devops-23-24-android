@@ -1,13 +1,12 @@
 package com.example.templateapplication.data.TimeSlots
 
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.templateapplication.MyApplication
-import com.example.templateapplication.data.AppContainer
-import com.example.templateapplication.data.Appointments.AppointmentDao
 import com.example.templateapplication.data.Appointments.asDbAppointment
 import com.example.templateapplication.data.Appointments.asDomainAppointment
 import com.example.templateapplication.data.Appointments.dbAppointment
+import com.example.templateapplication.model.Appointment
 import com.example.templateapplication.model.TimeSlot
 
 @Entity(tableName = "timeslots")
@@ -18,30 +17,50 @@ data class dbTimeSlot (
     val appointmentType: Int,
     val dateTime: String,
     val duration: Int,
-    val appointment: dbAppointment,
+    @Embedded val appointment: dbAppointment?,
 )
 
 fun dbTimeSlot.asDomainTimeSlot(): TimeSlot {
+
+    // check if appointment is not null
+    var a: Appointment? = null
+    if (this.appointment != null) {
+        a = this.appointment.asDomainAppointment()
+    }
     return TimeSlot(id = this.id,
         doctorId = this.doctorId,
         appointmentType = this.appointmentType,
         dateTime = this.dateTime,
         duration = this.duration,
-        appointment = this.appointment.asDomainAppointment())
+        appointment = a)
 }
 
 fun TimeSlot.asDbTimeSlot(): dbTimeSlot {
+
+    // check if appointment is not null
+    var a: dbAppointment? = null
+    if (this.appointment != null) {
+        a = this.appointment.asDbAppointment()
+    }
+
     return dbTimeSlot(id = this.id,
         doctorId = this.doctorId,
         appointmentType = this.appointmentType,
         dateTime = this.dateTime,
         duration = this.duration,
-        appointment = this.appointment.asDbAppointment())
+        appointment = a)
 }
 
 fun List<dbTimeSlot>.asDomainTimeSlots(): List<TimeSlot> {
     var timeSlotList = this.map {
-        TimeSlot(it.id, it.doctorId, it.appointmentType, it.dateTime, it.duration, it.appointment.asDomainAppointment())
+
+        // check if appointment is not null
+        var a: Appointment? = null
+        if (it.appointment != null) {
+            a = it.appointment.asDomainAppointment()
+        }
+
+        TimeSlot(it.id, it.doctorId, it.appointmentType, it.dateTime, it.duration, a)
     }
     return timeSlotList
 }

@@ -22,6 +22,6 @@ interface AppointmentDao {
     @Query("SELECT * from appointments")
     fun getAllAppointments(): Flow<List<dbAppointment>>
 
-    @Query("SELECT * from appointments WHERE appointment_Id = :id")
+    @Query("SELECT * from appointments WHERE appointment_id = :id")
     fun getAppointment(id: Int): Flow<dbAppointment>
 }
