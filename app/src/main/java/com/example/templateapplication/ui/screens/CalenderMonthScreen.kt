@@ -35,6 +35,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.templateapplication.R
 import com.example.templateapplication.shared.SimpleCalendarTitle
 import com.example.templateapplication.shared.StatusBarColorUpdateEffect
@@ -65,7 +66,7 @@ private val informationColor: Color @Composable get() = colorResource(R.color.bl
 
 
 @Composable
-fun CalenderMonthScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : TimeSlotViewModel) {
+fun CalenderMonthScreen(timeslotViewModel: TimeSlotViewModel = viewModel(factory = TimeSlotViewModel.Factory)) {
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth.minusMonths(500) }
     val endMonth = remember { currentMonth.plusMonths(500) }
@@ -257,7 +258,7 @@ private fun MonthHeader(
 //    }
 //}
 //@Composable
-//private fun AppointmentInformation(doctor: Appointment.Doctor, patient: Appointment.Patient) {
+//private fun AppointmentInformation(doctor: Appointment.dbDoctor.kt, patient: Appointment.Patient) {
 //    Row(
 //        modifier = Modifier
 //            .fillMaxWidth()

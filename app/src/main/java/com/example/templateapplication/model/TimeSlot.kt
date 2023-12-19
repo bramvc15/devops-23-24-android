@@ -1,33 +1,20 @@
 package com.example.templateapplication.model
 
-import kotlinx.serialization.Contextual
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Serializer
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.Date
 
 @Serializable
 data class TimeSlot(
+    @SerialName(value = "id")
     val id: Int,
+    @SerialName(value = "doctorId")
+    val doctorId: Int,
+    @SerialName(value = "appointmentType")
     val appointmentType: Int,
-    @Serializable(with = LocalDateTimeSerializer::class) val dateTime: LocalDateTime,
+    @SerialName(value = "dateTime")
+    val dateTime: String,
+    @SerialName(value = "duration")
     val duration: Int,
-    val appointmentDTO: Appointment?
+    @SerialName(value = "appointmentDTO")
+    val appointment: Appointment?,
 )
-
-@Serializer(forClass = LocalDateTime::class)
-object LocalDateTimeSerializer : kotlinx.serialization.KSerializer<LocalDateTime> {
-    private val formatter: DateTimeFormatter = DateTimeFormatter.ISO_DATE_TIME
-
-    override fun serialize(encoder: Encoder, value: LocalDateTime) {
-        encoder.encodeString(formatter.format(value))
-    }
-
-    override fun deserialize(decoder: Decoder): LocalDateTime {
-        return LocalDateTime.parse(decoder.decodeString(), formatter)
-    }
-}

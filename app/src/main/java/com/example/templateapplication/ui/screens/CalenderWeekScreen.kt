@@ -1,5 +1,6 @@
 package com.example.templateapplication.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -32,13 +33,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.templateapplication.R
+import com.example.templateapplication.data.GlobalDoctor
 import com.example.templateapplication.model.TimeSlot
 import com.example.templateapplication.shared.StatusBarColorUpdateEffect
 import com.example.templateapplication.shared.displayText
 import com.example.templateapplication.shared.getWeekPageTitle
 import com.example.templateapplication.shared.rememberFirstVisibleWeekAfterScroll
-import com.example.templateapplication.ui.views.DoctorViewModel
 import com.example.templateapplication.ui.views.TimeSlotViewModel
 import com.kizitonwose.calendar.compose.WeekCalendar
 import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
@@ -48,12 +50,14 @@ import java.time.format.DateTimeFormatter
 private val topAppColor: Color @Composable get() = colorResource(R.color.colorPrimary)
 
 @Composable
-fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : TimeSlotViewModel) {
+fun CalendarWeekScreen(timeslotViewModel: TimeSlotViewModel = viewModel(factory = TimeSlotViewModel.Factory)) {
     val currentDate = remember { LocalDate.now() }
     val startDate = remember { currentDate.minusDays(500) }
     val endDate = remember { currentDate.plusDays(500) }
     var selection by remember { mutableStateOf(currentDate) }
     val timeslots by timeslotViewModel.timeslots.collectAsState()
+
+    Log.d("here", "${timeslots}")
 
     Column(
         modifier = Modifier
@@ -83,7 +87,7 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : Tim
                 }
             },
         )
-        val selectedAppointment = timeslots.filter { it.dateTime.toLocalDate() == selection }
+        val selectedAppointment = timeslots.filter { it.dateTime == selection.toString() }
         if (selectedAppointment.isNotEmpty()) {
             Column(
                 modifier = Modifier
@@ -103,7 +107,7 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : Tim
                         .weight(1f)
                 ) {
                     items(selectedAppointment) { appointment ->
-                        AppointmentItem(timeslot = appointment, doctorViewModel = doctorViewModel)
+                        AppointmentItem(timeslot = appointment, timeslotViewModel = timeslotViewModel)
                     }
                 }
             }
@@ -144,7 +148,7 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : Tim
 }
 
 @Composable
-private fun AppointmentItem(timeslot: TimeSlot, doctorViewModel: DoctorViewModel) {
+private fun AppointmentItem(timeslot: TimeSlot, timeslotViewModel: TimeSlotViewModel) {
     var isExpanded by remember { mutableStateOf(false) }
 
     Card(
@@ -161,7 +165,7 @@ private fun AppointmentItem(timeslot: TimeSlot, doctorViewModel: DoctorViewModel
                 .padding(16.dp)
         ) {
             Text(
-                text = "name: ${timeslot.appointmentDTO?.patientDTO?.name ?: "N/A"}",
+                text = "name: ${timeslot.appointment?.patient?.name ?: "N/A"}",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
@@ -174,7 +178,7 @@ private fun AppointmentItem(timeslot: TimeSlot, doctorViewModel: DoctorViewModel
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Doctor: ${doctorViewModel.selectedDoctor?.name}",
+                text = "dbDoctor.kt: ${GlobalDoctor.doctor?.name ?: "N/A"}",
                 fontSize = 14.sp,
                 color = Color.Black
             )
@@ -199,7 +203,7 @@ private fun AppointmentItem(timeslot: TimeSlot, doctorViewModel: DoctorViewModel
             if (isExpanded) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Reason: ${timeslot.appointmentDTO?.reason}",
+                    text = "Reason: ${timeslot.appointment?.reason}",
                     fontSize = 14.sp,
                     color = Color.Black
                 )

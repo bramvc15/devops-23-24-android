@@ -39,7 +39,7 @@ fun BackConfirmationDialog(
                 openDialog.value = false
             },
             title = { Text("Confirmation") },
-            text = { Text("Do you really want to go back to Doctor Selection Screen?") },
+            text = { Text("Do you really want to go back to dbDoctor.kt Selection Screen?") },
             confirmButton = {
                 Button(
                     onClick = {

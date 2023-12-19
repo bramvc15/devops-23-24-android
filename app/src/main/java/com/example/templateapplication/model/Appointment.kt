@@ -1,11 +1,16 @@
 package com.example.templateapplication.model
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class Appointment(
-    val id: Int,
+    @SerialName(value = "id")
+    val timeSlotId: Int,
+    @SerialName(value = "reason")
     val reason: String,
-    val note: String,
-    val patientDTO: PatientDTO,
+    @SerialName(value = "note")
+    val note: String?,
+    @SerialName(value = "patientDTO")
+    val patient: Patient,
 )

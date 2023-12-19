@@ -5,71 +5,94 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import coil.network.HttpException
+import com.example.templateapplication.MyApplication
+import com.example.templateapplication.data.Doctors.DoctorRepository
+import com.example.templateapplication.data.GlobalDoctor
 import com.example.templateapplication.model.Doctor
-import com.example.templateapplication.network.DoctorApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.io.IOException
 
 
 sealed interface DoctorUiState {
-    data class Success(val doctors: List<Doctor>, val selectedDoctor: Doctor?) : DoctorUiState
+    data class Success(val doctors: List<Doctor>) : DoctorUiState
     data class Error(val errorMessage: String) : DoctorUiState
     object Loading : DoctorUiState
 }
 
-
-
-class DoctorViewModel() : ViewModel()  {
-
-
-    private var doctorUiState: DoctorUiState by mutableStateOf(DoctorUiState.Loading)
+class DoctorViewModel(private val doctorRepository: DoctorRepository) : ViewModel()  {
+    var doctorUiState: DoctorUiState by mutableStateOf(DoctorUiState.Loading)
+        private set
 
     private val _doctors = MutableStateFlow<List<Doctor>>(emptyList())
     val doctors: StateFlow<List<Doctor>> get() = _doctors
-
-    var selectedDoctor: Doctor? by mutableStateOf(null)
-
-    private fun setDoctors(newDoctors: List<Doctor>) {
-        _doctors.value = newDoctors
-    }
-
-    fun selectDoctor(doctor: Doctor) {
-        selectedDoctor = doctor
-    }
 
     init {
         getDoctors()
     }
 
     private fun getDoctors() {
+        Log.d("THOAMS", "${doctors}")
         viewModelScope.launch {
             doctorUiState = DoctorUiState.Loading
             doctorUiState = try {
-                val listResult = DoctorApi.retrofitService.getDoctors()
-                setDoctors(listResult)
-                DoctorUiState.Success(listResult, selectedDoctor)
+                val doctorsFlow = doctorRepository.getAllDoctorsStream()
+                Log.d("GUILLAUME", "${doctorsFlow}")
+
+                val doctors: MutableList<Doctor> = mutableListOf()
+                doctorsFlow.map { doc ->
+                    Log.d("test", "${doc}")
+                    doctors.addAll(doc)
+                }
+                Log.d("test2", "${doctors}")
+
+                _doctors.value = doctors
+
+                Log.d("WOUT", "${doctors}")
+                DoctorUiState.Success(doctors)
             } catch (e: IOException) {
-                Log.d("here", "here")
-                DoctorUiState.Error("Network error: ${e.message}")
+                Log.d("DoctorViewModel", "IOException")
+                Log.d("DoctorViewModel", e.message.toString())
+                Log.d("DoctorViewModel", e.stackTraceToString())
+                DoctorUiState.Error("IOException error: ${e.message}")
             } catch (e: HttpException) {
-                DoctorUiState.Error("HTTP error: ${e.message}")
+                Log.d("DoctorViewModel", "HttpException")
+                Log.d("DoctorViewModel", e.message.toString())
+                Log.d("DoctorViewModel", e.stackTraceToString())
+                DoctorUiState.Error("HttpException error: ${e.message}")
+            } catch (e: Exception) {
+                Log.d("DoctorViewModel", "Exception")
+                Log.d("DoctorViewModel", e.message.toString())
+                Log.d("DoctorViewModel", e.stackTraceToString())
+                DoctorUiState.Error("Exception error: ${e.message}")
             }
         }
     }
-    /*
+
+    // Niet zeker of dit oke is
+    fun selectDoctor(doctor: Doctor) {
+        GlobalDoctor.doctor = doctor
+    }
+
+    /**
+     * Factory for [DoctorViewModel] that takes [DoctorRepository] as a dependency
+     */
     companion object {
-        val Factory : ViewModelProvider.Factory = viewModelFactory {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val application = this[APPLICATION_KEY] as MyApplication
-                val doctorsRepository = application.container.doctorsRepository
-                DoctorViewModel(doctorsRepository = doctorsRepository)
+                val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as MyApplication)
+                val doctorRepository = application.container.doctorRepository
+                DoctorViewModel(doctorRepository = doctorRepository)
             }
         }
-    }*/
+    }
 }
 
 

@@ -26,13 +26,11 @@ import com.example.templateapplication.ui.screens.DoctorSelectionScreen
 import com.example.templateapplication.ui.screens.NoteScreen
 import com.example.templateapplication.ui.screens.PasswordScreen
 import com.example.templateapplication.ui.views.DoctorViewModel
-import com.example.templateapplication.ui.views.TimeSlotViewModel
 
 @Composable
 fun AppNavigation() {
     val navController: NavHostController = rememberNavController()
-    val doctorViewModel: DoctorViewModel = viewModel()
-    val timeslotViewModel = TimeSlotViewModel(doctorViewModel)
+    val doctorViewModel: DoctorViewModel = viewModel(factory = DoctorViewModel.Factory)
 
     Scaffold(
         bottomBar = {
@@ -81,7 +79,7 @@ fun AppNavigation() {
                         }
                     )
                 }
-                CalenderMonthScreen(doctorViewModel = doctorViewModel, timeslotViewModel = timeslotViewModel)
+                CalenderMonthScreen()
             }
 
             composable(route = Screens.CalenderWeekScreen.name) {
@@ -96,7 +94,7 @@ fun AppNavigation() {
                         }
                     )
                 }
-                CalendarWeekScreen(doctorViewModel = doctorViewModel, timeslotViewModel = timeslotViewModel)
+                CalendarWeekScreen()
             }
 
             composable(route = Screens.DoctorSelectionScreen.name) {
@@ -104,7 +102,7 @@ fun AppNavigation() {
                 DoctorSelectionScreen(
                     onNextButtonClicked = { doctor ->
 
-                        doctorViewModel.selectedDoctor = doctor
+                        doctorViewModel.selectDoctor(doctor)
 
                         navController.navigate(
                             "${Screens.PasswordScreen.name}/${Uri.encode(doctor.name)}/${
