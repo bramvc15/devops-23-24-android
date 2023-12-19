@@ -9,7 +9,7 @@ interface AppointmentRepository {
 }
 
 class NetworkAppointmentRepository(
-    //private val appointmentDao: AppointmentDao,
+    private val appointmentDao: AppointmentDao,
     private val appointmentApiService: AppointmentApiService
 ): AppointmentRepository {
     override suspend fun getAppointments(body: Patient): List<Appointment> {

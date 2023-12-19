@@ -38,7 +38,7 @@ interface AppContainer {
  * Variables are initialized lazily and the same instance is shared across the whole app.
  */
 class DefaultAppContainer(private val context: Context): AppContainer {
-    private val baseUrl = "http://192.168.0.227:5001/api/"
+    private val baseUrl = "http://192.168.100.101:5001/api/"
 
     /**
      * Use the Retrofit builder to build a retrofit object using a kotlinx.serialization converter
@@ -63,7 +63,7 @@ class DefaultAppContainer(private val context: Context): AppContainer {
      */
     override val appointmentRepository: AppointmentRepository by lazy {
         NetworkAppointmentRepository(
-            //VisionDatabase.getDatabase(context = context).appointmentDao(),
+            VisionDatabase.getDatabase(context = context).appointmentDao(),
             retrofit.create(AppointmentApiService::class.java)
         )
     }
@@ -73,7 +73,7 @@ class DefaultAppContainer(private val context: Context): AppContainer {
      */
     override val timeSlotRepository: TimeSlotRepository by lazy {
         NetworkTimeSlotRepository(
-            //VisionDatabase.getDatabase(context = context).appointmentDao(),
+            VisionDatabase.getDatabase(context = context).timeSlotDao(),
             retrofit.create(TimeSlotApiService::class.java)
         )
     }
@@ -83,7 +83,7 @@ class DefaultAppContainer(private val context: Context): AppContainer {
      */
     override val patientRepository: PatientRepository by lazy {
         NetworkPatientRepository(
-            //VisionDatabase.getDatabase(context = context).appointmentDao(),
+            VisionDatabase.getDatabase(context = context).patientDao(),
             retrofit.create(PatientApiService::class.java)
         )
     }

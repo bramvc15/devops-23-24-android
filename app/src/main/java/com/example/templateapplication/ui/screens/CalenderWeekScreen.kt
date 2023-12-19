@@ -1,5 +1,6 @@
 package com.example.templateapplication.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -56,6 +57,8 @@ fun CalendarWeekScreen(timeslotViewModel: TimeSlotViewModel = viewModel(factory 
     var selection by remember { mutableStateOf(currentDate) }
     val timeslots by timeslotViewModel.timeslots.collectAsState()
 
+    Log.d("here", "${timeslots}")
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -84,7 +87,7 @@ fun CalendarWeekScreen(timeslotViewModel: TimeSlotViewModel = viewModel(factory 
                 }
             },
         )
-        val selectedAppointment = timeslots.filter { it.dateTime.toLocalDate() == selection }
+        val selectedAppointment = timeslots.filter { it.dateTime == selection.toString() }
         if (selectedAppointment.isNotEmpty()) {
             Column(
                 modifier = Modifier
@@ -162,7 +165,7 @@ private fun AppointmentItem(timeslot: TimeSlot, timeslotViewModel: TimeSlotViewM
                 .padding(16.dp)
         ) {
             Text(
-                text = "name: ${timeslot.appointmentDTO?.patientDTO?.name ?: "N/A"}",
+                text = "name: ${timeslot.appointment?.patient?.name ?: "N/A"}",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
@@ -200,7 +203,7 @@ private fun AppointmentItem(timeslot: TimeSlot, timeslotViewModel: TimeSlotViewM
             if (isExpanded) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Reason: ${timeslot.appointmentDTO?.reason}",
+                    text = "Reason: ${timeslot.appointment?.reason}",
                     fontSize = 14.sp,
                     color = Color.Black
                 )

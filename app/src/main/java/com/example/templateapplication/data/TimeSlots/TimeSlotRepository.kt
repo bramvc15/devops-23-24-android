@@ -8,7 +8,7 @@ interface TimeSlotRepository {
 }
 
 class NetworkTimeSlotRepository(
-    //private val timeSlotDao: TimeSlotDao,
+    private val timeSlotDao: TimeSlotDao,
     private val timeSlotApiService: TimeSlotApiService
 ): TimeSlotRepository {
     override suspend fun getTimeSlots(id: Int): List<TimeSlot> {

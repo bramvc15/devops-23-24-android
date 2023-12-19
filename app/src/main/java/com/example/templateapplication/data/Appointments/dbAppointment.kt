@@ -1,5 +1,7 @@
 package com.example.templateapplication.data.Appointments
 
+import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.templateapplication.data.Patients.asDbPatient
@@ -10,10 +12,11 @@ import com.example.templateapplication.model.Appointment
 @Entity(tableName = "appointments")
 data class dbAppointment (
     @PrimaryKey
+    @ColumnInfo(name = "appointment_id")
     val timeSlotId: Int,
     val reason: String,
     val note: String?,
-    val patient: dbPatient,
+    @Embedded val patient: dbPatient,
 )
 
 fun dbAppointment.asDomainAppointment(): Appointment {

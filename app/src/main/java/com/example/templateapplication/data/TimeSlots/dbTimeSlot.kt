@@ -1,6 +1,8 @@
 package com.example.templateapplication.data.TimeSlots
 
+import androidx.room.Embedded
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.example.templateapplication.data.Appointments.asDbAppointment
 import com.example.templateapplication.data.Appointments.asDomainAppointment
 import com.example.templateapplication.data.Appointments.dbAppointment
@@ -8,12 +10,13 @@ import com.example.templateapplication.model.TimeSlot
 
 @Entity(tableName = "timeslots")
 data class dbTimeSlot (
+    @PrimaryKey
     val id: Int,
     val doctorId: Int,
     val appointmentType: Int,
     val dateTime: String,
     val duration: Int,
-    val appointment: dbAppointment,
+    @Embedded val appointment: dbAppointment,
 )
 
 fun dbTimeSlot.asDomainTimeSlot(): TimeSlot {
