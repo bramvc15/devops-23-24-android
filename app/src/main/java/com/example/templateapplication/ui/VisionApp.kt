@@ -5,11 +5,15 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import com.example.templateapplication.navigation.AppNavigation
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.templateapplication.ui.utils.VisionNavigationType
 
 
 @Composable
-fun VisionApp(windowSize: WindowWidthSizeClass) {
+fun VisionApp(windowSize: WindowWidthSizeClass,
+modifier: Modifier = Modifier,
+              ){
     val navigationType: VisionNavigationType
         when (windowSize) {
             WindowWidthSizeClass.Compact -> {
@@ -29,5 +33,6 @@ fun VisionApp(windowSize: WindowWidthSizeClass) {
                 navigationType = VisionNavigationType.BOTTOM_NAVIGATION
             }
         }
-        AppNavigation(navigationType)
+        AppNavigation(navigationType,
+            modifier = modifier)
 }

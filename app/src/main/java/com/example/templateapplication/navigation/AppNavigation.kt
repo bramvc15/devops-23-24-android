@@ -11,6 +11,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationRail
+import androidx.compose.material3.NavigationRailItem
+import androidx.compose.material3.PermanentDrawerSheet
+import androidx.compose.material3.PermanentNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,7 +40,8 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun AppNavigation(navigationType: VisionNavigationType) {
+fun AppNavigation(navigationType: VisionNavigationType,
+                  modifier: Modifier = Modifier){
     val navController: NavHostController = rememberNavController()
     val doctorViewModel: DoctorViewModel = viewModel(factory = DoctorViewModel.Factory)
 
@@ -133,129 +138,79 @@ fun AppNavigation(navigationType: VisionNavigationType) {
 fun GetNavigationBar(navController: NavHostController, navigationType: VisionNavigationType) {
     when (navigationType) {
         VisionNavigationType.BOTTOM_NAVIGATION -> {
-            BottomNavigationBar(navController = navController)
+            VisionBottomNavigationBar(navController = navController)
         }
         VisionNavigationType.NAVIGATION_RAIL -> {
-            NavigationRail(navController = navController)
+            VisionNavigationRail(navController = navController)
         }
         VisionNavigationType.PERMANENT_NAVIGATION_DRAWER -> {
-            PermanentNavigationDrawer(navController = navController)
+            VisionPermanentNavigationDrawer(navController = navController)
         }
     }
 
 }
 
 @Composable
-fun PermanentNavigationDrawer(navController: NavHostController) {
-    NavigationBar {
+fun VisionPermanentNavigationDrawer(navController: NavHostController) {
+    PermanentDrawerSheet(
+        modifier = Modifier.fillMaxWidth()
+    ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.primary)
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            listOfNavItems.forEach { navItem ->
-                NavigationBarItem(
-                    selected = currentDestination?.hierarchy?.any { it.route == navItem.route } == true,
-                    onClick = {
-                        navController.navigate(navItem.route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                                inclusive = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
+        listOfNavItems.forEach { navItem ->
+            NavigationRailItem(
+                selected = currentDestination?.hierarchy?.any { it.route == navItem.route } == true,
+                onClick = {
+                    navController.navigate(navItem.route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                            inclusive = true
                         }
-                    },
-                    icon = {
-                        Icon(
-                            imageVector = navItem.icon,
-                            contentDescription = null,
-                            tint = if (currentDestination?.hierarchy?.any { it.route == navItem.route } == true) {
-                                MaterialTheme.colorScheme.onPrimary
-                            } else {
-                                MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
-                            }
-                        )
-                    },
-                    label = {
-                        Text(
-                            text = navItem.label,
-                            color = if (currentDestination?.hierarchy?.any { it.route == navItem.route } == true) {
-                                MaterialTheme.colorScheme.onPrimary
-                            } else {
-                                MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
-                            }
-                        )
+                        launchSingleTop = true
+                        restoreState = true
                     }
-                )
-            }
+                },
+                icon = {
+                    Icon(imageVector = navItem.icon, contentDescription = navItem.label)
+                }
+            )
         }
     }
-
-
 }
 
+
 @Composable
-fun NavigationRail(navController: NavHostController) {
-    NavigationBar {
+fun VisionNavigationRail(navController: NavHostController) {
+    NavigationRail() {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.primary)
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            listOfNavItems.forEach { navItem ->
-                NavigationBarItem(
-                    selected = currentDestination?.hierarchy?.any { it.route == navItem.route } == true,
-                    onClick = {
-                        navController.navigate(navItem.route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                                inclusive = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
+        listOfNavItems.forEach { navItem ->
+            NavigationRailItem(
+                selected = currentDestination?.hierarchy?.any { it.route == navItem.route } == true,
+                onClick = {
+                    navController.navigate(navItem.route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                            inclusive = true
                         }
-                    },
-                    icon = {
-                        Icon(
-                            imageVector = navItem.icon,
-                            contentDescription = null,
-                            tint = if (currentDestination?.hierarchy?.any { it.route == navItem.route } == true) {
-                                MaterialTheme.colorScheme.onPrimary
-                            } else {
-                                MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
-                            }
-                        )
-                    },
-                    label = {
-                        Text(
-                            text = navItem.label,
-                            color = if (currentDestination?.hierarchy?.any { it.route == navItem.route } == true) {
-                                MaterialTheme.colorScheme.onPrimary
-                            } else {
-                                MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
-                            }
-                        )
+                        launchSingleTop = true
+                        restoreState = true
                     }
-                )
-            }
+                },
+
+                icon = {
+                    Icon(imageVector = navItem.icon, contentDescription = navItem.label)
+        }
+
+            )
         }
     }
 
 }
 
 @Composable
-fun BottomNavigationBar(navController: NavHostController) {
+fun VisionBottomNavigationBar(navController: NavHostController) {
     NavigationBar {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
