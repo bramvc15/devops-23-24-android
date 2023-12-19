@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -19,14 +20,10 @@ import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -42,7 +39,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.templateapplication.R
-import com.example.templateapplication.model.TimeSlot
 import com.example.templateapplication.shared.StatusBarColorUpdateEffect
 import com.example.templateapplication.shared.displayText
 import com.example.templateapplication.shared.getWeekPageTitle
@@ -57,6 +53,7 @@ import java.time.format.DateTimeFormatter
 
 private val topAppColor: Color @Composable get() = colorResource(R.color.colorPrimary)
 
+
 @Composable
 fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : TimeSlotViewModel) {
     val currentDate = remember { LocalDate.now() }
@@ -67,12 +64,12 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : Tim
 
     var isAddingAppointment by remember { mutableStateOf(false) }
     var selectedType by remember { mutableStateOf("Consultation") }
+    var selectedDoctor by remember { mutableStateOf(doctorViewModel.selectedDoctor) }
     var dropdownExpanded by remember { mutableStateOf(false) }
-
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White),
+                .fillMaxSize()
+                .background(Color.White),
     ) {
         val state = rememberWeekCalendarState(
             startDate = startDate,
@@ -82,21 +79,42 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : Tim
         val visibleWeek = rememberFirstVisibleWeekAfterScroll(state)
         TopAppBar(
             elevation = 0.dp,
-            title = { Text(text = getWeekPageTitle(visibleWeek)) },
-            actions = {
-                Button(onClick = {
-                    selection = LocalDate.now()
-                }) {
-                    Text(text = "Vandaag")
-                }
-
-                FloatingActionButton(
-                    onClick = {
-                        isAddingAppointment = !isAddingAppointment
-                    }
+            title = {
+                Text(text = getWeekPageTitle(visibleWeek))
+                Box(modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                        .clickable { dropdownExpanded = true }
+                        .border(
+                                width = 1.dp,
+                                color = Color.Gray,
+                                shape = MaterialTheme.shapes.small
+                        )
                 ) {
-                    Icon(Icons.Filled.Add, "Add appointment")
+                    Spacer(modifier = Modifier.height(4.dp))
+                    DropdownMenu(
+                        expanded = dropdownExpanded,
+                        onDismissRequest = { dropdownExpanded = false },
+                        modifier = Modifier
+                                .width(200.dp)
+                                .background(Color.White)
+                                .align(Alignment.TopEnd)
+                    ) {
+                        doctorViewModel.doctors.collectAsState().value.forEach { doctor ->
+                            DropdownMenuItem(
+                                    onClick = {
+                                        doctorViewModel.selectDoctor(doctor)
+                                        selectedDoctor = doctor
+                                    }) {
+                                Text(text = doctor.name)
+                            }
+                        }
+                    }
+                    Text(selectedDoctor?.name ?: "Select a doctor", modifier = Modifier.padding(2.dp), fontSize = 14.sp)
                 }
+                    },
+            actions = {
+
             },
         )
         StatusBarColorUpdateEffect(topAppColor)
@@ -116,14 +134,14 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : Tim
         if(isAddingAppointment) {
             Card(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
+                        .fillMaxWidth()
+                        .padding(16.dp),
                 elevation = 8.dp
             ) {
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
+                            .fillMaxWidth()
+                            .padding(16.dp)
                 ) {
                     Text(text = "Maak een afspraak op ${selection.format(DateTimeFormatter.ofPattern("dd MMMM"))}",
                         fontWeight = FontWeight.Bold,
@@ -136,8 +154,8 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : Tim
                         onValueChange = {  },
                         label = { Text(text = "Naam") },
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .height(56.dp)
+                                .fillMaxWidth()
+                                .height(56.dp)
                     )
 
                     OutlinedTextField(
@@ -145,8 +163,8 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : Tim
                         onValueChange = {  },
                         label = { Text(text = "Reden") },
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .height(56.dp)
+                                .fillMaxWidth()
+                                .height(56.dp)
                     )
 
                     OutlinedTextField(
@@ -154,20 +172,20 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : Tim
                         onValueChange = {  },
                         label = { Text(text = "Note") },
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .height(56.dp)
+                                .fillMaxWidth()
+                                .height(56.dp)
                     )
 
                     Box(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 16.dp)
-                            .clickable { dropdownExpanded = true }
-                            .border(
-                                width = 1.dp,
-                                color = Color.Gray,
-                                shape = MaterialTheme.shapes.small
-                            )
+                                .fillMaxWidth()
+                                .padding(top = 16.dp)
+                                .clickable { dropdownExpanded = true }
+                                .border(
+                                        width = 1.dp,
+                                        color = Color.Gray,
+                                        shape = MaterialTheme.shapes.small
+                                )
                     ) {
                         Spacer(modifier = Modifier.height(4.dp))
                         DropdownMenu(
@@ -190,9 +208,9 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : Tim
                         isAddingAppointment = false
                     },
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .height(56.dp)
-                            .padding(top = 16.dp)
+                                .fillMaxWidth()
+                                .height(56.dp)
+                                .padding(top = 16.dp)
                     ) {
                         Text(text = "Afspraak maken")
                     }
@@ -205,8 +223,8 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : Tim
         if (selectedAppointment.isNotEmpty()) {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
+                        .fillMaxWidth()
+                        .padding(16.dp)
             ) {
                 Text(
                     text = "Appointments for ${selection.format(DateTimeFormatter.ofPattern("dd MMMM"))}",
@@ -217,8 +235,8 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : Tim
 
                 LazyColumn(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
+                            .fillMaxWidth()
+                            .weight(1f)
                 ) {
                     items(selectedAppointment) { appointment ->
                         AppointmentItem(timeslot = appointment, doctorViewModel = doctorViewModel)
@@ -229,8 +247,8 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : Tim
 
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
+                        .fillMaxWidth()
+                        .padding(16.dp)
             ) {
                 Text(
                     text = "Appointments for ${selection.format(DateTimeFormatter.ofPattern("dd MMMM"))}",
@@ -242,8 +260,8 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : Tim
 
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
+                        .fillMaxSize()
+                        .padding(16.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -269,9 +287,9 @@ private val dateFormatter = DateTimeFormatter.ofPattern("dd")
 private fun Day(date: LocalDate, isSelected: Boolean, onClick: (LocalDate) -> Unit) {
     Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .clickable { onClick(date) },
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .clickable { onClick(date) },
         contentAlignment = Alignment.Center,
     ) {
         Column(
@@ -295,10 +313,10 @@ private fun Day(date: LocalDate, isSelected: Boolean, onClick: (LocalDate) -> Un
         if (isSelected) {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(5.dp)
-                    .background(colorResource(R.color.example_7_yellow))
-                    .align(Alignment.BottomCenter),
+                        .fillMaxWidth()
+                        .height(5.dp)
+                        .background(colorResource(R.color.example_7_yellow))
+                        .align(Alignment.BottomCenter),
             )
         }
     }

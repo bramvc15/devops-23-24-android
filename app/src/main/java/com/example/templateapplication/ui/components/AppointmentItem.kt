@@ -1,12 +1,12 @@
 package com.example.templateapplication.ui.components
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -33,7 +33,8 @@ fun AppointmentItem(timeslot: TimeSlot, doctorViewModel: DoctorViewModel) {
     Card(
             modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp),
+                    .padding(8.dp)
+                    .clickable { isExpanded = !isExpanded },
             elevation = 8.dp,
             shape = MaterialTheme.shapes.medium,
             backgroundColor = colorResource(id = R.color.lightgray )
@@ -62,22 +63,6 @@ fun AppointmentItem(timeslot: TimeSlot, doctorViewModel: DoctorViewModel) {
                     color = Color.Black
             )
 
-            // Add a clickable area to toggle expansion
-            Box(
-                    modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                isExpanded = !isExpanded
-                            }
-            ) {
-                Text(
-                        text = if (isExpanded) "Click to collapse" else "Click for more details",
-                        fontSize = 14.sp,
-                        color = colorResource(id = R.color.example_7_yellow),
-                        fontWeight = FontWeight.Bold,
-                )
-            }
-
             // Conditionally display additional information when expanded
             if (isExpanded) {
                 Spacer(modifier = Modifier.height(8.dp))
@@ -86,6 +71,15 @@ fun AppointmentItem(timeslot: TimeSlot, doctorViewModel: DoctorViewModel) {
                         fontSize = 14.sp,
                         color = Color.Black
                 )
+                Spacer(modifier = Modifier.height(8.dp))
+                Button(
+                        onClick = { /*TODO*/ },
+                        modifier = Modifier
+                                .fillMaxWidth()
+                                .height(50.dp)
+                ) {
+                    Text(text = "Annuleer")
+                }
             }
         }
     }
