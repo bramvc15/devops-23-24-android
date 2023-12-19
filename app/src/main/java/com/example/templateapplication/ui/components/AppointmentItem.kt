@@ -47,20 +47,20 @@ fun AppointmentItem(timeslot: TimeSlot, doctorViewModel: DoctorViewModel) {
                             .padding(16.dp)
             ) {
                 Text(
-                        text = "${timeslot.dateTime.format(DateTimeFormatter.ofPattern("HH:mm"))} - ${timeslot.dateTime.plusMinutes(timeslot.duration.toLong()).format(DateTimeFormatter.ofPattern("HH:mm"))}",
+                        text = "${timeslot.dateTime.format(DateTimeFormatter.ofPattern("HH:mm"))}",
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.Black
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                        text = "${timeslot.appointmentDTO?.patientDTO?.name ?: "N/A"}",
+                        text = "${timeslot.appointment?.patient?.name ?: "N/A"}",
                         fontSize = 16.sp,
                         color = Color.Black
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                        text = "Doctor: ${doctorViewModel.selectedDoctor?.name}",
+                        text = "Doctor:",
                         fontSize = 14.sp,
                         color = Color.Black
                 )
@@ -69,7 +69,7 @@ fun AppointmentItem(timeslot: TimeSlot, doctorViewModel: DoctorViewModel) {
                 if (isExpanded) {
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                            text = "Reason: ${timeslot.appointmentDTO?.reason}",
+                            text = "Reason: ${timeslot.appointment?.reason}",
                             fontSize = 14.sp,
                             color = Color.Black
                     )

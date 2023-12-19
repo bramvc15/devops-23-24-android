@@ -1,28 +1,30 @@
 package com.example.templateapplication.network
 
 import com.example.templateapplication.model.TimeSlot
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaType
-import retrofit2.Retrofit
+import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
-private const val BASE_URL =
-    "http://192.168.0.123:5001/api/"
-
-private val retrofit = Retrofit.Builder()
-    .baseUrl(BASE_URL)
-    .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
-    .build()
-
 interface TimeSlotApiService {
-    @GET("timeslot/{id}")
-    suspend fun getTimeSlots(@Path("id") id: Int): List<TimeSlot>
-}
+    @GET("timeslot/{doctorId}")
+    suspend fun getTimeSlots(@Path("doctorId") id: Int): List<TimeSlot>
 
-object TimeSlotApi {
-    val retrofitService: TimeSlotApiService by lazy {
-        retrofit.create(TimeSlotApiService::class.java)
-    }
+    @PUT("timeslot")
+    suspend fun updateTimeSlot(
+        @Body timeSlot: TimeSlot
+    ) : TimeSlot
+
+    @POST("timeslot")
+    suspend fun createTimeSlot(
+        @Body timeSlot: TimeSlot
+    ) : TimeSlot
+
+    @DELETE("timeslot")
+    suspend fun deleteTimeSlot(
+        @Body timeSlot: TimeSlot
+    ) : Response<Unit>
 }

@@ -1,5 +1,6 @@
 package com.example.templateapplication.ui.screens
 
+import android.icu.util.LocaleData
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -66,7 +67,6 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : Tim
 
     var isAddingAppointment by remember { mutableStateOf(false) }
     var selectedType by remember { mutableStateOf("Consultation") }
-    var selectedDoctor by remember { mutableStateOf(doctorViewModel.selectedDoctor) }
     var dropdownExpanded by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
@@ -94,25 +94,25 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : Tim
                         )
                 ) {
                     Spacer(modifier = Modifier.height(4.dp))
-                    DropdownMenu(
-                        expanded = dropdownExpanded,
-                        onDismissRequest = { dropdownExpanded = false },
-                        modifier = Modifier
-                                .background(Color.White)
-                                .align(Alignment.TopEnd)
-                                .fillMaxHeight()
-                    ) {
-                        doctorViewModel.doctors.collectAsState().value.forEach { doctor ->
-                            DropdownMenuItem(
-                                    onClick = {
-                                        doctorViewModel.selectDoctor(doctor)
-                                        selectedDoctor = doctor
-                                    }) {
-                                Text(text = doctor.name)
-                            }
-                        }
-                    }
-                    Text(selectedDoctor?.name ?: "Select a doctor", modifier = Modifier.padding(2.dp), fontSize = 14.sp)
+//                    DropdownMenu(
+//                        expanded = dropdownExpanded,
+//                        onDismissRequest = { dropdownExpanded = false },
+//                        modifier = Modifier
+//                                .background(Color.White)
+//                                .align(Alignment.TopEnd)
+//                                .fillMaxHeight()
+//                    ) {
+//                        doctorViewModel.doctors.collectAsState().value.forEach { doctor ->
+//                            DropdownMenuItem(
+//                                    onClick = {
+//                                        doctorViewModel.selectDoctor(doctor)
+//                                        selectedDoctor = doctor
+//                                    }) {
+//                                Text(text = doctor.name)
+//                            }
+//                        }
+//                    }
+//                    Text(selectedDoctor?.name ?: "Select a doctor", modifier = Modifier.padding(2.dp), fontSize = 14.sp)
                 }
                     },
             actions = {
@@ -131,7 +131,7 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : Tim
                 }
             },
         )
-        val selectedAppointment = timeslots.filter { it.dateTime.toLocalDate() == selection  && it.appointmentDTO != null }
+        val selectedAppointment = timeslots.filter { LocalDate.parse(it.dateTime) == selection  && it.appointment != null }
 
         if(isAddingAppointment) {
             Card(

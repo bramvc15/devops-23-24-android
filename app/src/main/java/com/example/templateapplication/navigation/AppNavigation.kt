@@ -31,22 +31,12 @@ import com.example.templateapplication.ui.views.TimeSlotViewModel
 @Composable
 fun AppNavigation() {
     val navController: NavHostController = rememberNavController()
-    val doctorViewModel: DoctorViewModel = viewModel()
-    val timeslotViewModel = TimeSlotViewModel(doctorViewModel)
+    val doctorViewModel: DoctorViewModel = viewModel(factory = DoctorViewModel.Factory)
+    val timeSlotViewModel: TimeSlotViewModel = viewModel(factory = TimeSlotViewModel.Factory)
 
     Scaffold(
         bottomBar = {
-
-            if (navController.currentDestination?.hierarchy?.any {
-                    it.route in listOf(
-                        Screens.DoctorSelectionScreen.name,
-                        Screens.PasswordScreen.name
-                    )
-                } == false
-            ) {
                 GetNavigationBar(navController = navController)
-            }
-
         }
     ) { paddingValues ->
 
@@ -81,7 +71,7 @@ fun AppNavigation() {
                         }
                     )
                 }
-                CalenderMonthScreen(doctorViewModel = doctorViewModel, timeslotViewModel = timeslotViewModel)
+                CalenderMonthScreen(doctorViewModel, timeSlotViewModel)
             }
 
             composable(route = Screens.CalenderWeekScreen.name) {
@@ -96,7 +86,7 @@ fun AppNavigation() {
                         }
                     )
                 }
-                CalendarWeekScreen(doctorViewModel = doctorViewModel, timeslotViewModel = timeslotViewModel)
+                CalendarWeekScreen(doctorViewModel, timeSlotViewModel)
             }
 
             composable(route = Screens.DoctorSelectionScreen.name) {
@@ -104,7 +94,7 @@ fun AppNavigation() {
                 DoctorSelectionScreen(
                     onNextButtonClicked = { doctor ->
 
-                        doctorViewModel.selectedDoctor = doctor
+                        doctorViewModel.selectDoctor(doctor)
 
                         navController.navigate(
                             "${Screens.PasswordScreen.name}/${Uri.encode(doctor.name)}/${
