@@ -34,17 +34,7 @@ fun AppNavigation() {
 
     Scaffold(
         bottomBar = {
-
-            if (navController.currentDestination?.hierarchy?.any {
-                    it.route in listOf(
-                        Screens.DoctorSelectionScreen.name,
-                        Screens.PasswordScreen.name
-                    )
-                } == false
-            ) {
                 GetNavigationBar(navController = navController)
-            }
-
         }
     ) { paddingValues ->
 

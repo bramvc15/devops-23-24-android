@@ -35,7 +35,7 @@ fun dbTimeSlot.asDomainTimeSlot(): TimeSlot {
         appointment = a)
 }
 
-fun TimeSlot.asDbTimeSlot(): dbTimeSlot {
+fun TimeSlot.asDbTimeSlot(): dbTimeSlot? {
 
     // check if appointment is not null
     var a: dbAppointment? = null
@@ -43,12 +43,14 @@ fun TimeSlot.asDbTimeSlot(): dbTimeSlot {
         a = this.appointment.asDbAppointment()
     }
 
-    return dbTimeSlot(timeslotId = this.id,
-        doctorId = this.doctorId,
+    return this.doctorId?.let {
+        dbTimeSlot(timeslotId = this.id,
+        doctorId = it,
         appointmentType = this.appointmentType,
         dateTime = this.dateTime,
         duration = this.duration,
         appointment = a)
+    }
 }
 
 fun List<dbTimeSlot>.asDomainTimeSlots(): List<TimeSlot> {

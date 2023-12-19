@@ -1,5 +1,7 @@
 package com.example.templateapplication.data.TimeSlots
 
+import com.example.templateapplication.data.GlobalDoctor
+import com.example.templateapplication.model.Doctor
 import com.example.templateapplication.model.TimeSlot
 import com.example.templateapplication.network.TimeSlotApiService
 import kotlinx.coroutines.CoroutineScope
@@ -35,23 +37,30 @@ class OfflineFirstTimeSlotRepository(private val timeSlotDao: TimeSlotDao, priva
     }
 
     override suspend fun insertTimeSlot(timeSlot: TimeSlot) {
-        timeSlotDao.insert(timeSlot.asDbTimeSlot())
+        timeSlot.asDbTimeSlot()?.let { timeSlotDao.insert(it) }
         timeSlotApi.createTimeSlot(timeSlot)
     }
 
     override suspend fun updateTimeSlot(timeSlot: TimeSlot) {
-        timeSlotDao.update(timeSlot.asDbTimeSlot())
+        timeSlot.asDbTimeSlot()?.let { timeSlotDao.update(it) }
         timeSlotApi.updateTimeSlot(timeSlot)
     }
 
     override suspend fun deleteTimeSlot(timeSlot: TimeSlot) {
-        timeSlotDao.delete(timeSlot.asDbTimeSlot())
+        timeSlot.asDbTimeSlot()?.let { timeSlotDao.delete(it) }
         timeSlotApi.deleteTimeSlot(timeSlot)
     }
 
     override suspend fun refreshTimeSlots() {
         // TODO get the id's from doctors and refresh for each doctor
-        timeSlotApi.getTimeSlots(3)
-            .also { externalTimeSlots -> timeSlotDao.deleteAndInsert(timeSlots = externalTimeSlots.map(TimeSlot::asDbTimeSlot)) }
+        getSelectedDoctor()?.let {
+            timeSlotApi.getTimeSlots(it.id)
+                .also { externalTimeSlots -> timeSlotDao.deleteAndInsert(timeSlots = externalTimeSlots.map(TimeSlot::asDbTimeSlot)) }
+        }
     }
+
+    fun getSelectedDoctor(): Doctor? {
+        return GlobalDoctor.doctor
+    }
+
 }

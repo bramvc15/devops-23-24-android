@@ -15,7 +15,7 @@ interface TimeSlotDao {
     suspend fun insert(timeSlot: dbTimeSlot)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertTimeSlots(timeSlots: List<dbTimeSlot>): List<Long>
+    suspend fun insertTimeSlots(timeSlots: List<dbTimeSlot?>): List<Long>
 
     @Update
     suspend fun update(timeSlot: dbTimeSlot)
@@ -33,7 +33,7 @@ interface TimeSlotDao {
     fun deleteAllTimeSlots()
 
     @Transaction
-    suspend fun deleteAndInsert(timeSlots: List<dbTimeSlot>) {
+    suspend fun deleteAndInsert(timeSlots: kotlin.collections.List<com.example.templateapplication.data.TimeSlots.dbTimeSlot?>) {
         deleteAllTimeSlots()
         insertTimeSlots(timeSlots)
     }

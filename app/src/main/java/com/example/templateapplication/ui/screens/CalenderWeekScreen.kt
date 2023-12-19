@@ -87,7 +87,8 @@ fun CalendarWeekScreen(timeslotViewModel: TimeSlotViewModel = viewModel(factory 
                 }
             },
         )
-        val selectedAppointment = timeslots.filter { it.dateTime == selection.toString() }
+        val selectedAppointment = timeslots.filter { LocalDate.parse(it.dateTime, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm[:ss[.SSSSSSS]]")) == selection  }
+        Log.d("select", "${selectedAppointment}")
         if (selectedAppointment.isNotEmpty()) {
             Column(
                 modifier = Modifier

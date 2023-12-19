@@ -11,9 +11,9 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import coil.network.HttpException
 import com.example.templateapplication.MyApplication
+import com.example.templateapplication.data.GlobalDoctor
 import com.example.templateapplication.data.TimeSlots.TimeSlotRepository
 import com.example.templateapplication.model.Doctor
-import com.example.templateapplication.model.Note
 import com.example.templateapplication.model.TimeSlot
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -35,22 +35,26 @@ class TimeSlotViewModel(private val timeSlotRepository: TimeSlotRepository) : Vi
     val timeslots: StateFlow<List<TimeSlot>> get() = _timeslots
 
     init {
-
+        fun getSelectedDoctor(): Doctor? {
+            return GlobalDoctor.doctor
+        }
+        getTimeSlots(getSelectedDoctor())
     }
 
-    private fun getTimeSlots(doctor: Doctor) {
+    private fun getTimeSlots(doctor: Doctor?) {
         viewModelScope.launch {
             timeSlotUiState = TimeSlotUiState.Loading
             timeSlotUiState = try {
-                val timeslotsFlow = timeSlotRepository.getTimeSlotsStream(doctor.id)
+                val timeslotsFlow = doctor?.let { timeSlotRepository.getTimeSlotsStream(it.id) }
 
-                val timeslots: MutableList<TimeSlot> = mutableListOf()
-                timeslotsFlow.collect { ts ->
-                    timeslots.addAll(ts)
+                //val timeslots: MutableList<TimeSlot> = mutableListOf()
+                if (timeslotsFlow != null) {
+                    timeslotsFlow.collect { ts ->
+                        _timeslots.value = ts
+                    }
                 }
 
-                _timeslots.value = timeslots
-                TimeSlotUiState.Success(timeslots)
+                TimeSlotUiState.Success(timeslots = timeslots.value)
             } catch (e: IOException) {
                 Log.d("TimeSlotViewModel", "IOException")
                 Log.d("TimeSlotViewModel", e.message.toString())

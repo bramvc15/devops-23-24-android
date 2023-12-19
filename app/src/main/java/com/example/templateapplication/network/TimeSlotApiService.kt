@@ -10,8 +10,8 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface TimeSlotApiService {
-    @GET("timeslot/{id}")
-    suspend fun getTimeSlots(@Path("id") id: Int): List<TimeSlot>
+    @GET("timeslot/{doctorId}")
+    suspend fun getTimeSlots(@Path("doctorId") id: Int): List<TimeSlot>
 
     @PUT("timeslot")
     suspend fun updateTimeSlot(
