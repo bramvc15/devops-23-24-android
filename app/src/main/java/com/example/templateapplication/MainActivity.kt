@@ -39,15 +39,3 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun VisionAppCompactPreview() {
-    VisionApplicationTheme {
-        Surface{
-            VisionApp(windowSize = WindowWidthSizeClass.Compact,
-            )
-        }
-    }
-}
-
-

@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -22,9 +23,12 @@ import com.example.templateapplication.ui.screens.CalenderMonthScreen
 import com.example.templateapplication.ui.screens.DoctorSelectionScreen
 import com.example.templateapplication.ui.screens.NoteScreen
 import com.example.templateapplication.ui.screens.PasswordScreen
+import com.example.templateapplication.ui.utils.VisionNavigationType
 
 @Composable
-fun AppNavigation() {
+fun AppNavigation(
+    navigationType: VisionNavigationType,
+) {
     val navController: NavHostController = rememberNavController()
 
     Scaffold(
@@ -35,7 +39,8 @@ fun AppNavigation() {
                     Screens.PasswordScreen.name
                 )
             ) {
-                GetNavigationBar(navController = navController)
+                GetNavigationBar(navController = navController,
+                    navigationType = navigationType)
             }
         }
     ) { paddingValues ->
@@ -58,7 +63,8 @@ fun AppNavigation() {
 
             composable(route = Screens.CalenderWeekScreen.name) {
 
-                GetNavigationBar(navController = navController)
+                GetNavigationBar(navController = navController,
+                    navigationType = navigationType)
                 CalendarWeekScreen()
             }
 
@@ -74,7 +80,8 @@ fun AppNavigation() {
                                 )
                             }"
                         )
-                    }
+                    },
+
                 )
             }
 
@@ -97,30 +104,83 @@ fun AppNavigation() {
 }
 
 @Composable
-fun GetNavigationBar(navController: NavHostController) {
+fun GetNavigationBar(navController: NavHostController,
+                     navigationType: VisionNavigationType
+                     ) {
     NavigationBar {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
-        listOfNavItems.forEach { navItem ->
-            NavigationBarItem(
-                selected = currentDestination?.hierarchy?.any { it.route == navItem.route } == true,
-                onClick = {
-                    navController.navigate(navItem.route) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                            inclusive = true
+        //BOTTOM_NAVIGATION, NAVIGATION_RAIL, PERMANENT_NAVIGATION_DRAWER
+        if (navigationType == VisionNavigationType.BOTTOM_NAVIGATION){
+            listOfNavItems.forEach { navItem ->
+                NavigationBarItem(
+                    selected = currentDestination?.hierarchy?.any { it.route == navItem.route } == true,
+                    onClick = {
+                        navController.navigate(navItem.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                                inclusive = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
                         }
-                        launchSingleTop = true
-                        restoreState = true
+                    },
+                    icon = {
+                        Icon(imageVector = navItem.icon, contentDescription = null)
+                    },
+                    label = {
+                        Text(text = navItem.label)
                     }
-                },
-                icon = {
-                    Icon(imageVector = navItem.icon, contentDescription = null)
-                },
-                label = {
-                    Text(text = navItem.label)
-                }
-            )
+                )
+            }
+
+
+        }
+        else if (navigationType == VisionNavigationType.NAVIGATION_RAIL) {
+            listOfNavItems.forEach { navItem ->
+                NavigationBarItem(
+                    selected = currentDestination?.hierarchy?.any { it.route == navItem.route } == true,
+                    onClick = {
+                        navController.navigate(navItem.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                                inclusive = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
+                    icon = {
+                        Icon(imageVector = navItem.icon, contentDescription = null)
+                    },
+                    label = {
+                        Text(text = navItem.label)
+                    }
+                )
+            }
+        }
+        else if (navigationType == VisionNavigationType.PERMANENT_NAVIGATION_DRAWER) {
+            listOfNavItems.forEach { navItem ->
+                NavigationBarItem(
+                    selected = currentDestination?.hierarchy?.any { it.route == navItem.route } == true,
+                    onClick = {
+                        navController.navigate(navItem.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                                inclusive = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
+                    icon = {
+                        Icon(imageVector = navItem.icon, contentDescription = null)
+                    },
+                    label = {
+                        Text(text = navItem.label)
+                    }
+                )
+            }
         }
     }
 }

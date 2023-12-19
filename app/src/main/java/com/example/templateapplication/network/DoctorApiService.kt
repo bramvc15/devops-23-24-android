@@ -8,7 +8,7 @@ import retrofit2.Retrofit
 import retrofit2.http.GET
 
 private const val BASE_URL =
-    "http://192.168.100.101:5046/api/"
+    "http://10.0.2.2:5001/api/"
 
 /**
  * Use the Retrofit builder to build a retrofit object using a kotlinx.serialization converter

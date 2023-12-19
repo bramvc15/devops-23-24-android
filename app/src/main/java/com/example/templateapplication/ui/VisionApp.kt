@@ -5,27 +5,29 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import com.example.templateapplication.navigation.AppNavigation
-import com.example.templateapplication.ui.utils.ReplyNavigationType
+import com.example.templateapplication.ui.utils.VisionNavigationType
 
 
 @Composable
 fun VisionApp(
     windowSize:WindowWidthSizeClass,
 ){
-    val navigationType: ReplyNavigationType
+    val navigationType: VisionNavigationType
+
+
     when (windowSize) {
         WindowWidthSizeClass.Compact -> {
-            navigationType = ReplyNavigationType.BOTTOM_NAVIGATION
+            navigationType = VisionNavigationType.BOTTOM_NAVIGATION
         }
         WindowWidthSizeClass.Medium -> {
-            navigationType = ReplyNavigationType.NAVIGATION_RAIL
+            navigationType = VisionNavigationType.NAVIGATION_RAIL
         }
         WindowWidthSizeClass.Expanded -> {
-            navigationType = ReplyNavigationType.PERMANENT_NAVIGATION_DRAWER
+            navigationType = VisionNavigationType.PERMANENT_NAVIGATION_DRAWER
         }
         else -> {
-            navigationType = ReplyNavigationType.BOTTOM_NAVIGATION
+            navigationType = VisionNavigationType.BOTTOM_NAVIGATION
         }
     }
-    AppNavigation()
+    AppNavigation(navigationType = navigationType,)
 }

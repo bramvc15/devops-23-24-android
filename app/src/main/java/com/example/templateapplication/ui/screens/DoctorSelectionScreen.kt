@@ -29,19 +29,19 @@ import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.example.templateapplication.model.Doctor
 import com.example.templateapplication.shared.AppPreferences
+import com.example.templateapplication.ui.utils.VisionNavigationType
 import com.example.templateapplication.ui.views.DoctorViewModel
 
 
 @Composable
 fun DoctorSelectionScreen(
     doctorViewModel : DoctorViewModel  = viewModel(),
-    onNextButtonClicked: (Doctor) -> Unit,
+    onNextButtonClicked: (Doctor) -> Unit
     ) {
 
     val appPreferences = AppPreferences(LocalContext.current)
 
     val doctors by doctorViewModel.doctors.collectAsState()
-
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
