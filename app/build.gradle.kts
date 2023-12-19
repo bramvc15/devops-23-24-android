@@ -15,6 +15,12 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+        manifestPlaceholders.putAll(
+            mutableMapOf(
+                "auth0Domain" to "@string/com_auth0_domain",
+                "auth0Scheme" to "@string/com_auth0_scheme"
+            )
+        )
 
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -44,6 +50,7 @@ android {
     }
     buildFeatures {
         compose = true
+        //viewBinding = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
@@ -126,4 +133,11 @@ dependencies {
     testImplementation("androidx.room:room-testing:$room_version")
     //noinspection GradleDependency
     annotationProcessor("androidx.room:room-compiler:$room_version")
+
+    // Auth0
+    //noinspection GradleDynamicVersion
+    implementation("com.auth0.android:auth0:+")
+    //noinspection GradleDynamicVersion
+    implementation("com.auth0.android:jwtdecode:+")
+    implementation("io.coil-kt:coil-compose:2.5.0")
 }
