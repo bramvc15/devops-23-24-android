@@ -6,7 +6,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.example.templateapplication.data.Patients.dbPatient
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -23,6 +22,6 @@ interface PatientDao {
     @Query("SELECT * from patients")
     fun getAllPatients(): Flow<List<dbPatient>>
 
-    @Query("SELECT * from patients WHERE id = :id")
+    @Query("SELECT * from patients WHERE patient_id = :id")
     fun getPatient(id: Int): Flow<dbPatient>
 }
