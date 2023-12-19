@@ -12,6 +12,7 @@ import com.auth0.android.callback.Callback
 import com.auth0.android.provider.WebAuthProvider
 import com.auth0.android.result.Credentials
 import com.example.templateapplication.R
+import com.example.templateapplication.data.GlobalDoctor
 import com.example.templateapplication.model.AuthedDoctor
 
 
@@ -54,6 +55,7 @@ class MainViewModel: ViewModel() {
                     Log.d(TAG, "ID token: $idToken")
 
                     authedDoctor = AuthedDoctor(idToken)
+                    GlobalDoctor.authedDoctor = authedDoctor
 
                     userIsAuthenticated = true
                     appJustLaunched = false
@@ -76,6 +78,7 @@ class MainViewModel: ViewModel() {
                 override fun onSuccess(result: Void?) {
                     // The user successfully logged out.
                     authedDoctor = AuthedDoctor()
+                    GlobalDoctor.authedDoctor = authedDoctor
                     userIsAuthenticated = false
                 }
 

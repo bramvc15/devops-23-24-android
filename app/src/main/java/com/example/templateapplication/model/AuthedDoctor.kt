@@ -7,7 +7,6 @@ data class AuthedDoctor(val idToken: String? = null) {
 
     private val TAG = "AuthedDoctor"
 
-    var authToken = ""
     var id = ""
     var name = ""
     var email = ""
@@ -23,7 +22,6 @@ data class AuthedDoctor(val idToken: String? = null) {
 
                 // The ID token is a valid JWT,
                 // so extract information about the AuthedDoctor from it.
-                authToken = idToken
                 id = jwt.subject ?: ""
                 name = jwt.getClaim("name").asString() ?: ""
                 email = jwt.getClaim("email").asString() ?: ""

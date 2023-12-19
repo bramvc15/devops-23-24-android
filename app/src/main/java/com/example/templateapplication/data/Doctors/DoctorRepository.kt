@@ -4,7 +4,7 @@ import com.example.templateapplication.model.Doctor
 import com.example.templateapplication.network.DoctorApiService
 
 interface DoctorRepository {
-    suspend fun getDoctors(): List<Doctor>
+    suspend fun getDoctors(token: String): List<Doctor>
     suspend fun insertDoctor(doctor: Doctor)
     suspend fun updateDoctor(doctor: Doctor) : Doctor
     suspend fun deleteDoctor(doctor: Doctor)
@@ -15,8 +15,9 @@ class NetworkDoctorRepository(
     private val doctorDao: DoctorDao,
     private val doctorApiService: DoctorApiService
 ): DoctorRepository {
-    override suspend fun getDoctors(): List<Doctor> {
-        return doctorApiService.getDoctors()
+    override suspend fun getDoctors(token: String): List<Doctor> {
+        val authorizationHeader = "Bearer $token"
+        return doctorApiService.getDoctors(authorizationHeader)
     }
 
     override suspend fun insertDoctor(doctor: Doctor) {

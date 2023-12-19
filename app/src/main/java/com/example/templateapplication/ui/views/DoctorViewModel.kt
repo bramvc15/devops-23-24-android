@@ -41,7 +41,8 @@ class DoctorViewModel(private val doctorRepository: DoctorRepository) : ViewMode
         viewModelScope.launch {
             doctorUiState = DoctorUiState.Loading
             doctorUiState = try {
-                val doctors = doctorRepository.getDoctors()
+                val token = GlobalDoctor.authedDoctor?.idToken ?: throw Exception("Token is null")
+                val doctors = doctorRepository.getDoctors(token)
                 _doctors.value = doctors
                 DoctorUiState.Success(doctors)
             } catch (e: IOException) {

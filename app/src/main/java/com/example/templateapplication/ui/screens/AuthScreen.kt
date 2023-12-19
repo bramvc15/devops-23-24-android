@@ -26,16 +26,16 @@ import com.example.templateapplication.R
 import com.example.templateapplication.ui.views.MainViewModel
 
 @Composable
-fun AuthScreen(viewModel: MainViewModel) {
+fun AuthScreen(mainViewModel: MainViewModel) {
     Column(
         modifier = Modifier.padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
-        val title = if (viewModel.userIsAuthenticated) {
+        val title = if (mainViewModel.userIsAuthenticated) {
             stringResource(R.string.logged_in_title)
         } else {
-            if (viewModel.appJustLaunched) {
+            if (mainViewModel.appJustLaunched) {
                 stringResource(R.string.initial_title)
             } else {
                 stringResource(R.string.logged_out_title)
@@ -44,28 +44,28 @@ fun AuthScreen(viewModel: MainViewModel) {
         Title(
             text = title
         )
-        if (viewModel.userIsAuthenticated) {
+        if (mainViewModel.userIsAuthenticated) {
             UserInfoRow(
                 label = stringResource(R.string.name_label),
-                value = viewModel.authedDoctor.name,
+                value = mainViewModel.authedDoctor.name,
             )
             UserInfoRow(
                 label = stringResource(R.string.email_label),
-                value = viewModel.authedDoctor.email,
+                value = mainViewModel.authedDoctor.email,
             )
             UserPicture(
-                url = viewModel.authedDoctor.picture,
-                description = viewModel.authedDoctor.name,
+                url = mainViewModel.authedDoctor.picture,
+                description = mainViewModel.authedDoctor.name,
             )
         }
         val buttonText: String
         val onClickAction: () -> Unit
-        if (viewModel.userIsAuthenticated) {
+        if (mainViewModel.userIsAuthenticated) {
             buttonText = stringResource(R.string.log_out_button)
-            onClickAction = { viewModel.logout() }
+            onClickAction = { mainViewModel.logout() }
         } else {
             buttonText = stringResource(R.string.log_in_button)
-            onClickAction = { viewModel.login() }
+            onClickAction = { mainViewModel.login() }
         }
         LogButton(
             text = buttonText,
