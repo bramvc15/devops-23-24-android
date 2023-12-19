@@ -47,6 +47,7 @@ import com.example.templateapplication.shared.StatusBarColorUpdateEffect
 import com.example.templateapplication.shared.displayText
 import com.example.templateapplication.shared.getWeekPageTitle
 import com.example.templateapplication.shared.rememberFirstVisibleWeekAfterScroll
+import com.example.templateapplication.ui.components.AppointmentItem
 import com.example.templateapplication.ui.views.DoctorViewModel
 import com.example.templateapplication.ui.views.TimeSlotViewModel
 import com.kizitonwose.calendar.compose.WeekCalendar
@@ -91,7 +92,7 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : Tim
 
                 FloatingActionButton(
                     onClick = {
-                        isAddingAppointment = true
+                        isAddingAppointment = !isAddingAppointment
                     }
                 ) {
                     Icon(Icons.Filled.Add, "Add appointment")
@@ -110,7 +111,7 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : Tim
                 }
             },
         )
-        val selectedAppointment = timeslots.filter { it.dateTime.toLocalDate() == selection }
+        val selectedAppointment = timeslots.filter { it.dateTime.toLocalDate() == selection  && it.appointmentDTO != null }
 
         if(isAddingAppointment) {
             Card(
@@ -261,72 +262,6 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : Tim
         }
     }
 }
-
-@Composable
-private fun AppointmentItem(timeslot: TimeSlot, doctorViewModel: DoctorViewModel) {
-    var isExpanded by remember { mutableStateOf(false) }
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        elevation = 8.dp,
-        shape = MaterialTheme.shapes.medium,
-        backgroundColor = colorResource(id = R.color.lightgray )
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            Text(
-                text = "name: ${timeslot.appointmentDTO?.patientDTO?.name ?: "N/A"}",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "Appointment Time: ${timeslot.dateTime.format(DateTimeFormatter.ofPattern("HH:mm"))}",
-                fontSize = 14.sp,
-                color = Color.Black
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "Doctor: ${doctorViewModel.selectedDoctor?.name}",
-                fontSize = 14.sp,
-                color = Color.Black
-            )
-
-            // Add a clickable area to toggle expansion
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable {
-                        isExpanded = !isExpanded
-                    }
-            ) {
-                Text(
-                    text = if (isExpanded) "Click to collapse" else "Click for more details",
-                    fontSize = 14.sp,
-                    color = colorResource(id = R.color.example_7_yellow),
-                    fontWeight = FontWeight.Bold,
-                )
-            }
-
-            // Conditionally display additional information when expanded
-            if (isExpanded) {
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Reason: ${timeslot.appointmentDTO?.reason}",
-                    fontSize = 14.sp,
-                    color = Color.Black
-                )
-            }
-        }
-    }
-}
-
 
 private val dateFormatter = DateTimeFormatter.ofPattern("dd")
 
