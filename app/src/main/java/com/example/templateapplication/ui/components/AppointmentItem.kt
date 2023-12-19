@@ -23,12 +23,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.templateapplication.R
+import com.example.templateapplication.data.GlobalDoctor
 import com.example.templateapplication.model.TimeSlot
-import com.example.templateapplication.ui.views.DoctorViewModel
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun AppointmentItem(timeslot: TimeSlot, doctorViewModel: DoctorViewModel) {
+fun AppointmentItem(timeslot: TimeSlot) {
     var isExpanded by remember { mutableStateOf(false) }
     var isEditing by remember { mutableStateOf(false) }
     if(!isEditing) {
@@ -47,20 +47,20 @@ fun AppointmentItem(timeslot: TimeSlot, doctorViewModel: DoctorViewModel) {
                             .padding(16.dp)
             ) {
                 Text(
-                        text = "${timeslot.dateTime.format(DateTimeFormatter.ofPattern("HH:mm"))}",
+                        text = timeslot.dateTime.format(DateTimeFormatter.ofPattern("HH:mm")),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.Black
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                        text = "${timeslot.appointment?.patient?.name ?: "N/A"}",
+                        text = timeslot.appointment?.patient?.name ?: "N/A",
                         fontSize = 16.sp,
                         color = Color.Black
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                        text = "Doctor:",
+                        text = "Doctor: " + GlobalDoctor.doctor?.name,
                         fontSize = 14.sp,
                         color = Color.Black
                 )

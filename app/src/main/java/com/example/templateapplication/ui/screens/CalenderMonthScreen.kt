@@ -37,12 +37,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.templateapplication.R
 import com.example.templateapplication.shared.SimpleCalendarTitle
 import com.example.templateapplication.shared.StatusBarColorUpdateEffect
 import com.example.templateapplication.shared.displayText
 import com.example.templateapplication.shared.rememberFirstCompletelyVisibleMonth
-import com.example.templateapplication.ui.views.DoctorViewModel
 import com.example.templateapplication.ui.views.TimeSlotViewModel
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
@@ -68,8 +68,7 @@ private val informationColor: Color @Composable get() = colorResource(R.color.bl
 
 @Composable
 fun CalenderMonthScreen(
-    doctorViewModel: DoctorViewModel,
-    timeslotViewModel : TimeSlotViewModel
+    timeslotViewModel : TimeSlotViewModel = viewModel(factory = TimeSlotViewModel.Factory)
 ) {
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth.minusMonths(500) }
