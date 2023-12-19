@@ -20,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -28,33 +27,27 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.example.templateapplication.model.Doctor
-import com.example.templateapplication.shared.AppPreferences
-import com.example.templateapplication.ui.utils.VisionNavigationType
 import com.example.templateapplication.ui.views.DoctorViewModel
 
 
 @Composable
 fun DoctorSelectionScreen(
-    doctorViewModel : DoctorViewModel  = viewModel(),
-    onNextButtonClicked: (Doctor) -> Unit
+    doctorViewModel: DoctorViewModel = viewModel(factory = DoctorViewModel.Factory),
+    onNextButtonClicked: (Doctor) -> Unit,
     ) {
-
-    val appPreferences = AppPreferences(LocalContext.current)
 
     val doctors by doctorViewModel.doctors.collectAsState()
+
     LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
         items(doctors) { doctor ->
-            DoctorItem(doctor = doctor)
-            {
-                appPreferences.doctorId = doctor.id.toString()
+            DoctorItem(doctor = doctor) {
+                doctorViewModel.selectDoctor(doctor)
                 onNextButtonClicked(doctor)
             }
             Spacer(modifier = Modifier.height(16.dp))
         }
-
     }
 }
 
@@ -76,7 +69,7 @@ private fun DoctorItem(doctor : Doctor, onNextButtonClicked: (Doctor) -> Unit) {
                 .padding(16.dp)
         ) {
             val painter = rememberImagePainter(
-                data = doctor.image,
+                data = doctor.imageLink,
                 builder = {
                     transformations(CircleCropTransformation())
                 }

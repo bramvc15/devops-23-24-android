@@ -47,12 +47,11 @@ fun PasswordScreen(doctorName : String, doctorImage : String,  onNextButtonClick
             }
         )
 
-        // Adjusted the height of the Image and added more spacing
         Image(
             painter = painter,
             contentDescription = null,
             modifier = Modifier
-                .height(220.dp) // Adjusted height
+                .height(220.dp)
                 .fillMaxWidth()
                 .clip(CircleShape),
             contentScale = ContentScale.Inside,

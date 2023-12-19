@@ -1,16 +1,25 @@
 package com.example.templateapplication.model
 
 import com.squareup.moshi.Json
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class Doctor(
-    val id: Int?,
-    @field:Json(name = "name") val name: String,
-    val gender: String,
+    @SerialName(value = "id")
+    val id: Int,
+    @SerialName(value = "name")
+    val name: String,
+    @SerialName(value = "specialization")
     val specialization: String,
-    val infoOver: String,
-    val infoOpleiding: String,
-    val infoPublicaties: String,
-    @field:Json(name = "image") val image: String,
+    @SerialName(value = "gender")
+    val gender: Int,
+    @SerialName(value = "biograph")
+    val biograph: String?,
+    @SerialName(value = "isAvailable")
+    val isAvailable: Boolean,
+    @SerialName(value = "imageLink")
+    val imageLink: String,
+    @SerialName(value = "auth0Id")
+    val auth0Id: String,
 )

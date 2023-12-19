@@ -6,19 +6,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyItemScope
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Divider
 import androidx.compose.material.LocalContentColor
 import androidx.compose.material.Text
 import androidx.compose.material.darkColors
@@ -27,7 +22,6 @@ import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,14 +35,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.templateapplication.R
-import com.example.templateapplication.shared.Appointment
 import com.example.templateapplication.shared.SimpleCalendarTitle
 import com.example.templateapplication.shared.StatusBarColorUpdateEffect
-import com.example.templateapplication.shared.appointmentDateTimeFormatter
 import com.example.templateapplication.shared.displayText
-import com.example.templateapplication.shared.generateAppointments
 import com.example.templateapplication.shared.rememberFirstCompletelyVisibleMonth
+import com.example.templateapplication.ui.views.DoctorViewModel
+import com.example.templateapplication.ui.views.TimeSlotViewModel
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
@@ -60,9 +54,7 @@ import com.kizitonwose.calendar.core.previousMonth
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.YearMonth
-import java.util.Locale
 
-private val appointments = generateAppointments().groupBy { it.time.toLocalDate() }
 private val toolbarColor: Color @Composable get() = colorResource(R.color.colorPrimary)
 private val topAppColor: Color @Composable get() = colorResource(R.color.colorPrimary)
 private val backgroundColor: Color @Composable get() = colorResource(R.color.white)
@@ -74,18 +66,18 @@ private val informationColor: Color @Composable get() = colorResource(R.color.bl
 
 
 @Composable
-fun CalenderMonthScreen() {
+fun CalenderMonthScreen(timeslotViewModel: TimeSlotViewModel = viewModel(factory = TimeSlotViewModel.Factory)) {
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth.minusMonths(500) }
     val endMonth = remember { currentMonth.plusMonths(500) }
     var selection by remember { mutableStateOf<CalendarDay?>(null) }
     val daysOfWeek = remember { daysOfWeek() }
-    val appointmentsInSelectedDate = remember {
-        derivedStateOf {
-            val date = selection?.date
-            if (date == null) emptyList() else appointments[date].orEmpty()
-        }
-    }
+//    val appointmentsInSelectedDate = remember {
+//        derivedStateOf {
+//            val date = selection?.date
+//            if (date == null) emptyList() else appointments[date].orEmpty()
+//        }
+//    }
 
     StatusBarColorUpdateEffect(topAppColor)
     Column(
@@ -128,15 +120,15 @@ fun CalenderMonthScreen() {
                 state = state,
                 dayContent = { day ->
                     CompositionLocalProvider(LocalRippleTheme provides Example3RippleTheme) {
-                        val colors = if (day.position == DayPosition.MonthDate) {
-                            appointments[day.date].orEmpty().map { colorResource(it.color) }
-                        } else {
-                            emptyList()
-                        }
+//                        val colors = if (day.position == DayPosition.MonthDate) {
+//                            appointments[day.date].orEmpty().map { colorResource(it.color) }
+//                        } else {
+//                            emptyList()
+//                        }
                         Day(
                             day = day,
                             isSelected = selection == day,
-                            colors = colors,
+                            //colors = colors,
                         ) { clicked ->
                             selection = clicked
                         }
@@ -150,9 +142,9 @@ fun CalenderMonthScreen() {
                 },
             )
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                items(items = appointmentsInSelectedDate.value) { appointment ->
-                    AppointmentInformation(appointment = appointment)
-                }
+//                items(items = appointmentsInSelectedDate.value) { appointment ->
+//                    AppointmentInformation(appointment = appointment)
+//                }
             }
         }
     }
@@ -230,82 +222,82 @@ private fun MonthHeader(
         }
     }
 }
-
-@Composable
-private fun LazyItemScope.AppointmentInformation(appointment: Appointment) {
-    Row(
-        modifier = Modifier
-            .fillParentMaxWidth()
-            .height(IntrinsicSize.Max),
-        horizontalArrangement = Arrangement.spacedBy(2.dp),
-    ) {
-        Box(
-            modifier = Modifier
-                .background(color = colorResource(appointment.color))
-                .fillParentMaxWidth(1 / 7f)
-                .aspectRatio(1f),
-            contentAlignment = Alignment.Center,
-        ) {
-            Text(
-                text = appointmentDateTimeFormatter.format(appointment.time).uppercase(Locale.ENGLISH),
-                textAlign = TextAlign.Center,
-                lineHeight = 17.sp,
-                fontSize = 12.sp,
-            )
-        }
-        Box(
-            modifier = Modifier
-                .background(color = appointmentField)
-                .weight(1f)
-                .fillMaxHeight(),
-        ) {
-            AppointmentInformation(appointment.doctor, appointment.patient)
-            Divider(color = toolbarColor)
-        }
-
-    }
-}
-@Composable
-private fun AppointmentInformation(doctor: Appointment.Doctor, patient: Appointment.Patient) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(),
-    ) {
-        Box(
-            modifier = Modifier
-                .weight(0.3f)
-                .fillMaxHeight()
-                .fillMaxHeight(),
-            contentAlignment = Alignment.CenterEnd,
-        ) {
-        }
-        Column(
-            modifier = Modifier
-                .weight(0.7f)
-                .fillMaxHeight()
-                .fillMaxWidth(),
-            verticalArrangement = Arrangement.Center,
-        ) {
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = patient.name,
-                textAlign = TextAlign.Center,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Black,
-                color = informationColor
-            )
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = doctor.name,
-                textAlign = TextAlign.Center,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Light,
-                color = informationColor
-            )
-        }
-    }
-}
+//
+//@Composable
+//private fun LazyItemScope.AppointmentInformation(appointment: Appointment) {
+//    Row(
+//        modifier = Modifier
+//            .fillParentMaxWidth()
+//            .height(IntrinsicSize.Max),
+//        horizontalArrangement = Arrangement.spacedBy(2.dp),
+//    ) {
+//        Box(
+//            modifier = Modifier
+//                .background(color = colorResource(appointment.color))
+//                .fillParentMaxWidth(1 / 7f)
+//                .aspectRatio(1f),
+//            contentAlignment = Alignment.Center,
+//        ) {
+//            Text(
+//                text = appointmentDateTimeFormatter.format(appointment.time).uppercase(Locale.ENGLISH),
+//                textAlign = TextAlign.Center,
+//                lineHeight = 17.sp,
+//                fontSize = 12.sp,
+//            )
+//        }
+//        Box(
+//            modifier = Modifier
+//                .background(color = appointmentField)
+//                .weight(1f)
+//                .fillMaxHeight(),
+//        ) {
+//            AppointmentInformation(appointment.doctor, appointment.patient)
+//            Divider(color = toolbarColor)
+//        }
+//
+//    }
+//}
+//@Composable
+//private fun AppointmentInformation(doctor: Appointment.dbDoctor.kt, patient: Appointment.Patient) {
+//    Row(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .fillMaxHeight(),
+//    ) {
+//        Box(
+//            modifier = Modifier
+//                .weight(0.3f)
+//                .fillMaxHeight()
+//                .fillMaxHeight(),
+//            contentAlignment = Alignment.CenterEnd,
+//        ) {
+//        }
+//        Column(
+//            modifier = Modifier
+//                .weight(0.7f)
+//                .fillMaxHeight()
+//                .fillMaxWidth(),
+//            verticalArrangement = Arrangement.Center,
+//        ) {
+//            Text(
+//                modifier = Modifier.fillMaxWidth(),
+//                text = patient.name,
+//                textAlign = TextAlign.Center,
+//                fontSize = 16.sp,
+//                fontWeight = FontWeight.Black,
+//                color = informationColor
+//            )
+//            Text(
+//                modifier = Modifier.fillMaxWidth(),
+//                text = doctor.name,
+//                textAlign = TextAlign.Center,
+//                fontSize = 16.sp,
+//                fontWeight = FontWeight.Light,
+//                color = informationColor
+//            )
+//        }
+//    }
+//}
 
 private object Example3RippleTheme : RippleTheme {
     @Composable
