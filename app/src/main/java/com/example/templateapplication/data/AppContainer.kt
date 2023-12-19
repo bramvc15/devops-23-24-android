@@ -4,7 +4,7 @@ import android.content.Context
 import com.example.templateapplication.data.Appointments.AppointmentRepository
 import com.example.templateapplication.data.Appointments.NetworkAppointmentRepository
 import com.example.templateapplication.data.Doctors.DoctorRepository
-import com.example.templateapplication.data.Doctors.NetworkDoctorRepository
+import com.example.templateapplication.data.Doctors.OfflineFirstDoctorRepository
 import com.example.templateapplication.data.Notes.NetworkNoteRepository
 import com.example.templateapplication.data.Notes.NoteRepository
 import com.example.templateapplication.data.Patients.NetworkPatientRepository
@@ -49,13 +49,11 @@ class DefaultAppContainer(private val context: Context): AppContainer {
         .build()
 
     /**
-     * DI implementation for Doctor repository
+     * JUIST
      */
     override val doctorRepository: DoctorRepository by lazy {
-        NetworkDoctorRepository(
-            VisionDatabase.getDatabase(context = context).doctorDao(),
-            retrofit.create(DoctorApiService::class.java)
-        )
+        OfflineFirstDoctorRepository(VisionDatabase.getDatabase(context).doctorDao(),
+            retrofit.create(DoctorApiService::class.java))
     }
 
     /**
