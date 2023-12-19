@@ -24,7 +24,7 @@ interface DoctorDao {
     @Query("SELECT * from doctors WHERE id = :id")
     fun getDoctor(id: Int): Flow<dbDoctor?>
 
-    @Query("DELETE FROM doctors")
+    @Query("DELETE from doctors")
     suspend fun deleteAllDoctors()
 
     @Transaction

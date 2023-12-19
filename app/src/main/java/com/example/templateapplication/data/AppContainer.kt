@@ -5,9 +5,9 @@ import com.example.templateapplication.data.Appointments.AppointmentRepository
 import com.example.templateapplication.data.Appointments.NetworkAppointmentRepository
 import com.example.templateapplication.data.Doctors.DoctorRepository
 import com.example.templateapplication.data.Doctors.OfflineFirstDoctorRepository
-import com.example.templateapplication.data.Notes.NetworkNoteRepository
 import com.example.templateapplication.data.Notes.NoteRepository
-import com.example.templateapplication.data.Patients.NetworkPatientRepository
+import com.example.templateapplication.data.Notes.OfflineFirstNoteRepository
+import com.example.templateapplication.data.Patients.OfflineFirstPatientRepository
 import com.example.templateapplication.data.Patients.PatientRepository
 import com.example.templateapplication.data.TimeSlots.NetworkTimeSlotRepository
 import com.example.templateapplication.data.TimeSlots.TimeSlotRepository
@@ -49,10 +49,11 @@ class DefaultAppContainer(private val context: Context): AppContainer {
         .build()
 
     /**
-     * JUIST
+     * DI implementation for Doctor repository
      */
     override val doctorRepository: DoctorRepository by lazy {
-        OfflineFirstDoctorRepository(VisionDatabase.getDatabase(context).doctorDao(),
+        OfflineFirstDoctorRepository(
+            VisionDatabase.getDatabase(context).doctorDao(),
             retrofit.create(DoctorApiService::class.java))
     }
 
@@ -80,8 +81,8 @@ class DefaultAppContainer(private val context: Context): AppContainer {
      * DI implementation for Patient repository
      */
     override val patientRepository: PatientRepository by lazy {
-        NetworkPatientRepository(
-            VisionDatabase.getDatabase(context = context).patientDao(),
+        OfflineFirstPatientRepository(
+            VisionDatabase.getDatabase(context).patientDao(),
             retrofit.create(PatientApiService::class.java)
         )
     }
@@ -90,8 +91,8 @@ class DefaultAppContainer(private val context: Context): AppContainer {
      * DI implementation for Note repository
      */
     override val noteRepository: NoteRepository by lazy {
-        NetworkNoteRepository(
-            VisionDatabase.getDatabase(context = context).noteDao(),
+        OfflineFirstNoteRepository(
+            VisionDatabase.getDatabase(context).noteDao(),
             retrofit.create(NoteApiService::class.java)
         )
     }
