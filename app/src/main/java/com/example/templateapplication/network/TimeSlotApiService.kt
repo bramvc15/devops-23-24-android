@@ -13,9 +13,10 @@ interface TimeSlotApiService {
     @GET("timeslot/{doctorId}")
     suspend fun getTimeSlots(@Path("doctorId") id: Int): List<TimeSlot>
 
-    @PUT("timeslot")
+    @PUT("timeslot/{doctorId}")
     suspend fun updateTimeSlot(
-        @Body timeSlot: TimeSlot
+        @Body timeSlot: TimeSlot,
+        @Path("doctorId") id: Int
     ) : TimeSlot
 
     @POST("timeslot")
@@ -23,8 +24,9 @@ interface TimeSlotApiService {
         @Body timeSlot: TimeSlot
     ) : TimeSlot
 
-    @HTTP(method = "DELETE", path = "timeslot", hasBody = true)
+    @HTTP(method = "DELETE", path = "timeslot/{doctorId}", hasBody = true)
     suspend fun deleteTimeSlot(
-        @Body timeSlot: TimeSlot
+        @Body timeSlot: TimeSlot,
+        @Path("doctorId") id: Int
     ) : Response<Unit>
 }

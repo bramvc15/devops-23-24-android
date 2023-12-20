@@ -34,17 +34,11 @@ class TimeSlotViewModel(private val timeSlotRepository: TimeSlotRepository) : Vi
     private val _timeslots = MutableStateFlow<List<TimeSlot>>(emptyList())
     val timeslots: StateFlow<List<TimeSlot>> get() = _timeslots
 
-    private var selectedDoctor: Doctor? = null
-
     init {
         fun getSelectedDoctor(): Doctor? {
-            return selectedDoctor ?: GlobalDoctor.doctor
+            return GlobalDoctor.doctor
         }
         getTimeSlots(getSelectedDoctor())
-    }
-
-    fun selectDoctor() {
-        getTimeSlots(GlobalDoctor.doctor)
     }
 
     private fun getTimeSlots(doctor: Doctor?) {

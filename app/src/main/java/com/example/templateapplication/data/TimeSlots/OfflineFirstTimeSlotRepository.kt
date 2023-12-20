@@ -43,12 +43,12 @@ class OfflineFirstTimeSlotRepository(private val timeSlotDao: TimeSlotDao, priva
 
     override suspend fun updateTimeSlot(timeSlot: TimeSlot) {
         timeSlot.asDbTimeSlot()?.let { timeSlotDao.update(it) }
-        timeSlotApi.updateTimeSlot(timeSlot)
+        timeSlotApi.updateTimeSlot(timeSlot, timeSlot.doctorId!!)
     }
 
     override suspend fun deleteTimeSlot(timeSlot: TimeSlot) {
         timeSlot.asDbTimeSlot()?.let { timeSlotDao.delete(it) }
-        timeSlotApi.deleteTimeSlot(timeSlot)
+        timeSlotApi.deleteTimeSlot(timeSlot, timeSlot.doctorId!!)
     }
 
     override suspend fun refreshTimeSlots() {

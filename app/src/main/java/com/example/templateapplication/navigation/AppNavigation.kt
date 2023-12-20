@@ -34,7 +34,9 @@ fun AppNavigation() {
 
     Scaffold(
         bottomBar = {
-                GetNavigationBar(navController = navController)
+            if(currentRoute(navController) != null && currentRoute(navController) != Screens.DoctorSelectionScreen.name && !currentRoute(navController).toString().contains(Screens.PasswordScreen.name)) {
+                GetNavigationBar(navController)
+            }
         }
     ) { paddingValues ->
 
@@ -148,4 +150,11 @@ fun GetNavigationBar(navController: NavHostController) {
             )
         }
     }
+}
+
+@Composable
+private fun currentRoute(navController: NavHostController): String? {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
+    return currentDestination?.hierarchy?.first()?.route
 }
