@@ -13,8 +13,6 @@ import coil.network.HttpException
 import com.example.templateapplication.MyApplication
 import com.example.templateapplication.data.Appointments.AppointmentRepository
 import com.example.templateapplication.model.Appointment
-import com.example.templateapplication.model.Doctor
-import com.example.templateapplication.model.Patient
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -35,23 +33,22 @@ class AppointmentViewModel(private val appointmentRepository: AppointmentReposit
     val appointments: StateFlow<List<Appointment>> get() = _appointments
 
     init {
-        //getAppointments()
+        getAppointments()
     }
 
 
-    fun getAppointments(patient: Patient) {
+    fun getAppointments() {
         viewModelScope.launch {
             appointmentUiState = AppointmentUiState.Loading
             appointmentUiState = try {
                 val appointmentsFlow = appointmentRepository.getAppointments()
 
-                val appointments: MutableList<Appointment> = mutableListOf()
                 appointmentsFlow.collect { app ->
-                    appointments.addAll(app)
+                    _appointments.value = app
                 }
 
-                _appointments.value = appointments
-                AppointmentUiState.Success(appointments)
+                AppointmentUiState.Success(appointments = appointments.value)
+
             } catch (e: IOException) {
                 Log.d("AppointmentViewModel", "IOException")
                 Log.d("AppointmentViewModel", e.message.toString())
@@ -67,6 +64,26 @@ class AppointmentViewModel(private val appointmentRepository: AppointmentReposit
                 Log.d("AppointmentViewModel", e.message.toString())
                 Log.d("AppointmentViewModel", e.stackTraceToString())
                 AppointmentUiState.Error("Exception error: ${e.message}")
+            }
+        }
+    }
+
+    fun updateAppointment(appointment: Appointment) {
+        viewModelScope.launch {
+            try {
+                appointmentRepository.updateAppointment(appointment)
+            } catch (e: IOException) {
+                Log.d("TimeSlotViewModel", "IOException")
+                Log.d("TimeSlotViewModel", e.message.toString())
+                Log.d("TimeSlotViewModel", e.stackTraceToString())
+            } catch (e: HttpException) {
+                Log.d("TimeSlotViewModel", "HttpException")
+                Log.d("TimeSlotViewModel", e.message.toString())
+                Log.d("TimeSlotViewModel", e.stackTraceToString())
+            } catch (e: Exception) {
+                Log.d("TimeSlotViewModel", "Exception")
+                Log.d("TimeSlotViewModel", e.message.toString())
+                Log.d("TimeSlotViewModel", e.stackTraceToString())
             }
         }
     }

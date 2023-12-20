@@ -1,7 +1,6 @@
 package com.example.templateapplication.ui.screens
 
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -44,6 +43,7 @@ import com.example.templateapplication.shared.displayText
 import com.example.templateapplication.shared.getWeekPageTitle
 import com.example.templateapplication.shared.rememberFirstVisibleWeekAfterScroll
 import com.example.templateapplication.ui.components.AppointmentItem
+import com.example.templateapplication.ui.views.AppointmentViewModel
 import com.example.templateapplication.ui.views.DoctorViewModel
 import com.example.templateapplication.ui.views.TimeSlotViewModel
 import com.kizitonwose.calendar.compose.WeekCalendar
@@ -55,15 +55,15 @@ private val topAppColor: Color @Composable get() = colorResource(R.color.colorPr
 
 
 @Composable
-fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : TimeSlotViewModel = viewModel(factory = TimeSlotViewModel.Factory)) {
+fun CalendarWeekScreen(doctorViewModel: DoctorViewModel,
+                       timeslotViewModel : TimeSlotViewModel = viewModel(factory = TimeSlotViewModel.Factory),
+                       appointmentViewModel: AppointmentViewModel = viewModel(factory = AppointmentViewModel.Factory)
+                       ) {
     val currentDate = remember { LocalDate.now() }
     val startDate = remember { currentDate.minusDays(500) }
     val endDate = remember { currentDate.plusDays(500) }
     var selection by remember { mutableStateOf(currentDate) }
     val timeslots by timeslotViewModel.timeslots.collectAsState()
-
-    var isAddingAppointment by remember { mutableStateOf(false) }
-    var selectedType by remember { mutableStateOf("Consultation") }
     var dropdownExpanded by remember { mutableStateOf(false) }
     var selectedAppointment by remember { mutableStateOf(timeslots.filter { it.appointment != null }) }
 
@@ -133,7 +133,6 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : Tim
         selectedAppointment = timeslots.filter { LocalDate.parse(it.dateTime, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm[:ss[.SSSSSSS]]")) == selection  && it.appointment != null }
 
         if (selectedAppointment.isNotEmpty()) {
-            Log.d("CalendarWeekScreen", "Inside selectedAppointment block")
             Column(
                 modifier = Modifier
                         .fillMaxWidth()
@@ -154,19 +153,18 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : Tim
                     items(selectedAppointment) { appointment ->
                         AppointmentItem(
                             timeslot = appointment,
-                            timeSlotViewModel = timeslotViewModel,
+                            appointmentViewModel = appointmentViewModel,
                             OnDeleteTimeslot = {
                                 timeslotViewModel.deleteTimeSlot(it)
                             },
-                            OnUpdateTimeslot = {
-                                timeslotViewModel.updateTimeSlot(it)
+                            OnUpdateAppointment = {
+                                appointmentViewModel.updateAppointment(it)
                             }
                         )
                     }
                 }
             }
         }else {
-            Log.d("CalendarWeekScreen", "Inside else block")
 
             Column(
                 modifier = Modifier
