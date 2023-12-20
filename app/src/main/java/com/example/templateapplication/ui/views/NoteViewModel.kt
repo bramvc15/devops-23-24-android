@@ -12,7 +12,6 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import coil.network.HttpException
 import com.example.templateapplication.MyApplication
 import com.example.templateapplication.data.Notes.NoteRepository
-import com.example.templateapplication.model.Appointment
 import com.example.templateapplication.model.Note
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -42,13 +41,11 @@ class NoteViewModel(private val noteRepository: NoteRepository) : ViewModel() {
             noteUiState = try {
                 val notesFlow = noteRepository.getAllNotesStream()
 
-                val notes: MutableList<Note> = mutableListOf()
                 notesFlow.collect { note ->
-                    notes.addAll(note)
+                    _notes.value = note
                 }
 
-                _notes.value = notes
-                NoteUiState.Success(notes)
+                NoteUiState.Success(notes = notes.value)
             } catch (e: IOException) {
                 Log.d("NoteViewModel", "IOException")
                 Log.d("NoteViewModel", e.message.toString())
@@ -64,6 +61,33 @@ class NoteViewModel(private val noteRepository: NoteRepository) : ViewModel() {
                 Log.d("NoteViewModel", e.message.toString())
                 Log.d("NoteViewModel", e.stackTraceToString())
                 NoteUiState.Error("Exception error: ${e.message}")
+            }
+        }
+    }
+
+    fun insertNote(note : Note){
+        viewModelScope.launch {
+            try {
+                noteRepository.insertNote(note)
+            } catch (e: Exception) {
+                Log.d("NoteViewModel", "Exception during insertNote")
+                Log.d("NoteViewModel", e.message.toString())
+                Log.d("NoteViewModel", e.stackTraceToString())
+                noteUiState = NoteUiState.Error("Exception error: ${e.message}")
+            }
+        }
+    }
+
+    fun deleteNote(note : Note) {
+        viewModelScope.launch {
+            try {
+                Log.d("hallo", "ik ben hier")
+                noteRepository.deleteNote(note)
+            } catch (e: Exception) {
+                Log.d("delete", "Exception during insertNote")
+                Log.d("delete", e.message.toString())
+                Log.d("delete", e.stackTraceToString())
+                noteUiState = NoteUiState.Error("Exception error: ${e.message}")
             }
         }
     }

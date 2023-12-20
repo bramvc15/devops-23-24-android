@@ -24,12 +24,15 @@ import com.example.templateapplication.ui.screens.CalendarWeekScreen
 import com.example.templateapplication.ui.screens.CalenderMonthScreen
 import com.example.templateapplication.ui.screens.DoctorSelectionScreen
 import com.example.templateapplication.ui.screens.PasswordScreen
+import com.example.templateapplication.ui.screens.notes.NoteScreen
 import com.example.templateapplication.ui.views.DoctorViewModel
+import com.example.templateapplication.ui.views.NoteViewModel
 
 @Composable
 fun AppNavigation() {
     val navController: NavHostController = rememberNavController()
     val doctorViewModel: DoctorViewModel = viewModel(factory = DoctorViewModel.Factory)
+    val noteViewModel: NoteViewModel = viewModel(factory = NoteViewModel.Factory)
 
     Scaffold(
         bottomBar = {
@@ -42,6 +45,7 @@ fun AppNavigation() {
             startDestination = Screens.DoctorSelectionScreen.name,
             modifier = Modifier.padding(paddingValues)
         ) {
+
             composable(route = Screens.NoteScreen.name) {
                 LocalOnBackPressedDispatcherOwner.current?.let { it1 ->
                     BackConfirmationDialog(
@@ -54,7 +58,9 @@ fun AppNavigation() {
                         }
                     )
                 }
-                //NoteScreen()
+                NoteScreen(noteViewModel = noteViewModel
+
+                )
             }
             composable(route = Screens.CalenderMonthScreen.name) {
                 LocalOnBackPressedDispatcherOwner.current?.let { it1 ->

@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Note (
     @SerialName(value = "id")
-    val id: Int,
+    val id: Int?= null,
     @SerialName(value = "title")
     val title: String,
     @SerialName(value = "content")

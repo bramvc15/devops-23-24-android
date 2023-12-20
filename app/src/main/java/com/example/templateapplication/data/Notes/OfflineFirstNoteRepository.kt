@@ -21,7 +21,7 @@ class OfflineFirstNoteRepository(private val noteDao: NoteDao, private val noteA
     private suspend fun updateNotesInBackground() {
         while (true) {
             refreshNotes()
-            delay(300000)
+            delay(3000)
         }
     }
 
@@ -40,12 +40,12 @@ class OfflineFirstNoteRepository(private val noteDao: NoteDao, private val noteA
     }
 
     override suspend fun updateNote(note: Note) {
-        noteDao.update(note.asDbNote())
+        note.asDbNote()?.let { noteDao.update(it) }
         noteApi.updateNote(note)
     }
 
-    override suspend fun deleteNote(note: Note) {
-        noteDao.delete(note.asDbNote())
+    override suspend fun deleteNote(note : Note) {
+        note.asDbNote()?.let { noteDao.delete(it) }
         noteApi.deleteNote(note)
     }
 

@@ -3,8 +3,8 @@ package com.example.templateapplication.network
 import com.example.templateapplication.model.Note
 import retrofit2.Response
 import retrofit2.http.Body
-import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.HTTP
 import retrofit2.http.POST
 import retrofit2.http.PUT
 
@@ -22,7 +22,8 @@ interface NoteApiService {
         @Body note: Note
     ) : Note
 
-    @DELETE("note")
+    // mag eigenlijk niet, zal later gefix worden danku victor XD
+    @HTTP(method = "DELETE", path = "note", hasBody = true)
     suspend fun deleteNote(
         @Body note: Note
     ) : Response<Unit>
