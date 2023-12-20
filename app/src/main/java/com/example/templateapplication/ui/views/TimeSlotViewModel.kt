@@ -34,11 +34,17 @@ class TimeSlotViewModel(private val timeSlotRepository: TimeSlotRepository) : Vi
     private val _timeslots = MutableStateFlow<List<TimeSlot>>(emptyList())
     val timeslots: StateFlow<List<TimeSlot>> get() = _timeslots
 
+    private var selectedDoctor: Doctor? = null
+
     init {
         fun getSelectedDoctor(): Doctor? {
-            return GlobalDoctor.doctor
+            return selectedDoctor ?: GlobalDoctor.doctor
         }
         getTimeSlots(getSelectedDoctor())
+    }
+
+    fun selectDoctor() {
+        getTimeSlots(GlobalDoctor.doctor)
     }
 
     private fun getTimeSlots(doctor: Doctor?) {
@@ -73,6 +79,47 @@ class TimeSlotViewModel(private val timeSlotRepository: TimeSlotRepository) : Vi
             }
         }
     }
+
+    fun updateTimeSlot(timeSlot: TimeSlot) {
+        viewModelScope.launch {
+            try {
+                timeSlotRepository.updateTimeSlot(timeSlot)
+            } catch (e: IOException) {
+                Log.d("TimeSlotViewModel", "IOException")
+                Log.d("TimeSlotViewModel", e.message.toString())
+                Log.d("TimeSlotViewModel", e.stackTraceToString())
+            } catch (e: HttpException) {
+                Log.d("TimeSlotViewModel", "HttpException")
+                Log.d("TimeSlotViewModel", e.message.toString())
+                Log.d("TimeSlotViewModel", e.stackTraceToString())
+            } catch (e: Exception) {
+                Log.d("TimeSlotViewModel", "Exception")
+                Log.d("TimeSlotViewModel", e.message.toString())
+                Log.d("TimeSlotViewModel", e.stackTraceToString())
+            }
+        }
+    }
+
+    fun deleteTimeSlot(timeSlot: TimeSlot) {
+        viewModelScope.launch {
+            try {
+                timeSlotRepository.deleteTimeSlot(timeSlot)
+            } catch (e: IOException) {
+                Log.d("TimeSlotViewModel", "IOException")
+                Log.d("TimeSlotViewModel", e.message.toString())
+                Log.d("TimeSlotViewModel", e.stackTraceToString())
+            } catch (e: HttpException) {
+                Log.d("TimeSlotViewModel", "HttpException")
+                Log.d("TimeSlotViewModel", e.message.toString())
+                Log.d("TimeSlotViewModel", e.stackTraceToString())
+            } catch (e: Exception) {
+                Log.d("TimeSlotViewModel", "Exception")
+                Log.d("TimeSlotViewModel", e.message.toString())
+                Log.d("TimeSlotViewModel", e.stackTraceToString())
+            }
+        }
+    }
+
     /**
      * Factory for [TimeSlotViewModel] that takes [TimeSlotRepository] as a dependency
      */

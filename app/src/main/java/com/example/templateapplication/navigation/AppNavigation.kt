@@ -84,7 +84,7 @@ fun AppNavigation() {
                         }
                     )
                 }
-                CalendarWeekScreen()
+                CalendarWeekScreen(doctorViewModel)
             }
 
             composable(route = Screens.DoctorSelectionScreen.name) {

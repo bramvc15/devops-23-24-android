@@ -1,6 +1,7 @@
 package com.example.templateapplication.ui.screens
 
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,12 +18,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Button
-import androidx.compose.material.Card
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
@@ -45,6 +44,7 @@ import com.example.templateapplication.shared.displayText
 import com.example.templateapplication.shared.getWeekPageTitle
 import com.example.templateapplication.shared.rememberFirstVisibleWeekAfterScroll
 import com.example.templateapplication.ui.components.AppointmentItem
+import com.example.templateapplication.ui.views.DoctorViewModel
 import com.example.templateapplication.ui.views.TimeSlotViewModel
 import com.kizitonwose.calendar.compose.WeekCalendar
 import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
@@ -55,7 +55,7 @@ private val topAppColor: Color @Composable get() = colorResource(R.color.colorPr
 
 
 @Composable
-fun CalendarWeekScreen(timeslotViewModel : TimeSlotViewModel = viewModel(factory = TimeSlotViewModel.Factory)) {
+fun CalendarWeekScreen(doctorViewModel: DoctorViewModel, timeslotViewModel : TimeSlotViewModel = viewModel(factory = TimeSlotViewModel.Factory)) {
     val currentDate = remember { LocalDate.now() }
     val startDate = remember { currentDate.minusDays(500) }
     val endDate = remember { currentDate.plusDays(500) }
@@ -65,6 +65,8 @@ fun CalendarWeekScreen(timeslotViewModel : TimeSlotViewModel = viewModel(factory
     var isAddingAppointment by remember { mutableStateOf(false) }
     var selectedType by remember { mutableStateOf("Consultation") }
     var dropdownExpanded by remember { mutableStateOf(false) }
+    var selectedAppointment by remember { mutableStateOf(timeslots.filter { it.appointment != null }) }
+
     Column(
         modifier = Modifier
                 .fillMaxSize()
@@ -91,25 +93,25 @@ fun CalendarWeekScreen(timeslotViewModel : TimeSlotViewModel = viewModel(factory
                         )
                 ) {
                     Spacer(modifier = Modifier.height(4.dp))
-//                    DropdownMenu(
-//                        expanded = dropdownExpanded,
-//                        onDismissRequest = { dropdownExpanded = false },
-//                        modifier = Modifier
-//                                .background(Color.White)
-//                                .align(Alignment.TopEnd)
-//                                .fillMaxHeight()
-//                    ) {
-//                        doctorViewModel.doctors.collectAsState().value.forEach { doctor ->
-//                            DropdownMenuItem(
-//                                    onClick = {
-//                                        doctorViewModel.selectDoctor(doctor)
-//                                        selectedDoctor = doctor
-//                                    }) {
-//                                Text(text = doctor.name)
-//                            }
-//                        }
-//                    }
-//                    Text(selectedDoctor?.name ?: "Select a doctor", modifier = Modifier.padding(2.dp), fontSize = 14.sp)
+                    DropdownMenu(
+                        expanded = dropdownExpanded,
+                        onDismissRequest = { dropdownExpanded = false },
+                        modifier = Modifier
+                                .background(Color.White)
+                                .align(Alignment.TopEnd)
+                                .fillMaxHeight()
+                    ) {
+                        doctorViewModel.doctors.collectAsState().value.forEach { doctor ->
+                            DropdownMenuItem(
+                                    onClick = {
+                                        doctorViewModel.selectDoctor(doctor)
+                                        timeslotViewModel.selectDoctor()
+                                    }) {
+                                Text(text = doctor.name)
+                            }
+                        }
+                    }
+                    //Text(selectedDoctor?.name ?: "Select a doctor", modifier = Modifier.padding(2.dp), fontSize = 14.sp)
                 }
                     },
             actions = {
@@ -128,98 +130,11 @@ fun CalendarWeekScreen(timeslotViewModel : TimeSlotViewModel = viewModel(factory
                 }
             },
         )
-        val selectedAppointment = timeslots.filter { LocalDate.parse(it.dateTime, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm[:ss[.SSSSSSS]]")) == selection  && it.appointment != null }
 
-        if(isAddingAppointment) {
-            Card(
-                modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                elevation = 8.dp
-            ) {
-                Column(
-                    modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp)
-                ) {
-                    Text(text = "Maak een afspraak op ${selection.format(DateTimeFormatter.ofPattern("dd MMMM"))}",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp,
-                        color = Color.Black
-                    )
+        selectedAppointment = timeslots.filter { LocalDate.parse(it.dateTime, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm[:ss[.SSSSSSS]]")) == selection  && it.appointment != null }
 
-                    OutlinedTextField(
-                        value = "",
-                        onValueChange = {  },
-                        label = { Text(text = "Naam") },
-                        modifier = Modifier
-                                .fillMaxWidth()
-                                .height(56.dp)
-                    )
-
-                    OutlinedTextField(
-                        value = "",
-                        onValueChange = {  },
-                        label = { Text(text = "Reden") },
-                        modifier = Modifier
-                                .fillMaxWidth()
-                                .height(56.dp)
-                    )
-
-                    OutlinedTextField(
-                        value = "",
-                        onValueChange = {  },
-                        label = { Text(text = "Note") },
-                        modifier = Modifier
-                                .fillMaxWidth()
-                                .height(56.dp)
-                    )
-
-                    Box(
-                        modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 16.dp)
-                                .clickable { dropdownExpanded = true }
-                                .border(
-                                        width = 1.dp,
-                                        color = Color.Gray,
-                                        shape = MaterialTheme.shapes.small
-                                )
-                    ) {
-                        Spacer(modifier = Modifier.height(4.dp))
-                        DropdownMenu(
-                            expanded = dropdownExpanded,
-                            onDismissRequest = { dropdownExpanded = false },
-                            modifier = Modifier
-                                .background(Color.White)
-                        ) {
-                            DropdownMenuItem(onClick = { selectedType = "Consultatie" }) {
-                                Text(text = "Consultatie")
-                            }
-                            DropdownMenuItem(onClick = { selectedType = "Operatie"}) {
-                                Text(text = "Operatie")
-                            }
-                        }
-                        Text(selectedType, modifier = Modifier.padding(8.dp))
-                    }
-
-                    Button(onClick = {
-                        isAddingAppointment = false
-                    },
-                        modifier = Modifier
-                                .fillMaxWidth()
-                                .height(56.dp)
-                                .padding(top = 16.dp)
-                    ) {
-                        Text(text = "Afspraak maken")
-                    }
-
-
-
-                }
-            }
-        }
         if (selectedAppointment.isNotEmpty()) {
+            Log.d("CalendarWeekScreen", "Inside selectedAppointment block")
             Column(
                 modifier = Modifier
                         .fillMaxWidth()
@@ -238,11 +153,21 @@ fun CalendarWeekScreen(timeslotViewModel : TimeSlotViewModel = viewModel(factory
                             .weight(1f)
                 ) {
                     items(selectedAppointment) { appointment ->
-                        AppointmentItem(timeslot = appointment)
+                        AppointmentItem(
+                            timeslot = appointment,
+                            timeSlotViewModel = timeslotViewModel,
+                            OnDeleteTimeslot = {
+                                timeslotViewModel.updateTimeSlot(it)
+                            },
+                            OnUpdateTimeslot = {
+                                timeslotViewModel.updateTimeSlot(it)
+                            }
+                        )
                     }
                 }
             }
         }else {
+            Log.d("CalendarWeekScreen", "Inside else block")
 
             Column(
                 modifier = Modifier

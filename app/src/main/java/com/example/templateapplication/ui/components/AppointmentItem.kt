@@ -10,6 +10,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,29 +26,41 @@ import androidx.compose.ui.unit.sp
 import com.example.templateapplication.R
 import com.example.templateapplication.data.GlobalDoctor
 import com.example.templateapplication.model.TimeSlot
+import com.example.templateapplication.ui.views.TimeSlotViewModel
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun AppointmentItem(timeslot: TimeSlot) {
+fun AppointmentItem(
+    timeslot: TimeSlot,
+    timeSlotViewModel: TimeSlotViewModel,
+    OnUpdateTimeslot: (TimeSlot) -> Unit,
+    OnDeleteTimeslot: (TimeSlot) -> Unit
+) {
     var isExpanded by remember { mutableStateOf(false) }
     var isEditing by remember { mutableStateOf(false) }
+
+    var newNoteTitle by remember { mutableStateOf("") }
+
+    var updatedTimeslot by remember { mutableStateOf(timeslot) }
+
     if(!isEditing) {
         Card(
                 modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                        .clickable { isExpanded = !isExpanded },
+                    .fillMaxWidth()
+                    .padding(8.dp)
+                    .clickable { isExpanded = !isExpanded },
                 elevation = 8.dp,
                 shape = MaterialTheme.shapes.medium,
                 backgroundColor = colorResource(id = R.color.lightgray)
         ) {
             Column(
                     modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp)
+                        .fillMaxWidth()
+                        .padding(16.dp)
             ) {
                 Text(
-                        text = timeslot.dateTime.format(DateTimeFormatter.ofPattern("HH:mm")),
+                        text = "${LocalDateTime.parse(timeslot.dateTime).format(DateTimeFormatter.ofPattern("HH:mm"))} - ${LocalDateTime.parse(timeslot.dateTime).plusMinutes(timeslot.duration.toLong()).format(DateTimeFormatter.ofPattern("HH:mm"))}",
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.Black
@@ -74,27 +87,72 @@ fun AppointmentItem(timeslot: TimeSlot) {
                             color = Color.Black
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    Button(onClick = { /*TODO*/ },
+                    Button(onClick = { isEditing = true },
                             modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(50.dp)
+                                .fillMaxWidth()
+                                .height(50.dp)
                     ) {
                         Text(text = "Bewerk")
                     }
                     Spacer(modifier = Modifier.height(8.dp))
                     Button(
-                            onClick = { /*TODO*/ },
+                            onClick = { OnDeleteTimeslot(timeslot) },
                             colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red, contentColor = Color.White),
                             modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(50.dp)
+                                .fillMaxWidth()
+                                .height(50.dp)
                     ) {
-                        Text(text = "Annuleer")
+                        Text(text = "Verwijder")
                     }
                 }
             }
         }
     } else {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            elevation = 8.dp,
+            shape = MaterialTheme.shapes.medium,
+            backgroundColor = colorResource(id = R.color.lightgray)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
+                Text(
+                    text = "Bewerk afspraak",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+                Spacer(modifier = Modifier.height(8.dp))
 
+
+                OutlinedTextField(
+                    value = newNoteTitle,
+                    onValueChange = { newNoteTitle = it },
+                    label = { Text(text = "Notitie") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp)
+                )
+
+                Button(
+                    onClick = {
+                        isEditing = false
+                        updatedTimeslot = timeslot.copy(appointment = timeslot.appointment?.copy(note = newNoteTitle))
+                        OnUpdateTimeslot(timeslot)
+                              },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green, contentColor = Color.White),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp)
+                ) {
+                    Text(text = "Opslaan")
+                }
+            }
+        }
     }
 }
