@@ -154,9 +154,9 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel,
                         AppointmentItem(
                             timeslot = appointment,
                             appointmentViewModel = appointmentViewModel,
-                            onDeleteTimeslot = { timeslotViewModel.deleteTimeSlot(it) },
                             onUpdateAppointment = { appointmentViewModel.updateAppointment(it) },
-                            onUpdateTimeSlot = { timeslotViewModel.updateTimeSlot(it)}
+                            onUpdateTimeSlot = { timeslotViewModel.updateTimeSlot(it)},
+                            onCancelAppointment = { appointmentViewModel.deleteAppointment(it) },
                         )
                     }
                 }

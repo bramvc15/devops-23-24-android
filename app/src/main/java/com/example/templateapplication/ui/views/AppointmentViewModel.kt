@@ -88,6 +88,27 @@ class AppointmentViewModel(private val appointmentRepository: AppointmentReposit
         }
     }
 
+    fun deleteAppointment(appointment: Appointment) {
+        viewModelScope.launch {
+            try {
+                appointmentRepository.deleteAppointment(appointment)
+                getAppointments()
+            } catch (e: IOException) {
+                Log.d("TimeSlotViewModel", "IOException")
+                Log.d("TimeSlotViewModel", e.message.toString())
+                Log.d("TimeSlotViewModel", e.stackTraceToString())
+            } catch (e: HttpException) {
+                Log.d("TimeSlotViewModel", "HttpException")
+                Log.d("TimeSlotViewModel", e.message.toString())
+                Log.d("TimeSlotViewModel", e.stackTraceToString())
+            } catch (e: Exception) {
+                Log.d("TimeSlotViewModel", "Exception")
+                Log.d("TimeSlotViewModel", e.message.toString())
+                Log.d("TimeSlotViewModel", e.stackTraceToString())
+            }
+        }
+    }
+
     /**
      * Factory for [AppointmentViewModel] that takes [AppointmentRepository] as a dependency
      */

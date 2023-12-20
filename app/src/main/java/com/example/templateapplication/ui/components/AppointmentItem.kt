@@ -46,7 +46,7 @@ fun AppointmentItem(
     appointmentViewModel: AppointmentViewModel,
     onUpdateAppointment: (Appointment) -> Unit,
     onUpdateTimeSlot: (TimeSlot) -> Unit,
-    onDeleteTimeslot: (TimeSlot) -> Unit
+    onCancelAppointment: (Appointment) -> Unit
 ) {
     var isExpanded by remember { mutableStateOf(false) }
     var isEditing by remember { mutableStateOf(false) }
@@ -149,7 +149,7 @@ fun AppointmentItem(
                                 Button(
                                     onClick = {
                                         showDeleteDialog = false
-                                        onDeleteTimeslot(timeslot)
+                                        onCancelAppointment(selectedAppointment!!)
                                     }
                                 ) {
                                     Text("Verwijderen")
