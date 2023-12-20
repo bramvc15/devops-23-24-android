@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.templateapplication.R
+import com.example.templateapplication.data.GlobalDoctor
 import com.example.templateapplication.model.TimeSlot
 import com.example.templateapplication.shared.SimpleCalendarTitle
 import com.example.templateapplication.shared.StatusBarColorUpdateEffect
@@ -134,7 +135,7 @@ fun CalenderMonthScreen(
                 dayContent = { day ->
                     CompositionLocalProvider(LocalRippleTheme provides Example3RippleTheme) {
                         val colors = if (day.position == DayPosition.MonthDate) {
-                            timeslots.filter { it.appointment != null && LocalDateTime.parse(it.dateTime).toLocalDate() == day.date }.map { colorResource(R.color.red_800) }
+                            timeslots.filter { it.appointment != null && LocalDateTime.parse(it.dateTime).toLocalDate() == day.date }.map { colorResource(R.color.purple_200) }
                         } else {
                             emptyList()
                         }
@@ -190,7 +191,6 @@ fun CalenderMonthScreen(
                     }
                 }
             }
-
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 items(items = appointmentsInSelectedDate.value) { timeslot ->
                     AppointmentInformation(timeslot = timeslot)
@@ -301,53 +301,61 @@ private fun LazyItemScope.AppointmentInformation(timeslot: TimeSlot) {
                 .weight(1f)
                 .fillMaxHeight(),
         ) {
-            //AppointmentInformation(appointment.doctor, appointment.patient)
+            AppointmentInformationDetails(timeslot)
             Divider(color = toolbarColor)
         }
 
     }
 }
-//@Composable
-//private fun AppointmentInformation(doctor: Appointment.Doctor, patient: Appointment.Patient) {
-//    Row(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .fillMaxHeight(),
-//    ) {
-//        Box(
-//            modifier = Modifier
-//                .weight(0.3f)
-//                .fillMaxHeight()
-//                .fillMaxHeight(),
-//            contentAlignment = Alignment.CenterEnd,
-//        ) {
-//        }
-//        Column(
-//            modifier = Modifier
-//                .weight(0.7f)
-//                .fillMaxHeight()
-//                .fillMaxWidth(),
-//            verticalArrangement = Arrangement.Center,
-//        ) {
-//            Text(
-//                modifier = Modifier.fillMaxWidth(),
-//                text = patient.name,
-//                textAlign = TextAlign.Center,
-//                fontSize = 16.sp,
-//                fontWeight = FontWeight.Black,
-//                color = informationColor
-//            )
-//            Text(
-//                modifier = Modifier.fillMaxWidth(),
-//                text = doctor.name,
-//                textAlign = TextAlign.Center,
-//                fontSize = 16.sp,
-//                fontWeight = FontWeight.Light,
-//                color = informationColor
-//            )
-//        }
-//    }
-//}
+@Composable
+private fun AppointmentInformationDetails(timeslot: TimeSlot) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(),
+    ) {
+        Box(
+            modifier = Modifier
+                .weight(0.3f)
+                .fillMaxHeight()
+                .fillMaxHeight(),
+            contentAlignment = Alignment.CenterEnd,
+        ) {
+        }
+        Column(
+            modifier = Modifier
+                .weight(0.7f)
+                .fillMaxHeight()
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.Center,
+        ) {
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = "${DateTimeFormatter.ofPattern("HH:mm").format(LocalDateTime.parse(timeslot.dateTime))} - ${DateTimeFormatter.ofPattern("HH:mm").format(LocalDateTime.parse(timeslot.dateTime).plusMinutes(timeslot.duration.toLong()))}",
+                textAlign = TextAlign.Center,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Black,
+                color = informationColor
+            )
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = timeslot.appointment?.patient?.name ?: "N/A",
+                textAlign = TextAlign.Center,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Black,
+                color = informationColor
+            )
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = GlobalDoctor.doctor?.name ?: "N/A",
+                textAlign = TextAlign.Center,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Light,
+                color = informationColor
+            )
+        }
+    }
+}
 
 private object Example3RippleTheme : RippleTheme {
     @Composable
