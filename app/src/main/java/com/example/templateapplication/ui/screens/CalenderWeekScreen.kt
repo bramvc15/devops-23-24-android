@@ -49,7 +49,6 @@ import com.example.templateapplication.ui.views.TimeSlotViewModel
 import com.kizitonwose.calendar.compose.WeekCalendar
 import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 private val topAppColor: Color @Composable get() = colorResource(R.color.colorPrimary)
@@ -129,7 +128,7 @@ fun CalendarWeekScreen(timeslotViewModel : TimeSlotViewModel = viewModel(factory
                 }
             },
         )
-        val selectedAppointment = timeslots.filter { LocalDateTime.parse(it.dateTime).toLocalDate() == selection  && it.appointment != null }
+        val selectedAppointment = timeslots.filter { LocalDate.parse(it.dateTime, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm[:ss[.SSSSSSS]]")) == selection  && it.appointment != null }
 
         if(isAddingAppointment) {
             Card(
