@@ -23,7 +23,6 @@ import com.example.templateapplication.component.BackConfirmationDialog
 import com.example.templateapplication.ui.screens.CalendarWeekScreen
 import com.example.templateapplication.ui.screens.CalenderMonthScreen
 import com.example.templateapplication.ui.screens.DoctorSelectionScreen
-import com.example.templateapplication.ui.screens.NoteScreen
 import com.example.templateapplication.ui.screens.PasswordScreen
 import com.example.templateapplication.ui.views.DoctorViewModel
 
@@ -55,7 +54,7 @@ fun AppNavigation() {
                         }
                     )
                 }
-                NoteScreen()
+                //NoteScreen()
             }
             composable(route = Screens.CalenderMonthScreen.name) {
                 LocalOnBackPressedDispatcherOwner.current?.let { it1 ->
