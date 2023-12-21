@@ -67,7 +67,7 @@ class MainViewModel: ViewModel() {
     fun logout() {
         WebAuthProvider
             .logout(account)
-            .withScheme(context.getString(R.string.com_auth0_scheme))
+            //.withScheme(context.getString(R.string.com_auth0_scheme))
             .start(context, object : Callback<Void?, AuthenticationException> {
 
                 override fun onFailure(error: AuthenticationException) {

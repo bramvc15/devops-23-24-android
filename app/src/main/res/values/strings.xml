@@ -20,4 +20,7 @@
     <string name="name_label">Name</string>
     <string name="email_label">Email</string>
     <string name="user_icon_url">https://images.ctfassets.net/23aumh6u8s0i/5hHkO5DxWMPxDjc2QZLXYf/403128092dedc8eb3395314b1d3545ad/icon-user.png</string>
+    <string name="com_auth0_client_id"> com_auth0_client_id</string>
+    <string name="com_auth0_domain">com_auth0_domain</string>
+    <string name="com_auth0_scheme">com_auth0_scheme</string>
 </resources>

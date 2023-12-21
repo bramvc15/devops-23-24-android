@@ -19,7 +19,7 @@ data class dbPatient (
 )
 
 fun dbPatient.asDomainPatient(): Patient {
-    return Patient(id = this.patientId,
+    return Patient(id = this.id,
         name = this.name,
         email = this.email,
         phoneNumber = this.phoneNumber,
@@ -29,7 +29,7 @@ fun dbPatient.asDomainPatient(): Patient {
 }
 
 fun Patient.asDbPatient(): dbPatient {
-    return dbPatient(patientId = this.id,
+    return dbPatient(id = this.id,
         name = this.name,
         email = this.email,
         phoneNumber = this.phoneNumber,
@@ -40,7 +40,7 @@ fun Patient.asDbPatient(): dbPatient {
 
 fun List<dbPatient>.asDomainPatients(): List<Patient> {
     var patientList = this.map {
-        Patient(it.patientId, it.name, it.email, it.phoneNumber, it.dateOfBirth, it.gender, it.bloodType)
+        Patient(it.id, it.name, it.email, it.phoneNumber, it.dateOfBirth, it.gender, it.bloodType)
     }
     return patientList
 }

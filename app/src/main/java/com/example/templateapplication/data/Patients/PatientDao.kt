@@ -1,7 +1,6 @@
 package com.example.templateapplication.data.Patients
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -19,7 +18,7 @@ interface PatientDao {
     @Query("SELECT * from patients")
     fun getAllPatients(): Flow<List<dbPatient>>
 
-    @Query("SELECT * from patients WHERE patientId = :patientId")
+    @Query("SELECT * from patients WHERE patient_Id = :patientId")
     fun getPatient(patientId: Int): Flow<dbPatient>
 
     @Query("DELETE from patients")
