@@ -30,7 +30,7 @@ class OfflineFirstTimeSlotRepository(private val timeSlotDao: TimeSlotDao, priva
     override fun getTimeSlotsStream(doctorId: Int): Flow<List<TimeSlot>> {
         return timeSlotDao.getAllTimeSlots(doctorId).map { timeSlots -> timeSlots.map { it.asDomainTimeSlot() } }
             .onEach {
-                if (it.isEmpty()) {
+                if (it.isEmpty() && GlobalDoctor.doctor?.id == doctorId) {
                     refreshTimeSlots()
                 }
             }
