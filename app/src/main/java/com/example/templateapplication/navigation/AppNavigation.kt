@@ -20,8 +20,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.templateapplication.component.BackConfirmationDialog
-import com.example.templateapplication.ui.screens.CalendarWeekScreen
-import com.example.templateapplication.ui.screens.CalenderMonthScreen
+import com.example.templateapplication.ui.screens.calendarweek.CalendarWeekScreen
+import com.example.templateapplication.ui.screens.calendarmonth.CalenderMonthScreen
 import com.example.templateapplication.ui.screens.DoctorSelectionScreen
 import com.example.templateapplication.ui.screens.NoteScreen
 import com.example.templateapplication.ui.screens.PasswordScreen

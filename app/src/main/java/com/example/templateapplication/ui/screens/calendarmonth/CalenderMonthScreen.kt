@@ -1,4 +1,4 @@
-package com.example.templateapplication.ui.screens
+package com.example.templateapplication.ui.screens.calendarmonth
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

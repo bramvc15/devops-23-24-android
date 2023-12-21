@@ -73,17 +73,17 @@ class AppointmentViewModel(private val appointmentRepository: AppointmentReposit
             try {
                 appointmentRepository.updateAppointment(appointment)
             } catch (e: IOException) {
-                Log.d("TimeSlotViewModel", "IOException")
-                Log.d("TimeSlotViewModel", e.message.toString())
-                Log.d("TimeSlotViewModel", e.stackTraceToString())
+                Log.d("AppointmentViewModel", "IOException")
+                Log.d("AppointmentViewModel", e.message.toString())
+                Log.d("AppointmentViewModel", e.stackTraceToString())
             } catch (e: HttpException) {
-                Log.d("TimeSlotViewModel", "HttpException")
-                Log.d("TimeSlotViewModel", e.message.toString())
-                Log.d("TimeSlotViewModel", e.stackTraceToString())
+                Log.d("AppointmentViewModel", "HttpException")
+                Log.d("AppointmentViewModel", e.message.toString())
+                Log.d("AppointmentViewModel", e.stackTraceToString())
             } catch (e: Exception) {
-                Log.d("TimeSlotViewModel", "Exception")
-                Log.d("TimeSlotViewModel", e.message.toString())
-                Log.d("TimeSlotViewModel", e.stackTraceToString())
+                Log.d("AppointmentViewModel", "Exception")
+                Log.d("AppointmentViewModel", e.message.toString())
+                Log.d("AppointmentViewModel", e.stackTraceToString())
             }
         }
     }
@@ -94,17 +94,17 @@ class AppointmentViewModel(private val appointmentRepository: AppointmentReposit
                 appointmentRepository.deleteAppointment(appointment)
                 getAppointments()
             } catch (e: IOException) {
-                Log.d("TimeSlotViewModel", "IOException")
-                Log.d("TimeSlotViewModel", e.message.toString())
-                Log.d("TimeSlotViewModel", e.stackTraceToString())
+                Log.d("AppointmentViewModel", "IOException")
+                Log.d("AppointmentViewModel", e.message.toString())
+                Log.d("AppointmentViewModel", e.stackTraceToString())
             } catch (e: HttpException) {
-                Log.d("TimeSlotViewModel", "HttpException")
-                Log.d("TimeSlotViewModel", e.message.toString())
-                Log.d("TimeSlotViewModel", e.stackTraceToString())
+                Log.d("AppointmentViewModel", "HttpException")
+                Log.d("AppointmentViewModel", e.message.toString())
+                Log.d("AppointmentViewModel", e.stackTraceToString())
             } catch (e: Exception) {
-                Log.d("TimeSlotViewModel", "Exception")
-                Log.d("TimeSlotViewModel", e.message.toString())
-                Log.d("TimeSlotViewModel", e.stackTraceToString())
+                Log.d("AppointmentViewModel", "Exception")
+                Log.d("AppointmentViewModel", e.message.toString())
+                Log.d("AppointmentViewModel", e.stackTraceToString())
             }
         }
     }

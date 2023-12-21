@@ -1,4 +1,4 @@
-package com.example.templateapplication.ui.screens
+package com.example.templateapplication.ui.screens.calendarweek
 
 
 import androidx.compose.foundation.Image
@@ -42,7 +42,7 @@ import com.example.templateapplication.shared.StatusBarColorUpdateEffect
 import com.example.templateapplication.shared.displayText
 import com.example.templateapplication.shared.getWeekPageTitle
 import com.example.templateapplication.shared.rememberFirstVisibleWeekAfterScroll
-import com.example.templateapplication.ui.components.AppointmentItem
+import com.example.templateapplication.ui.screens.calendarweek.components.AppointmentItem
 import com.example.templateapplication.ui.views.AppointmentViewModel
 import com.example.templateapplication.ui.views.DoctorViewModel
 import com.example.templateapplication.ui.views.TimeSlotViewModel
@@ -156,7 +156,8 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel,
                             appointmentViewModel = appointmentViewModel,
                             onUpdateAppointment = { appointmentViewModel.updateAppointment(it) },
                             onUpdateTimeSlot = { timeslotViewModel.updateTimeSlot(it)},
-                            onCancelAppointment = { appointmentViewModel.deleteAppointment(it) },
+                            onCancelAppointment = {
+                                appointmentViewModel.deleteAppointment(it) },
                         )
                     }
                 }
