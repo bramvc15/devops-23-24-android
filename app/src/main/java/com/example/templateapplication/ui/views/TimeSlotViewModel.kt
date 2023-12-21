@@ -45,13 +45,9 @@ class TimeSlotViewModel(private val timeSlotRepository: TimeSlotRepository) : Vi
         viewModelScope.launch {
             timeSlotUiState = TimeSlotUiState.Loading
             timeSlotUiState = try {
-                val timeslotsFlow = doctor?.let { timeSlotRepository.getTimeSlotsStream(it.id) }
 
-                //val timeslots: MutableList<TimeSlot> = mutableListOf()
-                if (timeslotsFlow != null) {
-                    timeslotsFlow.collect { ts ->
-                        _timeslots.value = ts
-                    }
+                doctor?.let { timeSlotRepository.getTimeSlotsStream(it.id) }?.collect { ts ->
+                    _timeslots.value = ts
                 }
 
                 TimeSlotUiState.Success(timeslots = timeslots.value)
@@ -94,24 +90,9 @@ class TimeSlotViewModel(private val timeSlotRepository: TimeSlotRepository) : Vi
         }
     }
 
-    fun deleteTimeSlot(timeSlot: TimeSlot) {
-        viewModelScope.launch {
-            try {
-                timeSlotRepository.deleteTimeSlot(timeSlot)
-            } catch (e: IOException) {
-                Log.d("TimeSlotViewModel", "IOException")
-                Log.d("TimeSlotViewModel", e.message.toString())
-                Log.d("TimeSlotViewModel", e.stackTraceToString())
-            } catch (e: HttpException) {
-                Log.d("TimeSlotViewModel", "HttpException")
-                Log.d("TimeSlotViewModel", e.message.toString())
-                Log.d("TimeSlotViewModel", e.stackTraceToString())
-            } catch (e: Exception) {
-                Log.d("TimeSlotViewModel", "Exception")
-                Log.d("TimeSlotViewModel", e.message.toString())
-                Log.d("TimeSlotViewModel", e.stackTraceToString())
-            }
-        }
+    fun selectDoctor(doctor: Doctor) {
+        GlobalDoctor.doctor = doctor
+        getTimeSlots(doctor)
     }
 
     /**

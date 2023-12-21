@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,9 +18,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -83,39 +85,41 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel,
             elevation = 0.dp,
             title = {
                 Text(text = getWeekPageTitle(visibleWeek), fontSize = 16.sp)
+            },
+            actions = {
                 Box(modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                        .clickable { dropdownExpanded = true }
-                        .border(
-                                width = 1.dp,
-                                color = Color.Gray,
-                                shape = MaterialTheme.shapes.small
-                        )
+                    .wrapContentHeight()
+                    .padding(end = 16.dp)
+                    .clickable { dropdownExpanded = true }
+                    .border(
+                        width = 1.dp,
+                        color = Color.Gray,
+                        shape = MaterialTheme.shapes.small
+                    )
                 ) {
+                    Icon(
+                        imageVector = Icons.Default.Person,
+                        contentDescription = "Dropdown",
+                        modifier = Modifier.padding(4.dp)
+                    )
                     Spacer(modifier = Modifier.height(4.dp))
                     DropdownMenu(
                         expanded = dropdownExpanded,
                         onDismissRequest = { dropdownExpanded = false },
                         modifier = Modifier
-                                .background(Color.White)
-                                .align(Alignment.TopEnd)
-                                .fillMaxHeight()
+                            .background(Color.White)
+                            .align(Alignment.TopEnd)
                     ) {
                         doctorViewModel.doctors.collectAsState().value.forEach { doctor ->
                             DropdownMenuItem(
-                                    onClick = {
-
-                                    }) {
+                                onClick = {
+                                    timeslotViewModel.selectDoctor(doctor)
+                                }) {
                                 Text(text = doctor.name)
                             }
                         }
                     }
-                    //Text(selectedDoctor?.name ?: "Select a doctor", modifier = Modifier.padding(2.dp), fontSize = 14.sp)
                 }
-                    },
-            actions = {
-
             },
         )
         StatusBarColorUpdateEffect(topAppColor)
