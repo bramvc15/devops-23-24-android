@@ -1,5 +1,6 @@
 package com.example.templateapplication.data.Patients
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.templateapplication.model.Patient
@@ -7,7 +8,8 @@ import com.example.templateapplication.model.Patient
 @Entity(tableName = "patients")
 data class dbPatient (
     @PrimaryKey
-    val patientId: Int,
+    @ColumnInfo(name = "patient_id")
+    val id: Int,
     val name: String,
     val email: String,
     val phoneNumber: String,
