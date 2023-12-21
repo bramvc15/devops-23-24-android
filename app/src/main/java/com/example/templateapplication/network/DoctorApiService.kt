@@ -5,15 +5,12 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
 
 interface DoctorApiService {
     @GET("doctor")
-    suspend fun getDoctors(
-        @Header("Authorization") authorizationHeader: String
-    ): List<Doctor>
+    suspend fun getDoctors(): List<Doctor>
 
     @PUT("doctor")
     suspend fun updateDoctor(
