@@ -18,7 +18,10 @@ import com.example.templateapplication.network.PatientApiService
 import com.example.templateapplication.network.TimeSlotApiService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
+import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Response
 import retrofit2.Retrofit
 
 /**
@@ -39,13 +42,34 @@ interface AppContainer {
  */
 class DefaultAppContainer(private val context: Context): AppContainer {
     private val baseUrl = "http://192.168.100.101:5001/api/"
+    val authToken = GlobalDoctor.authedDoctor!!.bearerToken
+
+    /**
+     * Use a Interceptor to add Auth0 bearer token to every request
+     */
+    class AuthInterceptor(private val authToken: String) : Interceptor {
+        override fun intercept(chain: Interceptor.Chain): Response {
+            val request = chain.request().newBuilder()
+                .addHeader("Authorization", "$authToken")
+                .build()
+            return chain.proceed(request)
+        }
+    }
+
+    /**
+     * Create OkHttpClient with the AuthInterceptor
+     */
+    val client = OkHttpClient.Builder()
+        .addInterceptor(AuthInterceptor(authToken))
+        .build()
 
     /**
      * Use the Retrofit builder to build a retrofit object using a kotlinx.serialization converter
      */
     private val retrofit: Retrofit = Retrofit.Builder()
-        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
         .baseUrl(baseUrl)
+        .client(client)
+        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
         .build()
 
     /**

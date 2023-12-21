@@ -13,6 +13,7 @@ data class AuthedDoctor(val idToken: String? = null) {
     var emailVerified = ""
     var picture = ""
     var updatedAt = ""
+    var bearerToken = ""
 
     init {
         if (idToken != null) {
@@ -28,6 +29,7 @@ data class AuthedDoctor(val idToken: String? = null) {
                 emailVerified = jwt.getClaim("email_verified").asString() ?: ""
                 picture = jwt.getClaim("picture").asString() ?: ""
                 updatedAt = jwt.getClaim("updated_at").asString() ?: ""
+                bearerToken = idToken
             } catch (error: com.auth0.android.jwt.DecodeException) {
                 // The ID token is NOT a valid JWT, so log the error
                 // and leave the AuthedDoctor properties as empty strings.
