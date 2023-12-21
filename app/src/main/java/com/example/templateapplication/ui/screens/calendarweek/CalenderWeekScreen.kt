@@ -113,7 +113,7 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel,
                         doctorViewModel.doctors.collectAsState().value.forEach { doctor ->
                             DropdownMenuItem(
                                 onClick = {
-                                    timeslotViewModel.selectDoctor(doctor)
+                                    doctorViewModel.selectDoctor(doctor)
                                 }) {
                                 Text(text = doctor.name)
                             }
