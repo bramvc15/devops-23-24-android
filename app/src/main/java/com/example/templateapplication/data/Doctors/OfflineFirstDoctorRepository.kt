@@ -1,5 +1,7 @@
 package com.example.templateapplication.data.Doctors
 
+import android.util.Log
+import com.example.templateapplication.data.GlobalDoctor
 import com.example.templateapplication.model.Doctor
 import com.example.templateapplication.network.DoctorApiService
 import kotlinx.coroutines.CoroutineScope
@@ -20,8 +22,8 @@ class OfflineFirstDoctorRepository(private val doctorDao: DoctorDao, private val
 
     private suspend fun updateDoctorsInBackground() {
         while (true) {
-            refreshDoctors()
             delay(300000)
+            refreshDoctors()
         }
 
     }
@@ -40,7 +42,7 @@ class OfflineFirstDoctorRepository(private val doctorDao: DoctorDao, private val
     }
 
     override suspend fun refreshDoctors() {
-        doctorApi.getDoctors()
+        doctorApi.getDoctors(GlobalDoctor.authedDoctor!!.bearerToken)
             .also { externalDoctors -> doctorDao.deleteAndInsert(doctors = externalDoctors.map(Doctor::asDbDoctor)) }
     }
 }
