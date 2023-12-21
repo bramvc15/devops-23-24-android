@@ -20,45 +20,47 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 
-sealed interface DoctorUiState {
-    data class Success(val doctors: List<Doctor>) : DoctorUiState
-    data class Error(val errorMessage: String) : DoctorUiState
-    object Loading : DoctorUiState
-}
+
 
 class DoctorViewModel(private val doctorRepository: DoctorRepository) : ViewModel()  {
+
     var doctorUiState: DoctorUiState by mutableStateOf(DoctorUiState.Loading)
         private set
+    private val _uiState = MutableStateFlow(VisionUiState())
+    val uiState: StateFlow<VisionUiState> = _uiState
 
     private val _doctors = MutableStateFlow<List<Doctor>>(emptyList())
     val doctors: StateFlow<List<Doctor>> get() = _doctors
 
     init {
+        initializeUIState()
+    }
+    private fun initializeUIState(){
         getDoctors()
     }
 
     private fun getDoctors() {
         viewModelScope.launch {
             doctorUiState = DoctorUiState.Loading
-            doctorUiState = try {
+            try {
                 val doctors = doctorRepository.getDoctors()
                 _doctors.value = doctors
-                DoctorUiState.Success(doctors)
+                doctorUiState = DoctorUiState.Success(doctors)
             } catch (e: IOException) {
                 Log.d("DoctorViewModel", "IOException")
                 Log.d("DoctorViewModel", e.message.toString())
                 Log.d("DoctorViewModel", e.stackTraceToString())
-                DoctorUiState.Error("IOException error: ${e.message}")
+                doctorUiState = DoctorUiState.Error("IOException error: ${e.message}")
             } catch (e: HttpException) {
                 Log.d("DoctorViewModel", "HttpException")
                 Log.d("DoctorViewModel", e.message.toString())
                 Log.d("DoctorViewModel", e.stackTraceToString())
-                DoctorUiState.Error("HttpException error: ${e.message}")
+                doctorUiState = DoctorUiState.Error("HttpException error: ${e.message}")
             } catch (e: Exception) {
                 Log.d("DoctorViewModel", "Exception")
                 Log.d("DoctorViewModel", e.message.toString())
                 Log.d("DoctorViewModel", e.stackTraceToString())
-                DoctorUiState.Error("Exception error: ${e.message}")
+                doctorUiState = DoctorUiState.Error("Exception error: ${e.message}")
             }
         }
     }

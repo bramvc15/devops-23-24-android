@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //WindowCompat.setDecorFitsSystemWindows(window, false)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
             VisionApplicationTheme {
@@ -33,6 +33,18 @@ class MainActivity : ComponentActivity() {
                     VisionApp(windowSize.widthSizeClass)
                 }
             }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ReplyAppPreview() {
+    VisionApplicationTheme {
+        Surface {
+            VisionApp(
+                windowSize = WindowWidthSizeClass.Compact,
+            )
         }
     }
 }

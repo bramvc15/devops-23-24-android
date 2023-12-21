@@ -3,36 +3,41 @@ package com.example.templateapplication.ui
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import com.example.templateapplication.navigation.AppNavigation
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.templateapplication.navigation.AppNavigation
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import com.example.templateapplication.ui.utils.VisionNavigationType
-
+import com.example.templateapplication.ui.views.DoctorViewModel
 
 @Composable
-fun VisionApp(windowSize: WindowWidthSizeClass,
-modifier: Modifier = Modifier,
-              ){
-    val navigationType: VisionNavigationType
-        when (windowSize) {
-            WindowWidthSizeClass.Compact -> {
-                navigationType = VisionNavigationType.BOTTOM_NAVIGATION
-            }
+fun VisionApp(
+    windowSize: WindowWidthSizeClass,
+    modifier: Modifier = Modifier,
+) {
+    val viewModel: DoctorViewModel = viewModel(factory = DoctorViewModel.Factory)
+    val visionUiState = viewModel.doctorUiState.collectAsState().value
 
-            WindowWidthSizeClass.Medium -> {
-                navigationType = VisionNavigationType.NAVIGATION_RAIL
-
-            }
-
-            WindowWidthSizeClass.Expanded -> {
-                navigationType = VisionNavigationType.PERMANENT_NAVIGATION_DRAWER
-            }
-
-            else -> {
-                navigationType = VisionNavigationType.BOTTOM_NAVIGATION
-            }
+    val navigationType: VisionNavigationType = when (windowSize) {
+        WindowWidthSizeClass.Compact -> {
+            VisionNavigationType.BOTTOM_NAVIGATION
         }
-        AppNavigation(navigationType,
-            modifier = modifier)
+
+        WindowWidthSizeClass.Medium -> {
+            VisionNavigationType.NAVIGATION_RAIL
+        }
+
+        WindowWidthSizeClass.Expanded -> {
+            VisionNavigationType.PERMANENT_NAVIGATION_DRAWER
+        }
+
+        else -> {
+            VisionNavigationType.BOTTOM_NAVIGATION
+        }
+    }
+
+    AppNavigation(navigationType,
+                modifier = modifier,
+                visionUiState = visionUiState)
 }

@@ -36,18 +36,33 @@ import com.example.templateapplication.ui.screens.NoteScreen
 import com.example.templateapplication.ui.screens.PasswordScreen
 import com.example.templateapplication.ui.utils.VisionNavigationType
 import com.example.templateapplication.ui.views.DoctorViewModel
+
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.ui.unit.dp
+import com.example.templateapplication.ui.views.VisionUiState
+
 
 @Composable
 fun AppNavigation(navigationType: VisionNavigationType,
-                  modifier: Modifier = Modifier){
+                  modifier: Modifier = Modifier,
+                  visionUiState: VisionUiState,
+){
     val navController: NavHostController = rememberNavController()
     val doctorViewModel: DoctorViewModel = viewModel(factory = DoctorViewModel.Factory)
 
     Scaffold(
         bottomBar = {
-            GetNavigationBar(navController = navController, navigationType)
+            when (navigationType) {
+                VisionNavigationType.BOTTOM_NAVIGATION -> {
+                    VisionBottomNavigationBar(navController = navController)
+                }
+                VisionNavigationType.NAVIGATION_RAIL -> {
+                    VisionNavigationRail(navController = navController)
+                }
+                VisionNavigationType.PERMANENT_NAVIGATION_DRAWER -> {
+                    VisionPermanentNavigationDrawer(navController = navController)
+                }
+            }
         }
     ) { paddingValues ->
 
@@ -103,6 +118,7 @@ fun AppNavigation(navigationType: VisionNavigationType,
             composable(route = Screens.DoctorSelectionScreen.name) {
 
                 DoctorSelectionScreen(
+                    doctorViewModel = doctorViewModel,
                     onNextButtonClicked = { doctor ->
 
                         doctorViewModel.selectDoctor(doctor)
@@ -114,7 +130,10 @@ fun AppNavigation(navigationType: VisionNavigationType,
                                 )
                             }"
                         )
-                    }
+                    } ,
+                    visionUiState = visionUiState,
+                    modifier = modifier,
+
                 )
             }
 
@@ -129,22 +148,6 @@ fun AppNavigation(navigationType: VisionNavigationType,
                     }
                 )
             }
-        }
-    }
-
-}
-
-@Composable
-fun GetNavigationBar(navController: NavHostController, navigationType: VisionNavigationType) {
-    when (navigationType) {
-        VisionNavigationType.BOTTOM_NAVIGATION -> {
-            VisionBottomNavigationBar(navController = navController)
-        }
-        VisionNavigationType.NAVIGATION_RAIL -> {
-            VisionNavigationRail(navController = navController)
-        }
-        VisionNavigationType.PERMANENT_NAVIGATION_DRAWER -> {
-            VisionPermanentNavigationDrawer(navController = navController)
         }
     }
 
@@ -201,7 +204,7 @@ fun VisionNavigationRail(navController: NavHostController) {
 
                 icon = {
                     Icon(imageVector = navItem.icon, contentDescription = navItem.label)
-        }
+                }
 
             )
         }
