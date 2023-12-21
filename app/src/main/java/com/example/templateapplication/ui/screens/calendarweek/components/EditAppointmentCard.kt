@@ -5,20 +5,18 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.templateapplication.R
 import com.example.templateapplication.model.TimeSlot
 
 @Composable
@@ -36,9 +34,7 @@ fun EditAppointmentCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
-        elevation = 8.dp,
         shape = MaterialTheme.shapes.medium,
-        backgroundColor = colorResource(id = R.color.lightgray)
     ) {
         Column(
             modifier = Modifier
@@ -49,10 +45,8 @@ fun EditAppointmentCard(
                 text = "Bewerk afspraak",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black
             )
             Spacer(modifier = Modifier.height(8.dp))
-
 
             OutlinedTextField(
                 value = newNote,
@@ -81,7 +75,7 @@ fun EditAppointmentCard(
                 onClick = {
                     onSaveClick()
                 },
-                colors = ButtonDefaults.buttonColors(contentColor = Color.White, backgroundColor = Color.hsl(109f, 0.61f, 0.64f)),
+                colors = ButtonDefaults.buttonColors(Color.Green,contentColor = Color.White),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)
@@ -93,7 +87,7 @@ fun EditAppointmentCard(
                 onClick = {
                           onCancelClick()
                 },
-                colors = ButtonDefaults.buttonColors(contentColor = Color.White, backgroundColor = Color.hsl(4f, 0.83f, 0.59f)),
+                colors = ButtonDefaults.buttonColors(Color.Red /*backgroundColor = Color.hsl(4f, 0.83f, 0.59f)*/),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)

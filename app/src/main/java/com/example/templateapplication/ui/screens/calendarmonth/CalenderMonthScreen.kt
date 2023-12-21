@@ -18,12 +18,12 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Divider
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.Text
-import androidx.compose.material.darkColors
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material.ripple.RippleTheme
+import androidx.compose.material3.Divider
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -67,8 +67,8 @@ import java.time.format.DateTimeFormatter
 private val toolbarColor: Color @Composable get() = colorResource(R.color.colorPrimary)
 private val topAppColor: Color @Composable get() = colorResource(R.color.colorPrimary)
 private val backgroundColor: Color @Composable get() = colorResource(R.color.white)
-private val daysOfweekFontColor: Color @Composable get() = colorResource(R.color.black)
-private val daysColor: Color @Composable get() = colorResource(R.color.lightgray)
+private val daysOfweekFontColor: Color @Composable get() = colorResource(R.color.noteColorPink)
+private val daysColor: Color @Composable get() = colorResource(R.color.dark_gray)
 private val selectedItemColor: Color @Composable get() = colorResource(R.color.purple_200)
 private val appointmentField: Color @Composable get() = colorResource(R.color.white7)
 private val informationColor: Color @Composable get() = colorResource(R.color.black)
@@ -97,7 +97,7 @@ fun CalenderMonthScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(backgroundColor)
+           // .background(backgroundColor)
     ) {
         val state = rememberCalendarState(
             startMonth = startMonth,
@@ -112,7 +112,7 @@ fun CalenderMonthScreen(
             selection = null
         }
 
-        CompositionLocalProvider(LocalContentColor provides darkColors().onSurface) {
+        CompositionLocalProvider(LocalContentColor provides LocalContentColor.current.copy(alpha = 0.4f)) {
             SimpleCalendarTitle(
                 modifier = Modifier
                     .background(toolbarColor)
@@ -167,7 +167,7 @@ fun CalenderMonthScreen(
                             text = "Geen afspraken op ${selectedDate.date.format(DateTimeFormatter.ofPattern("dd MMMM"))}",
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp,
-                            color = Color.Black
+                          //  color = Color.Black
                         )
                     }
                 } else {
@@ -186,7 +186,7 @@ fun CalenderMonthScreen(
                             }",
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp,
-                            color = Color.Black
+                           // color = Color.Black
                         )
                     }
                 }
@@ -215,7 +215,7 @@ private fun Day(
                 color = if (isSelected) selectedItemColor else Color.White,
             )
             .padding(1.dp)
-            .background(color = daysColor)
+           .background(color = MaterialTheme.colorScheme.onPrimary)
 
 
             .clickable(
@@ -265,9 +265,9 @@ private fun MonthHeader(
                 modifier = Modifier.weight(1f),
                 textAlign = TextAlign.Center,
                 fontSize = 12.sp,
-                color = daysOfweekFontColor,
+               color = daysOfweekFontColor,
                 text = dayOfWeek.displayText(uppercase = true),
-                fontWeight = FontWeight.Black,
+               // fontWeight = FontWeight.Black,
             )
         }
     }
@@ -297,12 +297,12 @@ private fun LazyItemScope.AppointmentInformation(timeslot: TimeSlot) {
         }
         Box(
             modifier = Modifier
-                .background(color = appointmentField)
+               // .background(color = appointmentField)
                 .weight(1f)
                 .fillMaxHeight(),
         ) {
             AppointmentInformationDetails(timeslot)
-            Divider(color = toolbarColor)
+            Divider(/*color = toolbarColor*/)
         }
 
     }
@@ -335,7 +335,7 @@ private fun AppointmentInformationDetails(timeslot: TimeSlot) {
                 textAlign = TextAlign.Center,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Black,
-                color = informationColor
+               // color = informationColor
             )
             Text(
                 modifier = Modifier.fillMaxWidth(),
@@ -343,7 +343,7 @@ private fun AppointmentInformationDetails(timeslot: TimeSlot) {
                 textAlign = TextAlign.Center,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Black,
-                color = informationColor
+               // color = informationColor
             )
             Text(
                 modifier = Modifier.fillMaxWidth(),
@@ -351,7 +351,7 @@ private fun AppointmentInformationDetails(timeslot: TimeSlot) {
                 textAlign = TextAlign.Center,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Light,
-                color = informationColor
+               // color = informationColor
             )
         }
     }

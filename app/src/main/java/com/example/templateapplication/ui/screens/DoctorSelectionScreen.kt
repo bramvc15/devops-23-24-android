@@ -11,14 +11,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Card
-import androidx.compose.material.Text
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -54,14 +53,13 @@ fun DoctorSelectionScreen(
 
 @Composable
 private fun DoctorItem(doctor : Doctor, onNextButtonClicked: (Doctor) -> Unit) {
-    Card(
+    ElevatedCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
             .clickable {
                 onNextButtonClicked(doctor)
             },
-        elevation = 8.dp,
     ) {
         Column(
             modifier = Modifier
@@ -90,10 +88,8 @@ private fun DoctorItem(doctor : Doctor, onNextButtonClicked: (Doctor) -> Unit) {
             Text(
                 text = doctor.name,
                 fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black
+                fontWeight = FontWeight.Bold
             )
-
         }
     }
 }

@@ -15,15 +15,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -51,7 +45,7 @@ fun NoteScreen(
 ) {
 
     val notes by noteViewModel.notes.collectAsState()
-    val scaffoldState = rememberScaffoldState()
+    //val scaffoldState = rememberScaffoldState()
     var isDialogOpen by remember { mutableStateOf(false) }
 
     Box(
@@ -69,7 +63,7 @@ fun NoteScreen(
                 "Your notes",
                 fontSize = 40.sp,
                 modifier = Modifier.padding(10.dp),
-                color = MaterialTheme.colors.primary
+               // color = MaterialTheme.colors.
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -80,10 +74,6 @@ fun NoteScreen(
 
 
                 items(notes) { note ->
-//                    NoteItem(note = note, onDeleteClicked = {
-//                        noteViewModel.deleteNote(note)
-//                    })
-
                     AnimatedNoteItem(
                         note = note,
                         onDeleteClicked = { noteViewModel.deleteNote(note) }
@@ -111,7 +101,7 @@ fun NoteScreen(
         ) {
             Box(
                 modifier = Modifier
-                    .background(MaterialTheme.colors.primaryVariant)
+                    //.background(MaterialTheme.colors.primaryVariant)
                     .fillMaxSize()
                     .alpha(0.95f) // Adjust the alpha value as needed
             ) {
@@ -153,24 +143,22 @@ private fun AnimatedNoteItem(note : Note, onDeleteClicked: () -> Unit) {
 @Composable
 fun NoteItem(note : Note, onDeleteClicked: () -> Unit){
 
-    var isDeleting by remember { mutableStateOf(false) }
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .clip(MaterialTheme.shapes.medium),
-        elevation = 8.dp,
-        backgroundColor = colorResource(id = R.color.noteColorYellow)
-    ) {
+            .clip(MaterialTheme.shapes.medium)
+            .background(colorResource(id = R.color.noteColorYellow)),
+
+        ) {
         Column(
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth()
         ) {
-            Text(text = note.title, style = MaterialTheme.typography.h6)
+            Text(text = note.title, style = MaterialTheme.typography.bodyLarge)
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = note.content, style = MaterialTheme.typography.body1)
+            Text(text = note.content, style = MaterialTheme.typography.bodyMedium)
         }
 
         Box(
