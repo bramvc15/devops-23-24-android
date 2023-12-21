@@ -31,6 +31,7 @@ import com.example.templateapplication.ui.views.AppointmentViewModel
 @Composable
 fun AppointmentItem(
     timeslot: TimeSlot,
+    appointment: Appointment,
     appointmentViewModel: AppointmentViewModel,
     onUpdateAppointment: (Appointment) -> Unit,
     onUpdateTimeSlot: (TimeSlot) -> Unit,
@@ -51,11 +52,12 @@ fun AppointmentItem(
     if(!isEditing) {
         AppointmentCard(
             timeslot = timeslot,
+            appointment = appointment,
             onEdit = {
                 isEditing = true
             },
             onCancelAppointment = {
-                onCancelAppointment(selectedAppointment!!)
+                onCancelAppointment(appointment)
             }
         )
     } else {
@@ -67,8 +69,8 @@ fun AppointmentItem(
             onReasonChange = { newReason = it },
             onAppointmentTypeChange = { newAppointmentType = it },
             onSaveClick = {
-                isEditing = false;
-                updatedAppointment = selectedAppointment?.copy(
+                isEditing = false
+                updatedAppointment = appointment.copy(
                     note = newNote,
                     reason = newReason
                 )
@@ -82,8 +84,8 @@ fun AppointmentItem(
             },
             onCancelClick = {
                 isEditing = false
-                newNote = selectedAppointment?.note ?: ""
-                newReason = selectedAppointment?.reason ?: ""
+                newNote = appointment.note ?: ""
+                newReason = appointment.reason
                 newAppointmentType = timeslot.appointmentType
             })
     }
@@ -95,7 +97,7 @@ fun AppointmentTypeDropdown(
     onAppointmentTypeSelected: (Int) -> Unit
 ) {
     var dropdownExpanded by remember { mutableStateOf(false) }
-    var selectedAppointmentType by remember { mutableStateOf(TimeSlot.appointmentType) }
+    var selectedAppointmentType by remember { mutableIntStateOf(TimeSlot.appointmentType) }
 
     Box(
         modifier = Modifier

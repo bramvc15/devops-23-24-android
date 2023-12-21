@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.templateapplication.R
 import com.example.templateapplication.data.GlobalDoctor
+import com.example.templateapplication.model.Appointment
 import com.example.templateapplication.model.TimeSlot
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -32,6 +33,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun AppointmentCard(
     timeslot: TimeSlot,
+    appointment: Appointment,
     onEdit: () -> Unit,
     onCancelAppointment: () -> Unit
 ) {
@@ -53,7 +55,7 @@ fun AppointmentCard(
                 .padding(16.dp)
         ) {
             Text(
-                text = timeslot.appointment?.patient?.name ?: "N/A",
+                text = appointment.patient.name,
                 fontSize = 16.sp,
                 color = Color.Black
             )
@@ -87,7 +89,13 @@ fun AppointmentCard(
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = "Reason: ${timeslot.appointment?.reason}",
+                    text = "Reden: ${appointment.reason}",
+                    fontSize = 14.sp,
+                    color = Color.Black
+                )
+                Spacer(modifier = Modifier.height(2.dp))
+                Text(
+                    text = "Notitie: ${appointment.note ?: "N/A"}",
                     fontSize = 14.sp,
                     color = Color.Black
                 )
@@ -107,7 +115,7 @@ fun AppointmentCard(
                         .fillMaxWidth()
                         .height(50.dp)
                 ) {
-                    Text(text = "Verwijder")
+                    Text(text = "Annuleer")
                 }
 
                 if (showDeleteDialog) {
@@ -119,7 +127,7 @@ fun AppointmentCard(
                             Text("Waarschuwing")
                         },
                         text = {
-                            Text("Weet je zeker dat je deze afspraak wilt verwijderen?")
+                            Text("Weet je zeker dat je deze afspraak wilt annuleren?")
                         },
                         confirmButton = {
                             Button(
@@ -128,7 +136,7 @@ fun AppointmentCard(
                                     onCancelAppointment()
                                 }
                             ) {
-                                Text("Verwijderen")
+                                Text("Ja")
                             }
                         },
                         dismissButton = {
@@ -137,7 +145,7 @@ fun AppointmentCard(
                                     showDeleteDialog = false
                                 }
                             ) {
-                                Text("Annuleren")
+                                Text("Nee")
                             }
                         }
                     )

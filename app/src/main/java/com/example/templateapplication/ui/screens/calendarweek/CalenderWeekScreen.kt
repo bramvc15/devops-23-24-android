@@ -64,8 +64,9 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel,
     val endDate = remember { currentDate.plusDays(500) }
     var selection by remember { mutableStateOf(currentDate) }
     val timeslots by timeslotViewModel.timeslots.collectAsState()
+    val appointments by appointmentViewModel.appointments.collectAsState()
     var dropdownExpanded by remember { mutableStateOf(false) }
-    var selectedAppointment by remember { mutableStateOf(timeslots.filter { it.appointment != null }) }
+    var selectedTimeSlot by remember { mutableStateOf(timeslots.filter { it.appointment != null }) }
 
     Column(
         modifier = Modifier
@@ -130,9 +131,9 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel,
             },
         )
 
-        selectedAppointment = timeslots.filter { LocalDate.parse(it.dateTime, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm[:ss[.SSSSSSS]]")) == selection  && it.appointment != null }
+        selectedTimeSlot = timeslots.filter { LocalDate.parse(it.dateTime, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm[:ss[.SSSSSSS]]")) == selection  && it.appointment != null }
 
-        if (selectedAppointment.isNotEmpty()) {
+        if (selectedTimeSlot.isNotEmpty()) {
             Column(
                 modifier = Modifier
                         .fillMaxWidth()
@@ -150,15 +151,18 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel,
                             .fillMaxWidth()
                             .weight(1f)
                 ) {
-                    items(selectedAppointment) { appointment ->
-                        AppointmentItem(
-                            timeslot = appointment,
-                            appointmentViewModel = appointmentViewModel,
-                            onUpdateAppointment = { appointmentViewModel.updateAppointment(it) },
-                            onUpdateTimeSlot = { timeslotViewModel.updateTimeSlot(it)},
-                            onCancelAppointment = {
-                                appointmentViewModel.deleteAppointment(it) },
-                        )
+                    items(selectedTimeSlot) { timeslot ->
+                        appointments.find { it.timeSlotId == timeslot.appointment?.timeSlotId }?.let {
+                            AppointmentItem(
+                                timeslot = timeslot,
+                                appointment = it,
+                                appointmentViewModel = appointmentViewModel,
+                                onUpdateAppointment = { appointmentViewModel.updateAppointment(it) },
+                                onUpdateTimeSlot = { timeslotViewModel.updateTimeSlot(it)},
+                                onCancelAppointment = {
+                                    appointmentViewModel.deleteAppointment(it) },
+                            )
+                        }
                     }
                 }
             }
