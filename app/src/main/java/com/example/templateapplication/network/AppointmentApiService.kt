@@ -3,8 +3,8 @@ package com.example.templateapplication.network
 import com.example.templateapplication.model.Appointment
 import retrofit2.Response
 import retrofit2.http.Body
-import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.HTTP
 import retrofit2.http.POST
 import retrofit2.http.PUT
 
@@ -22,7 +22,7 @@ interface AppointmentApiService {
         @Body appointment: Appointment
     ) : Appointment
 
-    @DELETE("appointment")
+    @HTTP(method = "DELETE", path = "appointment", hasBody = true)
     suspend fun deleteAppointment(
         @Body appointment: Appointment
     ) : Response<Unit>

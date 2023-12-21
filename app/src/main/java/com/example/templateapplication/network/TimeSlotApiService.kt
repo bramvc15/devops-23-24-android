@@ -3,8 +3,8 @@ package com.example.templateapplication.network
 import com.example.templateapplication.model.TimeSlot
 import retrofit2.Response
 import retrofit2.http.Body
-import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.HTTP
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -13,9 +13,10 @@ interface TimeSlotApiService {
     @GET("timeslot/{doctorId}")
     suspend fun getTimeSlots(@Path("doctorId") id: Int): List<TimeSlot>
 
-    @PUT("timeslot")
+    @PUT("timeslot/{doctorId}")
     suspend fun updateTimeSlot(
-        @Body timeSlot: TimeSlot
+        @Body timeSlot: TimeSlot,
+        @Path("doctorId") id: Int
     ) : TimeSlot
 
     @POST("timeslot")
@@ -23,8 +24,9 @@ interface TimeSlotApiService {
         @Body timeSlot: TimeSlot
     ) : TimeSlot
 
-    @DELETE("timeslot")
+    @HTTP(method = "DELETE", path = "timeslot/{doctorId}", hasBody = true)
     suspend fun deleteTimeSlot(
-        @Body timeSlot: TimeSlot
+        @Body timeSlot: TimeSlot,
+        @Path("doctorId") id: Int
     ) : Response<Unit>
 }
