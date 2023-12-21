@@ -18,7 +18,7 @@ interface PatientDao {
     @Query("SELECT * from patients")
     fun getAllPatients(): Flow<List<dbPatient>>
 
-    @Query("SELECT * from patients WHERE patient_Id = :patientId")
+    @Query("SELECT * from patients WHERE patient_id = :patientId")
     fun getPatient(patientId: Int): Flow<dbPatient>
 
     @Query("DELETE from patients")

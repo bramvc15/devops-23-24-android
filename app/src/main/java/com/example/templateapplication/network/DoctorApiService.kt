@@ -10,9 +10,7 @@ import retrofit2.http.PUT
 
 interface DoctorApiService {
     @GET("doctor")
-    suspend fun getDoctors(
-//        @Header("Authorization") authorizationHeader: String
-    ): List<Doctor>
+    suspend fun getDoctors(): List<Doctor>
 
     @PUT("doctor")
     suspend fun updateDoctor(
