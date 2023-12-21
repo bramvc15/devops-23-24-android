@@ -38,23 +38,23 @@ class OfflineFirstTimeSlotRepository(private val timeSlotDao: TimeSlotDao, priva
 
     override suspend fun insertTimeSlot(timeSlot: TimeSlot) {
         timeSlot.asDbTimeSlot()?.let { timeSlotDao.insert(it) }
-        timeSlotApi.createTimeSlot(timeSlot)
+        timeSlotApi.createTimeSlot(GlobalDoctor.authedDoctor!!.bearerToken, timeSlot)
     }
 
     override suspend fun updateTimeSlot(timeSlot: TimeSlot) {
         timeSlot.asDbTimeSlot()?.let { timeSlotDao.update(it) }
-        timeSlotApi.updateTimeSlot(timeSlot, timeSlot.doctorId!!)
+        timeSlotApi.updateTimeSlot(GlobalDoctor.authedDoctor!!.bearerToken, timeSlot, timeSlot.doctorId!!)
     }
 
     override suspend fun deleteTimeSlot(timeSlot: TimeSlot) {
         timeSlot.asDbTimeSlot()?.let { timeSlotDao.delete(it) }
-        timeSlotApi.deleteTimeSlot(timeSlot, timeSlot.doctorId!!)
+        timeSlotApi.deleteTimeSlot(GlobalDoctor.authedDoctor!!.bearerToken, timeSlot, timeSlot.doctorId!!)
     }
 
     override suspend fun refreshTimeSlots() {
         // TODO get the id's from doctors and refresh for each doctor
         getSelectedDoctor()?.let {
-            timeSlotApi.getTimeSlots(it.id)
+            timeSlotApi.getTimeSlots(it.id, GlobalDoctor.authedDoctor!!.bearerToken)
                 .also { externalTimeSlots -> timeSlotDao.deleteAndInsert(timeSlots = externalTimeSlots.map(TimeSlot::asDbTimeSlot)) }
         }
     }

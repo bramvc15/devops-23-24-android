@@ -17,16 +17,19 @@ interface DoctorApiService {
 
     @PUT("doctor")
     suspend fun updateDoctor(
+        @Header("Authorization") headerValue: String,
        @Body doctor: Doctor
     ) : Doctor
 
     @DELETE("doctor")
     suspend fun deleteDoctor(
+        @Header("Authorization") headerValue: String,
         @Body doctor: Doctor
     ) : Response<Unit>
 
     @POST("doctor")
     suspend fun createDoctor(
+        @Header("Authorization") headerValue: String,
         @Body doctor: Doctor
     ) : Doctor
 }

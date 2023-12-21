@@ -1,5 +1,6 @@
 package com.example.templateapplication.data.Patients
 
+import com.example.templateapplication.data.GlobalDoctor
 import com.example.templateapplication.model.Patient
 import com.example.templateapplication.network.PatientApiService
 import kotlinx.coroutines.CoroutineScope
@@ -39,7 +40,7 @@ class OfflineFirstPatientRepository(private val patientDao: PatientDao, private 
     }
 
     override suspend fun refreshPatients() {
-        patientApi.getPatients()
+        patientApi.getPatients(GlobalDoctor.authedDoctor!!.bearerToken)
             .also { externalPatients -> patientDao.deleteAndInsert(patients = externalPatients.map(Patient::asDbPatient)) }
     }
 }

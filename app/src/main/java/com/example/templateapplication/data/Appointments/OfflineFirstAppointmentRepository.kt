@@ -1,5 +1,6 @@
 package com.example.templateapplication.data.Appointments
 
+import com.example.templateapplication.data.GlobalDoctor
 import com.example.templateapplication.model.Appointment
 import com.example.templateapplication.network.AppointmentApiService
 import kotlinx.coroutines.CoroutineScope
@@ -36,21 +37,21 @@ class OfflineFirstAppointmentRepository(private val appointmentDao: AppointmentD
 
     override suspend fun insertAppointment(appointment: Appointment) {
         appointmentDao.insert(appointment.asDbAppointment())
-        appointmentApi.createAppointment(appointment)
+        appointmentApi.createAppointment(GlobalDoctor.authedDoctor!!.bearerToken, appointment)
     }
 
     override suspend fun updateAppointment(appointment: Appointment) {
         appointmentDao.update(appointment.asDbAppointment())
-        appointmentApi.updateAppointment(appointment)
+        appointmentApi.updateAppointment(GlobalDoctor.authedDoctor!!.bearerToken, appointment)
     }
 
     override suspend fun deleteAppointment(appointment: Appointment) {
         appointmentDao.delete(appointment.asDbAppointment())
-        appointmentApi.deleteAppointment(appointment)
+        appointmentApi.deleteAppointment(GlobalDoctor.authedDoctor!!.bearerToken, appointment)
     }
 
     override suspend fun refreshAppointments() {
-        appointmentApi.getAppointments()
+        appointmentApi.getAppointments(GlobalDoctor.authedDoctor!!.bearerToken)
             .also { externalAppointments -> appointmentDao.deleteAndInsert(appointments = externalAppointments.map(Appointment::asDbAppointment)) }
     }
 }

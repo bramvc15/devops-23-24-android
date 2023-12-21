@@ -1,5 +1,6 @@
 package com.example.templateapplication.data.Notes
 
+import com.example.templateapplication.data.GlobalDoctor
 import com.example.templateapplication.model.Note
 import com.example.templateapplication.network.NoteApiService
 import kotlinx.coroutines.CoroutineScope
@@ -36,21 +37,21 @@ class OfflineFirstNoteRepository(private val noteDao: NoteDao, private val noteA
 
     override suspend fun insertNote(note: Note) {
         noteDao.insert(note.asDbNote())
-        noteApi.createNote(note)
+        noteApi.createNote(GlobalDoctor.authedDoctor!!.bearerToken, note)
     }
 
     override suspend fun updateNote(note: Note) {
-        note.asDbNote()?.let { noteDao.update(it) }
-        noteApi.updateNote(note)
+        note.asDbNote().let { noteDao.update(it) }
+        noteApi.updateNote(GlobalDoctor.authedDoctor!!.bearerToken, note)
     }
 
     override suspend fun deleteNote(note : Note) {
-        note.asDbNote()?.let { noteDao.delete(it) }
-        noteApi.deleteNote(note)
+        note.asDbNote().let { noteDao.delete(it) }
+        noteApi.deleteNote(GlobalDoctor.authedDoctor!!.bearerToken, note)
     }
 
     override suspend fun refreshNotes() {
-        noteApi.getNotes()
+        noteApi.getNotes(GlobalDoctor.authedDoctor!!.bearerToken)
             .also { externalNotes -> noteDao.deleteAndInsert(notes = externalNotes.map(Note::asDbNote)) }
     }
 }
