@@ -1,8 +1,9 @@
-package com.example.templateapplication.ui.screens
+package com.example.templateapplication.ui.screens.calendarweek
 
-import android.util.Log
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,10 +16,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Card
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -35,12 +40,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.templateapplication.R
-import com.example.templateapplication.data.GlobalDoctor
-import com.example.templateapplication.model.TimeSlot
 import com.example.templateapplication.shared.StatusBarColorUpdateEffect
 import com.example.templateapplication.shared.displayText
 import com.example.templateapplication.shared.getWeekPageTitle
 import com.example.templateapplication.shared.rememberFirstVisibleWeekAfterScroll
+import com.example.templateapplication.ui.screens.calendarweek.components.AppointmentItem
+import com.example.templateapplication.ui.views.AppointmentViewModel
+import com.example.templateapplication.ui.views.DoctorViewModel
 import com.example.templateapplication.ui.views.TimeSlotViewModel
 import com.kizitonwose.calendar.compose.WeekCalendar
 import com.kizitonwose.calendar.compose.weekcalendar.rememberWeekCalendarState
@@ -49,20 +55,25 @@ import java.time.format.DateTimeFormatter
 
 private val topAppColor: Color @Composable get() = colorResource(R.color.colorPrimary)
 
+
 @Composable
-fun CalendarWeekScreen(timeslotViewModel: TimeSlotViewModel = viewModel(factory = TimeSlotViewModel.Factory)) {
+fun CalendarWeekScreen(doctorViewModel: DoctorViewModel,
+                       timeslotViewModel : TimeSlotViewModel = viewModel(factory = TimeSlotViewModel.Factory),
+                       appointmentViewModel: AppointmentViewModel = viewModel(factory = AppointmentViewModel.Factory)
+                       ) {
     val currentDate = remember { LocalDate.now() }
     val startDate = remember { currentDate.minusDays(500) }
     val endDate = remember { currentDate.plusDays(500) }
     var selection by remember { mutableStateOf(currentDate) }
     val timeslots by timeslotViewModel.timeslots.collectAsState()
-
-    Log.d("here", "${timeslots}")
+    val appointments by appointmentViewModel.appointments.collectAsState()
+    var dropdownExpanded by remember { mutableStateOf(false) }
+    var selectedTimeSlot by remember { mutableStateOf(timeslots.filter { it.appointment != null }) }
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White),
+                .fillMaxSize()
+                .background(Color.White),
     ) {
         val state = rememberWeekCalendarState(
             startDate = startDate,
@@ -72,8 +83,44 @@ fun CalendarWeekScreen(timeslotViewModel: TimeSlotViewModel = viewModel(factory 
         val visibleWeek = rememberFirstVisibleWeekAfterScroll(state)
         TopAppBar(
             elevation = 0.dp,
-            title = { Text(text = getWeekPageTitle(visibleWeek)) },
-
+            title = {
+                Text(text = getWeekPageTitle(visibleWeek), fontSize = 16.sp)
+            },
+            actions = {
+                Box(modifier = Modifier
+                    .wrapContentHeight()
+                    .padding(end = 16.dp)
+                    .clickable { dropdownExpanded = true }
+                    .border(
+                        width = 1.dp,
+                        color = Color.Gray,
+                        shape = MaterialTheme.shapes.small
+                    )
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Person,
+                        contentDescription = "Dropdown",
+                        modifier = Modifier.padding(4.dp)
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    DropdownMenu(
+                        expanded = dropdownExpanded,
+                        onDismissRequest = { dropdownExpanded = false },
+                        modifier = Modifier
+                            .background(Color.White)
+                            .align(Alignment.TopEnd)
+                    ) {
+                        doctorViewModel.doctors.collectAsState().value.forEach { doctor ->
+                            DropdownMenuItem(
+                                onClick = {
+                                    timeslotViewModel.selectDoctor(doctor)
+                                }) {
+                                Text(text = doctor.name)
+                            }
+                        }
+                    }
+                }
+            },
         )
         StatusBarColorUpdateEffect(topAppColor)
         WeekCalendar(
@@ -87,13 +134,14 @@ fun CalendarWeekScreen(timeslotViewModel: TimeSlotViewModel = viewModel(factory 
                 }
             },
         )
-        val selectedAppointment = timeslots.filter { LocalDate.parse(it.dateTime, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm[:ss[.SSSSSSS]]")) == selection  }
-        Log.d("select", "${selectedAppointment}")
-        if (selectedAppointment.isNotEmpty()) {
+
+        selectedTimeSlot = timeslots.filter { LocalDate.parse(it.dateTime, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm[:ss[.SSSSSSS]]")) == selection  && it.appointment != null }
+
+        if (selectedTimeSlot.isNotEmpty()) {
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
+                        .fillMaxWidth()
+                        .padding(16.dp)
             ) {
                 Text(
                     text = "Appointments for ${selection.format(DateTimeFormatter.ofPattern("dd MMMM"))}",
@@ -104,11 +152,21 @@ fun CalendarWeekScreen(timeslotViewModel: TimeSlotViewModel = viewModel(factory 
 
                 LazyColumn(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
+                            .fillMaxWidth()
+                            .weight(1f)
                 ) {
-                    items(selectedAppointment) { appointment ->
-                        AppointmentItem(timeslot = appointment, timeslotViewModel = timeslotViewModel)
+                    items(selectedTimeSlot) { timeslot ->
+                        appointments.find { it.timeSlotId == timeslot.appointment?.timeSlotId }?.let {
+                            AppointmentItem(
+                                timeslot = timeslot,
+                                appointment = it,
+                                appointmentViewModel = appointmentViewModel,
+                                onUpdateAppointment = { appointmentViewModel.updateAppointment(it) },
+                                onUpdateTimeSlot = { timeslotViewModel.updateTimeSlot(it)},
+                                onCancelAppointment = {
+                                    appointmentViewModel.deleteAppointment(it) },
+                            )
+                        }
                     }
                 }
             }
@@ -116,20 +174,21 @@ fun CalendarWeekScreen(timeslotViewModel: TimeSlotViewModel = viewModel(factory 
 
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
+                        .fillMaxWidth()
+                        .padding(16.dp)
             ) {
                 Text(
                     text = "Appointments for ${selection.format(DateTimeFormatter.ofPattern("dd MMMM"))}",
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,
                     color = Color.Black
-                )}
+                )
+            }
 
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
+                        .fillMaxSize()
+                        .padding(16.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -144,75 +203,10 @@ fun CalendarWeekScreen(timeslotViewModel: TimeSlotViewModel = viewModel(factory 
                     color = Color.Black,
                     modifier = Modifier.padding(top = 8.dp)
                 )
-        }
-    }}
-}
-
-@Composable
-private fun AppointmentItem(timeslot: TimeSlot, timeslotViewModel: TimeSlotViewModel) {
-    var isExpanded by remember { mutableStateOf(false) }
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        elevation = 8.dp,
-        shape = MaterialTheme.shapes.medium,
-        backgroundColor = colorResource(id = R.color.lightgray )
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            Text(
-                text = "name: ${timeslot.appointment?.patient?.name ?: "N/A"}",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "Appointment Time: ${timeslot.dateTime.format(DateTimeFormatter.ofPattern("HH:mm"))}",
-                fontSize = 14.sp,
-                color = Color.Black
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "dbDoctor.kt: ${GlobalDoctor.doctor?.name ?: "N/A"}",
-                fontSize = 14.sp,
-                color = Color.Black
-            )
-
-            // Add a clickable area to toggle expansion
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable {
-                        isExpanded = !isExpanded
-                    }
-            ) {
-                Text(
-                    text = if (isExpanded) "Click to collapse" else "Click for more details",
-                    fontSize = 14.sp,
-                    color = colorResource(id = R.color.example_7_yellow),
-                    fontWeight = FontWeight.Bold,
-                )
-            }
-
-            // Conditionally display additional information when expanded
-            if (isExpanded) {
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Reason: ${timeslot.appointment?.reason}",
-                    fontSize = 14.sp,
-                    color = Color.Black
-                )
             }
         }
     }
 }
-
 
 private val dateFormatter = DateTimeFormatter.ofPattern("dd")
 
@@ -220,9 +214,9 @@ private val dateFormatter = DateTimeFormatter.ofPattern("dd")
 private fun Day(date: LocalDate, isSelected: Boolean, onClick: (LocalDate) -> Unit) {
     Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-            .clickable { onClick(date) },
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .clickable { onClick(date) },
         contentAlignment = Alignment.Center,
     ) {
         Column(
@@ -246,10 +240,10 @@ private fun Day(date: LocalDate, isSelected: Boolean, onClick: (LocalDate) -> Un
         if (isSelected) {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(5.dp)
-                    .background(colorResource(R.color.example_7_yellow))
-                    .align(Alignment.BottomCenter),
+                        .fillMaxWidth()
+                        .height(5.dp)
+                        .background(colorResource(R.color.example_7_yellow))
+                        .align(Alignment.BottomCenter),
             )
         }
     }

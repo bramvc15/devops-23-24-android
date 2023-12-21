@@ -20,8 +20,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.templateapplication.component.BackConfirmationDialog
-import com.example.templateapplication.ui.screens.CalendarWeekScreen
-import com.example.templateapplication.ui.screens.CalenderMonthScreen
+import com.example.templateapplication.ui.screens.calendarweek.CalendarWeekScreen
+import com.example.templateapplication.ui.screens.calendarmonth.CalenderMonthScreen
 import com.example.templateapplication.ui.screens.DoctorSelectionScreen
 import com.example.templateapplication.ui.screens.NoteScreen
 import com.example.templateapplication.ui.screens.PasswordScreen
@@ -34,7 +34,9 @@ fun AppNavigation() {
 
     Scaffold(
         bottomBar = {
-                GetNavigationBar(navController = navController)
+            if(currentRoute(navController) != null && currentRoute(navController) != Screens.DoctorSelectionScreen.name && !currentRoute(navController).toString().contains(Screens.PasswordScreen.name)) {
+                GetNavigationBar(navController)
+            }
         }
     ) { paddingValues ->
 
@@ -84,7 +86,7 @@ fun AppNavigation() {
                         }
                     )
                 }
-                CalendarWeekScreen()
+                CalendarWeekScreen(doctorViewModel)
             }
 
             composable(route = Screens.DoctorSelectionScreen.name) {
@@ -148,4 +150,11 @@ fun GetNavigationBar(navController: NavHostController) {
             )
         }
     }
+}
+
+@Composable
+private fun currentRoute(navController: NavHostController): String? {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
+    return currentDestination?.hierarchy?.first()?.route
 }
