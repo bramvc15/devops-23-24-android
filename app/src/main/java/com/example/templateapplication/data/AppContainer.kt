@@ -42,33 +42,12 @@ interface AppContainer {
  */
 class DefaultAppContainer(private val context: Context): AppContainer {
     private val baseUrl = "http://192.168.100.101:5001/api/"
-    val authToken = GlobalDoctor.authedDoctor!!.bearerToken
-
-    /**
-     * Use a Interceptor to add Auth0 bearer token to every request
-     */
-    class AuthInterceptor(private val authToken: String) : Interceptor {
-        override fun intercept(chain: Interceptor.Chain): Response {
-            val request = chain.request().newBuilder()
-                .addHeader("Authorization", "$authToken")
-                .build()
-            return chain.proceed(request)
-        }
-    }
-
-    /**
-     * Create OkHttpClient with the AuthInterceptor
-     */
-    val client = OkHttpClient.Builder()
-        .addInterceptor(AuthInterceptor(authToken))
-        .build()
 
     /**
      * Use the Retrofit builder to build a retrofit object using a kotlinx.serialization converter
      */
     private val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
-        .client(client)
         .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
         .build()
 
