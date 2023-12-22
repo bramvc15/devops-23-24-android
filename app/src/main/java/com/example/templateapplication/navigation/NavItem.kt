@@ -27,17 +27,5 @@ val listOfNavItems : List<NavItem> = listOf(
         icon = Icons.Filled.DateRange,
         route = Screens.CalenderMonthScreen.name
     ),
-    /*
-    NavItem(
-        label = "test",
-        icon = Icons.Default.Close,
-        route = Screens.DoctorSelectionScreen.name
-    ),
-    NavItem(
-        label = "test2",
-        icon = Icons.Default.Close,
-        route = Screens.PasswordScreen.name
-    )
-    */
 
 )

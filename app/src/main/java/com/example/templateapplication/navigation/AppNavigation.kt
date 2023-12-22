@@ -30,7 +30,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.templateapplication.component.BackConfirmationDialog
 import com.example.templateapplication.ui.screens.DoctorSelectionScreen
-import com.example.templateapplication.ui.screens.PasswordScreen
 import com.example.templateapplication.ui.utils.VisionNavigationType
 import com.example.templateapplication.ui.screens.calendarmonth.CalenderMonthScreen
 import com.example.templateapplication.ui.screens.calendarweek.CalendarWeekScreen
@@ -105,11 +104,8 @@ fun AppNavigation(
         composable(route = Screens.DoctorSelectionScreen.name) {
             DoctorSelectionScreen(
                 onNextButtonClicked = { doctor ->
-
-
-
                     navController.navigate(
-                        "${Screens.PasswordScreen.name}/${Uri.encode(doctor.name)}/${
+                        "${Screens.CalenderWeekScreen.name}/${Uri.encode(doctor.name)}/${
                             Uri.encode(
                                 doctor.imageLink
                             )
@@ -118,24 +114,6 @@ fun AppNavigation(
                 }
             )
         }
-
-        composable(route = Screens.PasswordScreen.name + "/{doctorName}/{doctorImage}") { backStackEntry ->
-            val doctorName = backStackEntry.arguments?.getString("doctorName") ?: ""
-            val doctorImage = backStackEntry.arguments?.getString("doctorImage") ?: ""
-            PasswordScreen(
-                doctorName = Uri.decode(doctorName),
-                doctorImage = Uri.decode(doctorImage),
-                onNextButtonClicked = {
-                    navController.navigate(Screens.CalenderWeekScreen.name)
-                }
-            )
-        }
     }
 
-}
-@Composable
-private fun currentRoute(navController: NavHostController): String? {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
-    return currentDestination?.hierarchy?.first()?.route
 }
