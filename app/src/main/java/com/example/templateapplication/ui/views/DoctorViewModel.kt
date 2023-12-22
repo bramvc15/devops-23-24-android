@@ -1,9 +1,6 @@
 package com.example.templateapplication.ui.views
 
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -85,7 +82,6 @@ class DoctorViewModel(private val doctorRepository: DoctorRepository) : ViewMode
         }
     }
 
-    // Niet zeker of dit oke is
     fun selectDoctor(doctor: Doctor) {
         GlobalDoctor.doctor = doctor
     }

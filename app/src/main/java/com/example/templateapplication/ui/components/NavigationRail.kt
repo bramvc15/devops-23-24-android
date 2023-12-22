@@ -6,7 +6,7 @@ import androidx.compose.material3.NavigationRailItem
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavDestination
-import com.example.templateapplication.ui.navigation.SchedualOverviewScreen
+import com.example.templateapplication.navigation.listOfNavItems
 
 @Composable
 fun VisionNavigationRail(
@@ -15,14 +15,14 @@ fun VisionNavigationRail(
     modifier: Modifier = Modifier
 ) {
     NavigationRail(modifier = modifier) {
-        for (navItem in SchedualOverviewScreen.values()) {
+        for (navItem in listOfNavItems) {
             NavigationRailItem(
-                selected = selectedDestination?.route == navItem.name,
-                onClick = { onTabPressed(navItem.name) },
+                selected = selectedDestination?.route == navItem.label,
+                onClick = { onTabPressed(navItem.label) },
                 icon = {
                     Icon(
                         imageVector = navItem.icon,
-                        contentDescription = navItem.name,
+                        contentDescription = navItem.label,
                     )
                 },
             )

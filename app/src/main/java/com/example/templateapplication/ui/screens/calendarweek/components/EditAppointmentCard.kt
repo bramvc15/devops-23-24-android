@@ -87,7 +87,7 @@ fun EditAppointmentCard(
                 onClick = {
                           onCancelClick()
                 },
-                colors = ButtonDefaults.buttonColors(Color.Red /*backgroundColor = Color.hsl(4f, 0.83f, 0.59f)*/),
+                colors = ButtonDefaults.buttonColors(Color.Red),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)

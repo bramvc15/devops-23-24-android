@@ -51,7 +51,6 @@ class MainViewModel: ViewModel() {
                     // The user successfully logged in.
                     val idToken = result.idToken
 
-                    // TODO: 🚨 REMOVE BEFORE GOING TO PRODUCTION!
                     Log.d(TAG, "ID token: $idToken")
 
                     authedDoctor = AuthedDoctor(idToken)
@@ -67,16 +66,13 @@ class MainViewModel: ViewModel() {
     fun logout() {
         WebAuthProvider
             .logout(account)
-            //.withScheme(context.getString(R.string.com_auth0_scheme))
             .start(context, object : Callback<Void?, AuthenticationException> {
 
                 override fun onFailure(error: AuthenticationException) {
-                    // For some reason, logout failed.
                     Log.e(TAG, "Error occurred in logout(): $error")
                 }
 
                 override fun onSuccess(result: Void?) {
-                    // The user successfully logged out.
                     authedDoctor = AuthedDoctor()
                     GlobalDoctor.authedDoctor = authedDoctor
                     userIsAuthenticated = false

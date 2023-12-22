@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import com.example.templateapplication.ui.VisionApp
@@ -17,8 +16,6 @@ import com.example.templateapplication.ui.screens.AuthScreen
 import com.example.templateapplication.ui.theme.VisionApplicationTheme
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.templateapplication.ui.utils.VisionNavigationType
 import com.example.templateapplication.ui.views.MainViewModel
 
