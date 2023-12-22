@@ -8,6 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,14 +17,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -56,6 +59,7 @@ import java.time.format.DateTimeFormatter
 private val topAppColor: Color @Composable get() = colorResource(R.color.colorPrimary)
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CalendarWeekScreen(doctorViewModel: DoctorViewModel,
                        timeslotViewModel : TimeSlotViewModel = viewModel(factory = TimeSlotViewModel.Factory),
@@ -73,7 +77,7 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel,
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+        // .background(Color.White),
     ) {
         val state = rememberWeekCalendarState(
             startDate = startDate,
@@ -82,10 +86,14 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel,
         )
         val visibleWeek = rememberFirstVisibleWeekAfterScroll(state)
         TopAppBar(
-            elevation = 0.dp,
+            modifier = Modifier.height(IntrinsicSize.Min),
             title = {
-                Text(text = getWeekPageTitle(visibleWeek), fontSize = 16.sp)
+                Text(text = getWeekPageTitle(visibleWeek), fontSize = 25.sp)
             },
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = colorResource(id = R.color.colorPrimary),
+                titleContentColor = colorResource(id = R.color.white),
+            ),
             actions = {
                 Box(modifier = Modifier
                     .wrapContentHeight()
@@ -100,23 +108,23 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel,
                     Icon(
                         imageVector = Icons.Default.Person,
                         contentDescription = "Dropdown",
-                        modifier = Modifier.padding(4.dp)
+                        modifier = Modifier.padding(4.dp),
+                        tint = colorResource(id = R.color.white)
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     DropdownMenu(
                         expanded = dropdownExpanded,
                         onDismissRequest = { dropdownExpanded = false },
                         modifier = Modifier
-                            .background(Color.White)
                             .align(Alignment.TopEnd)
                     ) {
                         doctorViewModel.doctors.collectAsState().value.forEach { doctor ->
                             DropdownMenuItem(
                                 onClick = {
-                                    doctorViewModel.selectDoctor(doctor)
-                                }) {
-                                Text(text = doctor.name)
-                            }
+                                    timeslotViewModel.selectDoctor(doctor)
+                                },
+                                text = { Text(text = doctor.name) }
+                            )
                         }
                     }
                 }
@@ -136,20 +144,17 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel,
         )
 
         selectedTimeSlot = timeslots.filter { LocalDate.parse(it.dateTime, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm[:ss[.SSSSSSS]]")) == selection  && it.appointment != null }
-
-        if (selectedTimeSlot.isNotEmpty()) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            ) {
-                Text(
-                    text = "Appointments for ${selection.format(DateTimeFormatter.ofPattern("dd MMMM"))}",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp,
-                    color = Color.Black
-                )
-
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            Text(
+                text = "Appointments for ${selection.format(DateTimeFormatter.ofPattern("d MMMM"))}",
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp,
+            )
+            if (selectedTimeSlot.isNotEmpty()) {
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -163,55 +168,40 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel,
                                 appointmentViewModel = appointmentViewModel,
                                 onUpdateAppointment = { appointmentViewModel.updateAppointment(it) },
                                 onUpdateTimeSlot = { timeslotViewModel.updateTimeSlot(it)},
-                                onCancelAppointment = {
-                                    appointmentViewModel.deleteAppointment(it) },
+                                onCancelAppointment = { appointmentViewModel.deleteAppointment(it) },
                             )
                         }
                     }
                 }
-            }
-        }else {
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            ) {
-                Text(
-                    text = "Appointments for ${selection.format(DateTimeFormatter.ofPattern("dd MMMM"))}",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp,
-                    color = Color.Black
-                )
-            }
-
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_launcher_background),
-                    contentDescription = "Happy Face"
-                )
-                Text(
-                    text = "No appointments",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp,
-                    color = Color.Black,
-                    modifier = Modifier.padding(top = 8.dp)
-                )
+            }else {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_launcher_background),
+                        contentDescription = "Happy Face"
+                    )
+                    Text(
+                        text = "No appointments",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp,
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
+                }
             }
         }
     }
 }
 
-private val dateFormatter = DateTimeFormatter.ofPattern("dd")
+private val dateFormatter = DateTimeFormatter.ofPattern("d")
 
 @Composable
 private fun Day(date: LocalDate, isSelected: Boolean, onClick: (LocalDate) -> Unit) {
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -228,13 +218,13 @@ private fun Day(date: LocalDate, isSelected: Boolean, onClick: (LocalDate) -> Un
                 text = date.dayOfWeek.displayText(),
                 fontSize = 12.sp,
                 color = Color.White,
-                fontWeight = FontWeight.Light,
+                //   fontWeight = FontWeight.Light,
             )
             Text(
                 text = dateFormatter.format(date),
                 fontSize = 14.sp,
-                color = if (isSelected) colorResource(R.color.example_7_yellow) else Color.White,
-                fontWeight = FontWeight.Bold,
+                color = if (isSelected) colorResource(R.color.noteColorYellow) else Color.White,
+                // fontWeight = FontWeight.Bold,
             )
         }
         if (isSelected) {
@@ -242,7 +232,7 @@ private fun Day(date: LocalDate, isSelected: Boolean, onClick: (LocalDate) -> Un
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(5.dp)
-                    .background(colorResource(R.color.example_7_yellow))
+                    .background(colorResource(R.color.noteColorYellow))
                     .align(Alignment.BottomCenter),
             )
         }
