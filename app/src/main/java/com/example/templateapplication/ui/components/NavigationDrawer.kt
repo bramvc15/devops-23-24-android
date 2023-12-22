@@ -26,7 +26,6 @@ import com.example.templateapplication.ui.screens.CalendarWeekScreen
 @Composable
 fun NavigationDrawerContent(
     selectedDestination: NavDestination?,
-    onTabPressed: ((String) -> Unit),
     modifier: Modifier = Modifier,
     navController: NavHostController,
 ) {

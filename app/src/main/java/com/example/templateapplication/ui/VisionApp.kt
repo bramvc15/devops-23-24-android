@@ -1,6 +1,7 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 package com.example.templateapplication.ui
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,10 +12,13 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.PermanentDrawerSheet
 import androidx.compose.material3.PermanentNavigationDrawer
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -54,40 +58,26 @@ fun VisionApp(
     val contentType: VisionContentType = VisionContentType.LIST_ONLY
     val viewModel: DoctorViewModel = viewModel(factory = DoctorViewModel.Factory)
     val visionUiState = viewModel.uiState.collectAsState().value
-   /* val goHome: () -> Unit = {
-        navController.popBackStack(
-            DoctorSelectionScreen.Start.name,
-            inclusive = false,
-        )
-    }
-    val goToMainLogin= { navController.navigate(PasswordScreen.Detail.name) { launchSingleTop = true } }
-    val goToCalendarWeek = { navController.navigate(CalendarWeekScreen.About.name)  {launchSingleTop = true} }
-    val goToCalendarMonth = { navController.navigate(CalenderMonthScreen.Camera.name) {launchSingleTop = true} }
 
-    val currentScreenTitle = TaskOverviewScreen.valueOf(
-        backStackEntry?.destination?.route ?: TaskOverviewScreen.Start.name,
-    ).title*/
     if (navigationType == VisionNavigationType.PERMANENT_NAVIGATION_DRAWER) {
+        Log.d("VisionApp", "VisionNavigationType.PERMANENT_NAVIGATION_DRAWER")
         PermanentNavigationDrawer(drawerContent = {
             PermanentDrawerSheet(Modifier.width(dimensionResource(R.dimen.drawer_width))) {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentDestination = navBackStackEntry?.destination
 
-            for (navItem in listOfNavItems) {
                 NavigationDrawerContent(
                     selectedDestination = navController.currentDestination,
                     navController = navController,
-                    onTabPressed = { navController.navigate(navItem.route) },
                     modifier = Modifier.fillMaxWidth(),
                 )
-            }
+
         }
 
     }) {
             Scaffold(
                 containerColor = Color.Transparent,
 
-        // modifier = Modifier.padding(dimensionResource(id = R.dimen.drawer_width), 0.dp, 0.dp, 0.dp )
         ) { innerPadding ->
 
                 AppNavigation(
@@ -97,18 +87,50 @@ fun VisionApp(
             }
 
     }
-    }else if (navigationType == VisionNavigationType.BOTTOM_NAVIGATION) {
-        Scaffold(
+    } else if (navigationType == VisionNavigationType.BOTTOM_NAVIGATION) {
+        Log.d("VisionApp", "VisionNavigationType.BOTTOM_NAVIGATION")
+
+
+    Scaffold(
             containerColor = Color.Transparent,
+            bottomBar = {
+                NavigationBar {
+                    val navBackStackEntry by navController.currentBackStackEntryAsState()
+                    val currentDestination = navBackStackEntry?.destination
+                    listOfNavItems.forEach { navItem ->
+                        NavigationBarItem(
+                            selected = currentDestination?.hierarchy?.any { it.route == navItem.route } == true,
+                            onClick = {
+                                navController.navigate(navItem.route) {
+                                    popUpTo(navController.graph.findStartDestination().id) {
+                                        saveState = true
+                                        inclusive = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
+                            },
+                            icon = {
+                                Icon(imageVector = navItem.icon, contentDescription = null)
+                            },
+                            label = {
+                                Text(text = navItem.label)
+                            }
+                        )
+                    }
+                }
+            }
         ) { innerPadding ->
 
             AppNavigation(
                 modifier = Modifier.padding(innerPadding),
                 navController = navController,
+
             )
         }
     }
     else {
+        Log.d("VisionApp", "VisionNavigationType.NAVIGATION_RAIL")
         Row {
             AnimatedVisibility(visible = navigationType == VisionNavigationType.NAVIGATION_RAIL) {
                 val navigationRailContentDescription = stringResource(R.string.navigation_rail)
