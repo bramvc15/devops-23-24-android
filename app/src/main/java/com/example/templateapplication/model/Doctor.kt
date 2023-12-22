@@ -1,6 +1,5 @@
 package com.example.templateapplication.model
 
-import com.squareup.moshi.Json
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
