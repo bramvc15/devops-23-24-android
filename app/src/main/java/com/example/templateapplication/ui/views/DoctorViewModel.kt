@@ -28,7 +28,6 @@ class DoctorViewModel(private val doctorRepository: DoctorRepository) : ViewMode
 
     private val _doctors = MutableStateFlow<List<Doctor>>(emptyList())
     val doctors: StateFlow<List<Doctor>> get() = _doctors
-
     init {
         initializeUIState()
     }
@@ -37,6 +36,7 @@ class DoctorViewModel(private val doctorRepository: DoctorRepository) : ViewMode
     }
     private fun initializeUIState() {
         getDoctors()
+        Log.d("DoctorViewModel", "Instance created")
     }
 
     private fun getDoctors() {

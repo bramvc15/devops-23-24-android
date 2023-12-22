@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.templateapplication.navigation.AppNavigation
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import com.example.templateapplication.ui.utils.VisionContentType
 import com.example.templateapplication.ui.utils.VisionNavigationType
 import com.example.templateapplication.ui.views.DoctorViewModel
 
@@ -16,29 +17,34 @@ fun VisionApp(
     windowSize: WindowWidthSizeClass,
     modifier: Modifier = Modifier,
 ) {
+    val navigationType: VisionNavigationType
+    val contentType: VisionContentType
     val viewModel: DoctorViewModel = viewModel(factory = DoctorViewModel.Factory)
     val visionUiState = viewModel.uiState.collectAsState().value
 
-    val navigationType: VisionNavigationType = when (windowSize) {
+    when (windowSize) {
         WindowWidthSizeClass.Compact -> {
-            VisionNavigationType.BOTTOM_NAVIGATION
+            navigationType = VisionNavigationType.BOTTOM_NAVIGATION
+            contentType = VisionContentType.LIST_ONLY
         }
-
         WindowWidthSizeClass.Medium -> {
-            VisionNavigationType.NAVIGATION_RAIL
+            navigationType = VisionNavigationType.NAVIGATION_RAIL
+            contentType = VisionContentType.LIST_ONLY
         }
-
         WindowWidthSizeClass.Expanded -> {
-            VisionNavigationType.PERMANENT_NAVIGATION_DRAWER
+            navigationType = VisionNavigationType.PERMANENT_NAVIGATION_DRAWER
+            contentType = VisionContentType.LIST_AND_DETAIL
         }
-
         else -> {
-            VisionNavigationType.BOTTOM_NAVIGATION
+            navigationType = VisionNavigationType.BOTTOM_NAVIGATION
+            contentType = VisionContentType.LIST_ONLY
         }
     }
 
-    AppNavigation(navigationType,
+    AppNavigation(
                 modifier = modifier,
                 visionUiState = visionUiState,
-        doctorViewModel = viewModel)
+        doctorViewModel = viewModel,
+        navigationType = navigationType,
+        contentType = contentType,)
 }

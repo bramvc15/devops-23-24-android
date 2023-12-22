@@ -1,6 +1,7 @@
 package com.example.templateapplication
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,16 +22,14 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-
+        Log.i("vm inspection", "Main activity onCreate")
         setContent {
             VisionApplicationTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
+                Surface{
                     val windowSize = calculateWindowSizeClass(this)
-                    VisionApp(windowSize.widthSizeClass)
+
+
+                    VisionApp(windowSize = windowSize.widthSizeClass)
                 }
             }
         }
@@ -43,11 +42,33 @@ fun ReplyAppPreview() {
     VisionApplicationTheme {
         Surface {
             VisionApp(
-                windowSize = WindowWidthSizeClass.Compact,
+                windowSize = WindowWidthSizeClass.Compact
+            )
+        }
+    }
+}
+@Preview(showBackground = true, widthDp = 700)
+@Composable
+fun ReplyAppMediumPreview() {
+    VisionApplicationTheme {
+        Surface {
+            VisionApp(
+                windowSize = WindowWidthSizeClass.Medium,
             )
         }
     }
 }
 
+@Preview(showBackground = true, widthDp = 1000)
+@Composable
+fun ReplyAppExpandedPreview() {
+    VisionApplicationTheme {
+        Surface {
+            VisionApp(
+                windowSize = WindowWidthSizeClass.Expanded,
+            )
+        }
+    }
+}
 
 

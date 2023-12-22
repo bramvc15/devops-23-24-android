@@ -1,6 +1,7 @@
 package com.example.templateapplication.navigation
 
 import android.net.Uri
+import android.util.Log
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,7 +21,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -36,12 +36,12 @@ import com.example.templateapplication.ui.screens.NoteScreen
 import com.example.templateapplication.ui.screens.PasswordScreen
 import com.example.templateapplication.ui.utils.VisionNavigationType
 import com.example.templateapplication.ui.views.DoctorViewModel
-
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.ui.unit.dp
 import com.example.templateapplication.ui.views.VisionUiState
 import androidx.compose.foundation.layout.PaddingValues
-
+import com.example.templateapplication.ui.utils.VisionContentType
+import kotlin.math.log
 
 
 @Composable
@@ -49,51 +49,44 @@ fun AppNavigation(
     navigationType: VisionNavigationType,
     modifier: Modifier = Modifier,
     visionUiState: VisionUiState,
-    doctorViewModel: DoctorViewModel
+    doctorViewModel: DoctorViewModel,
+    contentType: VisionContentType
 ) {
     val navController: NavHostController = rememberNavController()
-
-    Scaffold(
-        bottomBar = {
-            when (navigationType) {
-                VisionNavigationType.BOTTOM_NAVIGATION -> {
-                    VisionBottomNavigationBar(navController = navController)
-                }
-                VisionNavigationType.NAVIGATION_RAIL -> {
-                    VisionNavigationRail(navController = navController)
-                }
-                VisionNavigationType.PERMANENT_NAVIGATION_DRAWER -> {
-                    VisionPermanentNavigationDrawer(navController = navController)
-                }
-            }
+    Log.d("Navigation", "Navigation type: ${navigationType}")
+    when (navigationType) {
+        VisionNavigationType.BOTTOM_NAVIGATION -> {
+            VisionBottomNavigationBar(navController = navController)
+            Log.d("Navigation", "Bottom navigation created")
         }
-    ) { paddingValues ->
-
-        VisionAppContent(
-            navController = navController,
-            doctorViewModel = doctorViewModel,
-            paddingValues = paddingValues,
-            visionUiState = visionUiState,
-            modifier = modifier,
-        )
+        VisionNavigationType.NAVIGATION_RAIL -> {
+            VisionNavigationRail(navController = navController)
+            Log.d("Navigation", "Navigation rail created")
+        }
+        VisionNavigationType.PERMANENT_NAVIGATION_DRAWER -> {
+            VisionPermanentNavigationDrawer(navController = navController)
+            Log.d("Navigation", "Navigation Permanent created")
+        }
     }
+
+    VisionAppContent(
+        navController = navController,
+        doctorViewModel = doctorViewModel,
+        visionUiState = visionUiState,
+    )
 }
 
 @Composable
 fun VisionAppContent(
     navController: NavHostController,
     doctorViewModel: DoctorViewModel,
-    paddingValues: PaddingValues,
     visionUiState: VisionUiState,
-    modifier: Modifier = Modifier,
 ) {
     NavHost(
         navController = navController,
         startDestination = Screens.DoctorSelectionScreen.name,
-        modifier = Modifier.padding(paddingValues)
     ) {
         composable(route = Screens.NoteScreen.name) {
-
             LocalOnBackPressedDispatcherOwner.current?.let { it1 ->
                 BackConfirmationDialog(
                     onBackPressedDispatcher = it1.onBackPressedDispatcher,
@@ -101,7 +94,7 @@ fun VisionAppContent(
                         navController.navigate(Screens.DoctorSelectionScreen.name)
                     },
                     onCancel = {
-
+                        // Handle onCancel if needed
                     }
                 )
                 NoteScreen()
@@ -115,7 +108,7 @@ fun VisionAppContent(
                         navController.navigate(Screens.DoctorSelectionScreen.name)
                     },
                     onCancel = {
-
+                        // Handle onCancel if needed
                     }
                 )
                 CalenderMonthScreen()
@@ -129,7 +122,7 @@ fun VisionAppContent(
                         navController.navigate(Screens.DoctorSelectionScreen.name)
                     },
                     onCancel = {
-
+                        // Handle onCancel if needed
                     }
                 )
                 CalendarWeekScreen()
@@ -139,19 +132,11 @@ fun VisionAppContent(
             DoctorSelectionScreen(
                 doctorViewModel = doctorViewModel,
                 onNextButtonClicked = { doctor ->
-
                     doctorViewModel.selectDoctor(doctor)
-
-                    navController.navigate(
-                        "${Screens.PasswordScreen.name}/${Uri.encode(doctor.name)}/${
-                            Uri.encode(
-                                doctor.imageLink
-                            )
-                        }"
-                    )
+                    navController.navigate("${Screens.PasswordScreen.name}/" +
+                            "${Uri.encode(doctor.name)}/${Uri.encode(doctor.imageLink)}")
                 },
                 visionUiState = visionUiState,
-
             )
         }
 
@@ -256,3 +241,4 @@ fun VisionBottomNavigationBar(navController: NavHostController) {
         }
     }
 }
+
