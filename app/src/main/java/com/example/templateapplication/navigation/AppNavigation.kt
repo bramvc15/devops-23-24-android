@@ -20,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -28,13 +29,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.templateapplication.component.BackConfirmationDialog
-import com.example.templateapplication.ui.screens.CalendarWeekScreen
-import com.example.templateapplication.ui.screens.CalenderMonthScreen
 import com.example.templateapplication.ui.screens.DoctorSelectionScreen
-import com.example.templateapplication.ui.screens.NoteScreen
 import com.example.templateapplication.ui.screens.PasswordScreen
 import com.example.templateapplication.ui.utils.VisionNavigationType
+import com.example.templateapplication.ui.screens.calendarmonth.CalenderMonthScreen
+import com.example.templateapplication.ui.screens.calendarweek.CalendarWeekScreen
+import com.example.templateapplication.ui.screens.notes.NoteScreen
 import com.example.templateapplication.ui.views.DoctorViewModel
+import com.example.templateapplication.ui.views.NoteViewModel
 
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.ui.unit.dp
@@ -46,15 +48,16 @@ import com.example.templateapplication.ui.utils.VisionContentType
 @Composable
 fun AppNavigation(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
 ) {
+    val doctorViewModel: DoctorViewModel = viewModel(factory = DoctorViewModel.Factory)
+    val noteViewModel: NoteViewModel = viewModel(factory = NoteViewModel.Factory)
     NavHost(
         navController = navController,
         startDestination = Screens.DoctorSelectionScreen.name,
         modifier = modifier
     ) {
         composable(route = Screens.NoteScreen.name) {
-
             LocalOnBackPressedDispatcherOwner.current?.let { it1 ->
                 BackConfirmationDialog(
                     onBackPressedDispatcher = it1.onBackPressedDispatcher,
@@ -65,8 +68,10 @@ fun AppNavigation(
 
                     }
                 )
-                NoteScreen()
             }
+            NoteScreen(noteViewModel = noteViewModel
+
+            )
         }
         composable(route = Screens.CalenderMonthScreen.name) {
             LocalOnBackPressedDispatcherOwner.current?.let { it1 ->
@@ -79,9 +84,10 @@ fun AppNavigation(
 
                     }
                 )
-                CalenderMonthScreen()
             }
+            CalenderMonthScreen()
         }
+
         composable(route = Screens.CalenderWeekScreen.name) {
             LocalOnBackPressedDispatcherOwner.current?.let { it1 ->
                 BackConfirmationDialog(
@@ -93,8 +99,8 @@ fun AppNavigation(
 
                     }
                 )
-                CalendarWeekScreen()
             }
+            CalendarWeekScreen(doctorViewModel)
         }
         composable(route = Screens.DoctorSelectionScreen.name) {
             DoctorSelectionScreen(
@@ -126,4 +132,10 @@ fun AppNavigation(
         }
     }
 
+}
+@Composable
+private fun currentRoute(navController: NavHostController): String? {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
+    return currentDestination?.hierarchy?.first()?.route
 }

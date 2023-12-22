@@ -1,18 +1,13 @@
 package com.example.templateapplication.data.Appointments
 
 import com.example.templateapplication.model.Appointment
-import com.example.templateapplication.model.Patient
-import com.example.templateapplication.network.AppointmentApiService
+import kotlinx.coroutines.flow.Flow
 
 interface AppointmentRepository {
-    suspend fun getAppointments(body: Patient): List<Appointment>
-}
+    fun getAppointments(): Flow<List<Appointment>>
+    suspend fun insertAppointment(appointment: Appointment)
+    suspend fun updateAppointment(appointment: Appointment)
+    suspend fun deleteAppointment(appointment: Appointment)
+    suspend fun refreshAppointments()
 
-class NetworkAppointmentRepository(
-    private val appointmentDao: AppointmentDao,
-    private val appointmentApiService: AppointmentApiService
-): AppointmentRepository {
-    override suspend fun getAppointments(body: Patient): List<Appointment> {
-        return appointmentApiService.getAppointments(body)
-    }
 }

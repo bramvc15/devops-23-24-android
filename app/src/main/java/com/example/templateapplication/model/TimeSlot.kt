@@ -1,5 +1,6 @@
 package com.example.templateapplication.model
 
+import com.example.templateapplication.data.GlobalDoctor
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -8,7 +9,7 @@ data class TimeSlot(
     @SerialName(value = "id")
     val id: Int,
     @SerialName(value = "doctorId")
-    val doctorId: Int,
+    val doctorId: Int? = GlobalDoctor.doctor?.id,
     @SerialName(value = "appointmentType")
     val appointmentType: Int,
     @SerialName(value = "dateTime")
@@ -16,5 +17,5 @@ data class TimeSlot(
     @SerialName(value = "duration")
     val duration: Int,
     @SerialName(value = "appointmentDTO")
-    val appointment: Appointment,
+    val appointment: Appointment?,
 )

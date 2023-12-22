@@ -28,7 +28,7 @@ enum class DetailWizardSteps {
     SELECTEDDOCTOR,
 }
 
-data class DoctorData(
+data class DoctorUiState(
     val DoctorStep: DetailWizardSteps = DetailWizardSteps.NAME,
     val success: List<Doctor>? = null,
     val Error: String? = null,
@@ -42,6 +42,7 @@ class DoctorViewModel(private val doctorRepository: DoctorRepository) : ViewMode
 
     private val _doctors = MutableStateFlow<List<Doctor>>(emptyList())
     val doctors: StateFlow<List<Doctor>> get() = _doctors
+
     init {
         initializeUIState()
     }
@@ -57,9 +58,14 @@ class DoctorViewModel(private val doctorRepository: DoctorRepository) : ViewMode
         viewModelScope.launch {
             _uiState.value = VisionUiState.Loading
             try {
-                val doctors = doctorRepository.getDoctors()
-                _doctors.value = doctors
-                _uiState.value = VisionUiState(success = doctors)
+                val token = GlobalDoctor.authedDoctor?.idToken ?: throw Exception("Token is null")
+                val doctorsFlow = doctorRepository.getAllDoctorsStream()
+
+                doctorsFlow.collect { doc ->
+                    _doctors.value = doc
+                }
+
+                VisionUiState.Success(doctors = doctors.value)
             } catch (e: IOException) {
                 Log.d("DoctorViewModel", "IOException")
                 Log.d("DoctorViewModel", e.message.toString())
@@ -79,8 +85,6 @@ class DoctorViewModel(private val doctorRepository: DoctorRepository) : ViewMode
         }
     }
 
-    // Other methods...
-
     // Niet zeker of dit oke is
     fun selectDoctor(doctor: Doctor) {
         GlobalDoctor.doctor = doctor
@@ -99,7 +103,6 @@ class DoctorViewModel(private val doctorRepository: DoctorRepository) : ViewMode
         }
     }
 }
-
 
 
 

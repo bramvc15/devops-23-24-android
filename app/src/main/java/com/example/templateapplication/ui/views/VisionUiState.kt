@@ -8,6 +8,7 @@ data class VisionUiState(
     val loading: Boolean = false,
     val selectedDoctor: Doctor? = null
 ) {
+
     companion object {
         val Loading = VisionUiState(loading = true)
     }
