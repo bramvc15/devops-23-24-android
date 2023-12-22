@@ -3,6 +3,7 @@ package com.example.templateapplication.ui.screens.calendarmonth
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,12 +19,12 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Divider
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.Text
-import androidx.compose.material.darkColors
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material.ripple.RippleTheme
+import androidx.compose.material3.Divider
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -67,9 +68,9 @@ import java.time.format.DateTimeFormatter
 private val toolbarColor: Color @Composable get() = colorResource(R.color.colorPrimary)
 private val topAppColor: Color @Composable get() = colorResource(R.color.colorPrimary)
 private val backgroundColor: Color @Composable get() = colorResource(R.color.white)
-private val daysOfweekFontColor: Color @Composable get() = colorResource(R.color.black)
-private val daysColor: Color @Composable get() = colorResource(R.color.lightgray)
-private val selectedItemColor: Color @Composable get() = colorResource(R.color.purple_200)
+private val daysOfweekFontColor: Color @Composable get() = colorResource(R.color.noteColorPink)
+private val daysColor: Color @Composable get() = colorResource(R.color.dark_gray)
+private val selectedItemColor: Color @Composable get() = colorResource(R.color.noteColorYellow)
 private val appointmentField: Color @Composable get() = colorResource(R.color.white7)
 private val informationColor: Color @Composable get() = colorResource(R.color.black)
 
@@ -97,7 +98,7 @@ fun CalenderMonthScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(backgroundColor)
+           // .background(MaterialTheme.colorScheme.primary)
     ) {
         val state = rememberCalendarState(
             startMonth = startMonth,
@@ -112,7 +113,7 @@ fun CalenderMonthScreen(
             selection = null
         }
 
-        CompositionLocalProvider(LocalContentColor provides darkColors().onSurface) {
+        CompositionLocalProvider(LocalContentColor provides LocalContentColor.current.copy(alpha = 0.4f)) {
             SimpleCalendarTitle(
                 modifier = Modifier
                     .background(toolbarColor)
@@ -150,7 +151,12 @@ fun CalenderMonthScreen(
                 },
                 monthHeader = {
                     MonthHeader(
-                        modifier = Modifier.padding(vertical = 8.dp),
+                        modifier = Modifier
+                            .background(
+                                color = colorResource(
+                                    id = R.color.colorPrimary
+                                )
+                            ),
                         daysOfWeek = daysOfWeek,
                     )
                 },
@@ -167,7 +173,7 @@ fun CalenderMonthScreen(
                             text = "Geen afspraken op ${selectedDate.date.format(DateTimeFormatter.ofPattern("dd MMMM"))}",
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp,
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.primary
                         )
                     }
                 } else {
@@ -186,7 +192,7 @@ fun CalenderMonthScreen(
                             }",
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp,
-                            color = Color.Black
+                            color = MaterialTheme.colorScheme.primary
                         )
                     }
                 }
@@ -207,32 +213,44 @@ private fun Day(
     colors: List<Color> = emptyList(),
     onClick: (CalendarDay) -> Unit = {},
 ) {
+
+    val isDarkTheme = isSystemInDarkTheme()
+
+    val boxBackgroundColor = if (isDarkTheme) {
+        colorResource(id = R.color.lightgray)
+    } else {
+        colorResource(id = R.color.calLight)
+    }
+
+    val boxBackgroundColorBorder = if (isDarkTheme) {
+        colorResource(id = R.color.black)
+    } else {
+        colorResource(id = R.color.white)
+    }
+
     Box(
         modifier = Modifier
+            .background(boxBackgroundColor)
             .aspectRatio(1f)
             .border(
                 width = if (isSelected) 1.dp else 0.dp,
-                color = if (isSelected) selectedItemColor else Color.White,
-            )
+                color = if (isSelected) colorResource(id = R.color.noteColorPink) else boxBackgroundColorBorder)
             .padding(1.dp)
-            .background(color = daysColor)
-
-
             .clickable(
                 enabled = day.position == DayPosition.MonthDate,
                 onClick = { onClick(day) },
             ),
     ) {
         val textColor = when (day.position) {
-            DayPosition.MonthDate -> Color.Black
-            DayPosition.InDate, DayPosition.OutDate -> Color.Gray
+            DayPosition.MonthDate -> MaterialTheme.colorScheme.onPrimaryContainer
+            DayPosition.InDate, DayPosition.OutDate -> colorResource(id = R.color.dark_gray)
         }
         Text(
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(top = 3.dp, end = 4.dp),
             text = day.date.dayOfMonth.toString(),
-            color = textColor,
+           color = textColor,
             fontSize = 12.sp,
         )
         Column(
@@ -265,9 +283,8 @@ private fun MonthHeader(
                 modifier = Modifier.weight(1f),
                 textAlign = TextAlign.Center,
                 fontSize = 12.sp,
-                color = daysOfweekFontColor,
+                color = Color.White,
                 text = dayOfWeek.displayText(uppercase = true),
-                fontWeight = FontWeight.Black,
             )
         }
     }
@@ -297,12 +314,11 @@ private fun LazyItemScope.AppointmentInformation(timeslot: TimeSlot) {
         }
         Box(
             modifier = Modifier
-                .background(color = appointmentField)
                 .weight(1f)
                 .fillMaxHeight(),
         ) {
             AppointmentInformationDetails(timeslot)
-            Divider(color = toolbarColor)
+            Divider(/*color = toolbarColor*/)
         }
 
     }
@@ -335,7 +351,7 @@ private fun AppointmentInformationDetails(timeslot: TimeSlot) {
                 textAlign = TextAlign.Center,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Black,
-                color = informationColor
+                color = MaterialTheme.colorScheme.primary
             )
             Text(
                 modifier = Modifier.fillMaxWidth(),
@@ -343,7 +359,7 @@ private fun AppointmentInformationDetails(timeslot: TimeSlot) {
                 textAlign = TextAlign.Center,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Black,
-                color = informationColor
+                color = MaterialTheme.colorScheme.primary
             )
             Text(
                 modifier = Modifier.fillMaxWidth(),
@@ -351,7 +367,7 @@ private fun AppointmentInformationDetails(timeslot: TimeSlot) {
                 textAlign = TextAlign.Center,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Light,
-                color = informationColor
+                color = MaterialTheme.colorScheme.primary
             )
         }
     }

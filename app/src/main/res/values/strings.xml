@@ -1,17 +1,7 @@
 <resources>
     <string name="app_name">Vision Oogcentrum</string>
-    <string name="bottom_navigation_home">Home</string>
-    <string name="bottom_navigation_behandelingen">Behandelingen</string>
-    <string name="bottom_navigation_afspraak">Afspraak</string>
-    <string name="bottom_navigation_artsen">Artsen</string>
-    <string name="news_blog_title_1">Blogpost voorbeeld 1</string>
-    <string name="news_blog_title_2">Blogpost voorbeeld 2</string>
-    <string name="news_blog_description_1">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
-    <string name="news_blog_description_2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="loading_failed">Failed to load</string>
     <string name="loading">Loading</string>
-
     <string name="initial_title">Welcome to the app!</string>
     <string name="logged_in_title">You’re logged in!</string>
     <string name="logged_out_title">You’re logged out.</string>
