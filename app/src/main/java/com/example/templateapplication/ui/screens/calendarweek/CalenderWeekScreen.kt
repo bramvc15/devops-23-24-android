@@ -8,6 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -85,8 +86,9 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel,
         )
         val visibleWeek = rememberFirstVisibleWeekAfterScroll(state)
         TopAppBar(
+            modifier = Modifier.height(IntrinsicSize.Min),
             title = {
-                Text(text = getWeekPageTitle(visibleWeek), fontSize = 16.sp)
+                Text(text = getWeekPageTitle(visibleWeek), fontSize = 25.sp)
             },
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = colorResource(id = R.color.colorPrimary),
@@ -106,7 +108,8 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel,
                     Icon(
                         imageVector = Icons.Default.Person,
                         contentDescription = "Dropdown",
-                        modifier = Modifier.padding(4.dp)
+                        modifier = Modifier.padding(4.dp),
+                        tint = colorResource(id = R.color.white)
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     DropdownMenu(
@@ -180,8 +183,8 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel,
 
             Column(
                 modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
+                    .fillMaxWidth()
+                    .padding(16.dp)
             ) {
                 Text(
                     text = "Appointments for ${selection.format(DateTimeFormatter.ofPattern("dd MMMM"))}",
@@ -193,8 +196,8 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel,
 
             Column(
                 modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
+                    .fillMaxSize()
+                    .padding(16.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -220,9 +223,9 @@ private val dateFormatter = DateTimeFormatter.ofPattern("dd")
 private fun Day(date: LocalDate, isSelected: Boolean, onClick: (LocalDate) -> Unit) {
     Box(
         modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .clickable { onClick(date) },
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .clickable { onClick(date) },
         contentAlignment = Alignment.Center,
     ) {
         Column(
@@ -233,7 +236,7 @@ private fun Day(date: LocalDate, isSelected: Boolean, onClick: (LocalDate) -> Un
             Text(
                 text = date.dayOfWeek.displayText(),
                 fontSize = 12.sp,
-              //  color = Color.White,
+                color = Color.White,
              //   fontWeight = FontWeight.Light,
             )
             Text(
@@ -246,10 +249,10 @@ private fun Day(date: LocalDate, isSelected: Boolean, onClick: (LocalDate) -> Un
         if (isSelected) {
             Box(
                 modifier = Modifier
-                        .fillMaxWidth()
-                        .height(5.dp)
-                  //      .background(colorResource(R.color.noteColorYellow))
-                        .align(Alignment.BottomCenter),
+                    .fillMaxWidth()
+                    .height(5.dp)
+                    .background(colorResource(R.color.noteColorYellow))
+                    .align(Alignment.BottomCenter),
             )
         }
     }

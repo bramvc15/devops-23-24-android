@@ -3,6 +3,7 @@ package com.example.templateapplication.ui.screens.calendarmonth
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -97,7 +98,7 @@ fun CalenderMonthScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-           // .background(backgroundColor)
+           // .background(MaterialTheme.colorScheme.primary)
     ) {
         val state = rememberCalendarState(
             startMonth = startMonth,
@@ -150,7 +151,12 @@ fun CalenderMonthScreen(
                 },
                 monthHeader = {
                     MonthHeader(
-                        modifier = Modifier.padding(vertical = 8.dp),
+                        modifier = Modifier
+                            .background(
+                                color = colorResource(
+                                    id = R.color.colorPrimary
+                                )
+                            ),
                         daysOfWeek = daysOfWeek,
                     )
                 },
@@ -167,7 +173,7 @@ fun CalenderMonthScreen(
                             text = "Geen afspraken op ${selectedDate.date.format(DateTimeFormatter.ofPattern("dd MMMM"))}",
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp,
-                          //  color = Color.Black
+                            color = MaterialTheme.colorScheme.primary
                         )
                     }
                 } else {
@@ -186,7 +192,7 @@ fun CalenderMonthScreen(
                             }",
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp,
-                           // color = Color.Black
+                            color = MaterialTheme.colorScheme.primary
                         )
                     }
                 }
@@ -207,29 +213,44 @@ private fun Day(
     colors: List<Color> = emptyList(),
     onClick: (CalendarDay) -> Unit = {},
 ) {
+
+    val isDarkTheme = isSystemInDarkTheme()
+
+    val boxBackgroundColor = if (isDarkTheme) {
+        colorResource(id = R.color.lightgray)
+    } else {
+        colorResource(id = R.color.calLight)
+    }
+
+    val boxBackgroundColorBorder = if (isDarkTheme) {
+        colorResource(id = R.color.black)
+    } else {
+        colorResource(id = R.color.white)
+    }
+
     Box(
         modifier = Modifier
+            .background(boxBackgroundColor)
             .aspectRatio(1f)
             .border(
                 width = if (isSelected) 1.dp else 0.dp,
-                color = if (isSelected) selectedItemColor else MaterialTheme.colorScheme.onBackground,
-            )
+                color = if (isSelected) colorResource(id = R.color.noteColorPink) else boxBackgroundColorBorder)
             .padding(1.dp)
             .clickable(
                 enabled = day.position == DayPosition.MonthDate,
                 onClick = { onClick(day) },
             ),
     ) {
-//        val textColor = when (day.position) {
-//            DayPosition.MonthDate -> MaterialTheme.colorScheme.onSurface
-//            DayPosition.InDate, DayPosition.OutDate -> MaterialTheme.colorScheme.onBackground
-//        }
+        val textColor = when (day.position) {
+            DayPosition.MonthDate -> MaterialTheme.colorScheme.onPrimaryContainer
+            DayPosition.InDate, DayPosition.OutDate -> colorResource(id = R.color.dark_gray)
+        }
         Text(
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(top = 3.dp, end = 4.dp),
             text = day.date.dayOfMonth.toString(),
-         //  color = textColor,
+           color = textColor,
             fontSize = 12.sp,
         )
         Column(
@@ -262,7 +283,7 @@ private fun MonthHeader(
                 modifier = Modifier.weight(1f),
                 textAlign = TextAlign.Center,
                 fontSize = 12.sp,
-              // color = daysOfweekFontColor,
+                color = Color.White,
                 text = dayOfWeek.displayText(uppercase = true),
             )
         }
@@ -330,6 +351,7 @@ private fun AppointmentInformationDetails(timeslot: TimeSlot) {
                 textAlign = TextAlign.Center,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Black,
+                color = MaterialTheme.colorScheme.primary
             )
             Text(
                 modifier = Modifier.fillMaxWidth(),
@@ -337,6 +359,7 @@ private fun AppointmentInformationDetails(timeslot: TimeSlot) {
                 textAlign = TextAlign.Center,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Black,
+                color = MaterialTheme.colorScheme.primary
             )
             Text(
                 modifier = Modifier.fillMaxWidth(),
@@ -344,6 +367,7 @@ private fun AppointmentInformationDetails(timeslot: TimeSlot) {
                 textAlign = TextAlign.Center,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Light,
+                color = MaterialTheme.colorScheme.primary
             )
         }
     }

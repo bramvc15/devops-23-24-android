@@ -48,7 +48,7 @@ fun SimpleCalendarTitle(
                 .weight(1f)
                 .testTag("MonthTitle"),
             text = currentMonth.displayText(),
-            color = colorResource(id = R.color.lightgray),
+            color = colorResource(id = R.color.white),
             fontSize = 22.sp,
             textAlign = TextAlign.Center,
             //fontWeight = FontWeight.Medium,
