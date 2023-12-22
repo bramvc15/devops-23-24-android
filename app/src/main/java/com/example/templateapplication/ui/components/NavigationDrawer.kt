@@ -20,7 +20,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.templateapplication.R
 import com.example.templateapplication.navigation.listOfNavItems
 import com.example.templateapplication.ui.navigation.SchedualOverviewScreen
-import com.example.templateapplication.ui.screens.CalendarWeekScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

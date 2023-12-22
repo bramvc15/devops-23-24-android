@@ -65,7 +65,7 @@ class DoctorViewModel(private val doctorRepository: DoctorRepository) : ViewMode
                     _doctors.value = doc
                 }
 
-                VisionUiState.Success(doctors = doctors.value)
+                _uiState.value = VisionUiState(loading = doctors.value.isEmpty(), success = doctors.value)
             } catch (e: IOException) {
                 Log.d("DoctorViewModel", "IOException")
                 Log.d("DoctorViewModel", e.message.toString())

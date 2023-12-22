@@ -35,12 +35,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.templateapplication.navigation.listOfNavItems
-import com.example.templateapplication.ui.screens.CalendarWeekScreen
-import com.example.templateapplication.ui.screens.CalenderMonthScreen
 import com.example.templateapplication.ui.screens.DoctorSelectionScreen
 import com.example.templateapplication.ui.screens.PasswordScreen
-import com.example.templateapplication.ui.screens.CalendarWeekScreen
-import com.example.templateapplication.ui.screens.CalenderMonthScreen
 import com.example.templateapplication.ui.utils.VisionContentType
 import com.example.templateapplication.ui.utils.VisionNavigationType
 import com.example.templateapplication.ui.views.DoctorViewModel
