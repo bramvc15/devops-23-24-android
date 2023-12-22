@@ -69,7 +69,7 @@ private val topAppColor: Color @Composable get() = colorResource(R.color.colorPr
 private val backgroundColor: Color @Composable get() = colorResource(R.color.white)
 private val daysOfweekFontColor: Color @Composable get() = colorResource(R.color.noteColorPink)
 private val daysColor: Color @Composable get() = colorResource(R.color.dark_gray)
-private val selectedItemColor: Color @Composable get() = colorResource(R.color.purple_200)
+private val selectedItemColor: Color @Composable get() = colorResource(R.color.noteColorYellow)
 private val appointmentField: Color @Composable get() = colorResource(R.color.white7)
 private val informationColor: Color @Composable get() = colorResource(R.color.black)
 
@@ -212,27 +212,24 @@ private fun Day(
             .aspectRatio(1f)
             .border(
                 width = if (isSelected) 1.dp else 0.dp,
-                color = if (isSelected) selectedItemColor else Color.White,
+                color = if (isSelected) selectedItemColor else MaterialTheme.colorScheme.onBackground,
             )
             .padding(1.dp)
-           .background(color = MaterialTheme.colorScheme.onPrimary)
-
-
             .clickable(
                 enabled = day.position == DayPosition.MonthDate,
                 onClick = { onClick(day) },
             ),
     ) {
-        val textColor = when (day.position) {
-            DayPosition.MonthDate -> Color.Black
-            DayPosition.InDate, DayPosition.OutDate -> Color.Gray
-        }
+//        val textColor = when (day.position) {
+//            DayPosition.MonthDate -> MaterialTheme.colorScheme.onSurface
+//            DayPosition.InDate, DayPosition.OutDate -> MaterialTheme.colorScheme.onBackground
+//        }
         Text(
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(top = 3.dp, end = 4.dp),
             text = day.date.dayOfMonth.toString(),
-            color = textColor,
+         //  color = textColor,
             fontSize = 12.sp,
         )
         Column(
@@ -265,9 +262,8 @@ private fun MonthHeader(
                 modifier = Modifier.weight(1f),
                 textAlign = TextAlign.Center,
                 fontSize = 12.sp,
-               color = daysOfweekFontColor,
+              // color = daysOfweekFontColor,
                 text = dayOfWeek.displayText(uppercase = true),
-               // fontWeight = FontWeight.Black,
             )
         }
     }
@@ -297,7 +293,6 @@ private fun LazyItemScope.AppointmentInformation(timeslot: TimeSlot) {
         }
         Box(
             modifier = Modifier
-               // .background(color = appointmentField)
                 .weight(1f)
                 .fillMaxHeight(),
         ) {
@@ -335,7 +330,6 @@ private fun AppointmentInformationDetails(timeslot: TimeSlot) {
                 textAlign = TextAlign.Center,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Black,
-               // color = informationColor
             )
             Text(
                 modifier = Modifier.fillMaxWidth(),
@@ -343,7 +337,6 @@ private fun AppointmentInformationDetails(timeslot: TimeSlot) {
                 textAlign = TextAlign.Center,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Black,
-               // color = informationColor
             )
             Text(
                 modifier = Modifier.fillMaxWidth(),
@@ -351,7 +344,6 @@ private fun AppointmentInformationDetails(timeslot: TimeSlot) {
                 textAlign = TextAlign.Center,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Light,
-               // color = informationColor
             )
         }
     }

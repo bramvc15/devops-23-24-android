@@ -25,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -87,6 +88,10 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel,
             title = {
                 Text(text = getWeekPageTitle(visibleWeek), fontSize = 16.sp)
             },
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = colorResource(id = R.color.colorPrimary),
+                titleContentColor = colorResource(id = R.color.white),
+            ),
             actions = {
                 Box(modifier = Modifier
                     .wrapContentHeight()
@@ -141,8 +146,8 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel,
         if (selectedTimeSlot.isNotEmpty()) {
             Column(
                 modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
+                    .fillMaxWidth()
+                    .padding(16.dp)
             ) {
                 Text(
                     text = "Appointments for ${selection.format(DateTimeFormatter.ofPattern("dd MMMM"))}",
@@ -153,8 +158,8 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel,
 
                 LazyColumn(
                     modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
+                        .fillMaxWidth()
+                        .weight(1f)
                 ) {
                     items(selectedTimeSlot) { timeslot ->
                         appointments.find { it.timeSlotId == timeslot.appointment?.timeSlotId }?.let {

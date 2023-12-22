@@ -21,7 +21,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -52,7 +51,7 @@ fun SimpleCalendarTitle(
             color = colorResource(id = R.color.lightgray),
             fontSize = 22.sp,
             textAlign = TextAlign.Center,
-            fontWeight = FontWeight.Medium,
+            //fontWeight = FontWeight.Medium,
         )
         CalendarNavigationIcon(
             icon = painterResource(id = R.drawable.ic_launcher_foreground),
