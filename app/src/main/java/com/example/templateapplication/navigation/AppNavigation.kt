@@ -1,7 +1,6 @@
 package com.example.templateapplication.navigation
 
 import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -36,57 +35,26 @@ import com.example.templateapplication.ui.screens.NoteScreen
 import com.example.templateapplication.ui.screens.PasswordScreen
 import com.example.templateapplication.ui.utils.VisionNavigationType
 import com.example.templateapplication.ui.views.DoctorViewModel
+
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.ui.unit.dp
 import com.example.templateapplication.ui.views.VisionUiState
 import androidx.compose.foundation.layout.PaddingValues
 import com.example.templateapplication.ui.utils.VisionContentType
-import kotlin.math.log
 
 
 @Composable
 fun AppNavigation(
-    navigationType: VisionNavigationType,
     modifier: Modifier = Modifier,
-    visionUiState: VisionUiState,
-    doctorViewModel: DoctorViewModel,
-    contentType: VisionContentType
-) {
-    val navController: NavHostController = rememberNavController()
-    Log.d("Navigation", "Navigation type: ${navigationType}")
-    when (navigationType) {
-        VisionNavigationType.BOTTOM_NAVIGATION -> {
-            VisionBottomNavigationBar(navController = navController)
-            Log.d("Navigation", "Bottom navigation created")
-        }
-        VisionNavigationType.NAVIGATION_RAIL -> {
-            VisionNavigationRail(navController = navController)
-            Log.d("Navigation", "Navigation rail created")
-        }
-        VisionNavigationType.PERMANENT_NAVIGATION_DRAWER -> {
-            VisionPermanentNavigationDrawer(navController = navController)
-            Log.d("Navigation", "Navigation Permanent created")
-        }
-    }
-
-    VisionAppContent(
-        navController = navController,
-        doctorViewModel = doctorViewModel,
-        visionUiState = visionUiState,
-    )
-}
-
-@Composable
-fun VisionAppContent(
-    navController: NavHostController,
-    doctorViewModel: DoctorViewModel,
-    visionUiState: VisionUiState,
+    navController: NavHostController
 ) {
     NavHost(
         navController = navController,
         startDestination = Screens.DoctorSelectionScreen.name,
+        modifier = modifier
     ) {
         composable(route = Screens.NoteScreen.name) {
+
             LocalOnBackPressedDispatcherOwner.current?.let { it1 ->
                 BackConfirmationDialog(
                     onBackPressedDispatcher = it1.onBackPressedDispatcher,
@@ -94,7 +62,7 @@ fun VisionAppContent(
                         navController.navigate(Screens.DoctorSelectionScreen.name)
                     },
                     onCancel = {
-                        // Handle onCancel if needed
+
                     }
                 )
                 NoteScreen()
@@ -108,7 +76,7 @@ fun VisionAppContent(
                         navController.navigate(Screens.DoctorSelectionScreen.name)
                     },
                     onCancel = {
-                        // Handle onCancel if needed
+
                     }
                 )
                 CalenderMonthScreen()
@@ -122,7 +90,7 @@ fun VisionAppContent(
                         navController.navigate(Screens.DoctorSelectionScreen.name)
                     },
                     onCancel = {
-                        // Handle onCancel if needed
+
                     }
                 )
                 CalendarWeekScreen()
@@ -130,14 +98,18 @@ fun VisionAppContent(
         }
         composable(route = Screens.DoctorSelectionScreen.name) {
             DoctorSelectionScreen(
-                doctorViewModel = doctorViewModel,
                 onNextButtonClicked = { doctor ->
-                    doctorViewModel.selectDoctor(doctor)
-                    navController.navigate("${Screens.PasswordScreen.name}/" +
-                            "${Uri.encode(doctor.name)}/${Uri.encode(doctor.imageLink)}")
+
+
+                    navController.navigate(
+                        "${Screens.PasswordScreen.name}/${Uri.encode(doctor.name)}/${
+                            Uri.encode(
+                                doctor.imageLink
+                            )
+                        }"
+                    )
                 },
-                visionUiState = visionUiState,
-            )
+                )
         }
 
         composable(route = Screens.PasswordScreen.name + "/{doctorName}/{doctorImage}") { backStackEntry ->
@@ -152,93 +124,5 @@ fun VisionAppContent(
             )
         }
     }
+
 }
-
-@Composable
-fun VisionPermanentNavigationDrawer(navController: NavHostController) {
-    PermanentDrawerSheet(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentDestination = navBackStackEntry?.destination
-
-        for (navItem in listOfNavItems) {
-            NavigationRailItem(
-                selected = currentDestination?.hierarchy?.any { it.route == navItem.route } == true,
-                onClick = {
-                    navController.navigate(navItem.route) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                            inclusive = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                },
-                icon = {
-                    Icon(imageVector = navItem.icon, contentDescription = navItem.label)
-                }
-            )
-        }
-    }
-}
-
-@Composable
-fun VisionNavigationRail(navController: NavHostController) {
-    NavigationRail() {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentDestination = navBackStackEntry?.destination
-
-        for (navItem in listOfNavItems) {
-            NavigationRailItem(
-                selected = currentDestination?.hierarchy?.any { it.route == navItem.route } == true,
-                onClick = {
-                    navController.navigate(navItem.route) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                            inclusive = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                },
-
-                icon = {
-                    Icon(imageVector = navItem.icon, contentDescription = navItem.label)
-                }
-
-            )
-        }
-    }
-}
-
-@Composable
-fun VisionBottomNavigationBar(navController: NavHostController) {
-    NavigationBar {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentDestination = navBackStackEntry?.destination
-
-        for (navItem in listOfNavItems) {
-            NavigationBarItem(
-                selected = currentDestination?.hierarchy?.any { it.route == navItem.route } == true,
-                onClick = {
-                    navController.navigate(navItem.route) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                            inclusive = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                },
-                icon = {
-                    Icon(imageVector = navItem.icon, contentDescription = null)
-                },
-                label = {
-                    Text(text = navItem.label)
-                }
-            )
-        }
-    }
-}
-

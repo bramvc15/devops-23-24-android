@@ -16,6 +16,7 @@ import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.templateapplication.ui.utils.VisionNavigationType
 
 
 class MainActivity : ComponentActivity() {
@@ -27,46 +28,22 @@ class MainActivity : ComponentActivity() {
             VisionApplicationTheme {
                 Surface{
                     val windowSize = calculateWindowSizeClass(this)
-
-
-                    VisionApp(windowSize = windowSize.widthSizeClass)
+                    when (windowSize.widthSizeClass) {
+                        WindowWidthSizeClass.Compact -> {
+                            VisionApp(VisionNavigationType.BOTTOM_NAVIGATION)
+                        }
+                        WindowWidthSizeClass.Medium -> {
+                            VisionApp(VisionNavigationType.NAVIGATION_RAIL)
+                        }
+                        WindowWidthSizeClass.Expanded -> {
+                            VisionApp(navigationType = VisionNavigationType.PERMANENT_NAVIGATION_DRAWER)
+                        }
+                        else -> {
+                            VisionApp(navigationType = VisionNavigationType.BOTTOM_NAVIGATION)
+                        }
+                    }
                 }
             }
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ReplyAppPreview() {
-    VisionApplicationTheme {
-        Surface {
-            VisionApp(
-                windowSize = WindowWidthSizeClass.Compact
-            )
-        }
-    }
-}
-@Preview(showBackground = true, widthDp = 700)
-@Composable
-fun ReplyAppMediumPreview() {
-    VisionApplicationTheme {
-        Surface {
-            VisionApp(
-                windowSize = WindowWidthSizeClass.Medium,
-            )
-        }
-    }
-}
-
-@Preview(showBackground = true, widthDp = 1000)
-@Composable
-fun ReplyAppExpandedPreview() {
-    VisionApplicationTheme {
-        Surface {
-            VisionApp(
-                windowSize = WindowWidthSizeClass.Expanded,
-            )
         }
     }
 }

@@ -41,7 +41,6 @@ import com.example.templateapplication.shared.SimpleCalendarTitle
 import com.example.templateapplication.shared.StatusBarColorUpdateEffect
 import com.example.templateapplication.shared.displayText
 import com.example.templateapplication.shared.rememberFirstCompletelyVisibleMonth
-import com.example.templateapplication.ui.views.DoctorViewModel
 import com.example.templateapplication.ui.views.TimeSlotViewModel
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
