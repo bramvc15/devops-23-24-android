@@ -1,5 +1,6 @@
 package com.example.templateapplication.ui.screens
 
+import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -24,28 +25,30 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.example.templateapplication.model.Doctor
+import com.example.templateapplication.navigation.Screens
 import com.example.templateapplication.ui.views.DoctorViewModel
 import com.example.templateapplication.ui.views.VisionUiState
 
 
 @Composable
 fun DoctorSelectionScreen(
-    doctorViewModel: DoctorViewModel,
+    doctorViewModel: DoctorViewModel = viewModel(factory = DoctorViewModel.Factory),
     onNextButtonClicked: (Doctor) -> Unit,
-    visionUiState: VisionUiState
+
 ) {
-
     val doctors by doctorViewModel.doctors.collectAsState()
-
+    val visionUiState by doctorViewModel.uiState.collectAsState()
     LazyColumn(
         modifier = Modifier.fillMaxSize()
     ) {
         items(doctors) { doctor ->
             Log.d("DoctorSelectionScreen", "Doctor: $doctor")
-            DoctorItem(doctor = doctor, onNextButtonClicked, visionUiState, modifier = Modifier.fillMaxWidth(), viewModel = doctorViewModel)
+            DoctorItem(doctor = doctor, modifier = Modifier.fillMaxWidth(), viewModel = doctorViewModel, visionUiState = visionUiState, onNextButtonClicked = onNextButtonClicked)
+
             Spacer(modifier = Modifier.height(16.dp))
         }
     }
@@ -53,17 +56,14 @@ fun DoctorSelectionScreen(
 
 
 @Composable
-private fun DoctorItem(doctor : Doctor, onNextButtonClicked: (Doctor) -> Unit, visionUiState: VisionUiState, modifier: Modifier = Modifier, viewModel: DoctorViewModel) {
+private fun DoctorItem(doctor : Doctor, modifier: Modifier = Modifier, viewModel: DoctorViewModel, visionUiState: VisionUiState, onNextButtonClicked: (Doctor) -> Unit) {
     Card(
         modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
             .clickable {
                 onNextButtonClicked(doctor)
-                // Update VisionUiState with the selected doctor
-                // (Assuming VisionUiState has a property selectedDoctor)
-                val updatedUiState = visionUiState.copy(selectedDoctor = doctor)
-                viewModel.updateUiState(updatedUiState)
+                viewModel.selectDoctor(doctor)
             },
         elevation = 8.dp,
     ) {

@@ -101,6 +101,7 @@ fun AppNavigation(
                 onNextButtonClicked = { doctor ->
 
 
+
                     navController.navigate(
                         "${Screens.PasswordScreen.name}/${Uri.encode(doctor.name)}/${
                             Uri.encode(
@@ -108,8 +109,8 @@ fun AppNavigation(
                             )
                         }"
                     )
-                },
-                )
+                }
+            )
         }
 
         composable(route = Screens.PasswordScreen.name + "/{doctorName}/{doctorImage}") { backStackEntry ->

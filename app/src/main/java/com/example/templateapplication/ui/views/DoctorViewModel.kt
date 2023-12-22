@@ -20,7 +20,21 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 
+enum class DetailWizardSteps {
+    NAME,
+    SUCCESS,
+    ERROR,
+    LOADING,
+    SELECTEDDOCTOR,
+}
 
+data class DoctorData(
+    val DoctorStep: DetailWizardSteps = DetailWizardSteps.NAME,
+    val success: List<Doctor>? = null,
+    val Error: String? = null,
+    val loading: Boolean = false,
+    val selectedDoctor: Doctor? = null
+)
 
 class DoctorViewModel(private val doctorRepository: DoctorRepository) : ViewModel()  {
     private val _uiState = MutableStateFlow(VisionUiState())
