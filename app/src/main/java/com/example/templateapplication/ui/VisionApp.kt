@@ -60,7 +60,6 @@ fun VisionApp(
         PermanentNavigationDrawer(drawerContent = {
             PermanentDrawerSheet(Modifier.width(dimensionResource(R.dimen.drawer_width))) {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
-            val currentDestination = navBackStackEntry?.destination
 
                 NavigationDrawerContent(
                     selectedDestination = navController.currentDestination,
