@@ -1,6 +1,7 @@
 package com.example.templateapplication.navigation
 
 import android.net.Uri
+import android.util.Log
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -76,13 +77,11 @@ fun AppNavigation(
         composable(route = Screens.DoctorSelectionScreen.name) {
             DoctorSelectionScreen(
                 onNextButtonClicked = { doctor ->
+                    Log.d(doctor.name, "Doctor: $doctor")
                     navController.navigate(
-                        "${Screens.CalenderWeekScreen.name}/${Uri.encode(doctor.name)}/${
-                            Uri.encode(
-                                doctor.imageLink
-                            )
-                        }"
+                        Screens.CalenderWeekScreen.name
                     )
+
                 }
             )
         }
