@@ -90,6 +90,11 @@ class TimeSlotViewModel(private val timeSlotRepository: TimeSlotRepository) : Vi
         }
     }
 
+    fun selectDoctor(doctor: Doctor) {
+        GlobalDoctor.doctor = doctor
+        getTimeSlots(doctor)
+    }
+
     /**
      * Factory for [TimeSlotViewModel] that takes [TimeSlotRepository] as a dependency
      */
