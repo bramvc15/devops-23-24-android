@@ -20,50 +20,67 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 
-sealed interface DoctorUiState {
-    data class Success(val doctors: List<Doctor>) : DoctorUiState
-    data class Error(val errorMessage: String) : DoctorUiState
-    object Loading : DoctorUiState
+enum class DetailWizardSteps {
+    NAME,
+    SUCCESS,
+    ERROR,
+    LOADING,
+    SELECTEDDOCTOR,
 }
 
+data class DoctorUiState(
+    val DoctorStep: DetailWizardSteps = DetailWizardSteps.NAME,
+    val success: List<Doctor>? = null,
+    val Error: String? = null,
+    val loading: Boolean = false,
+    val selectedDoctor: Doctor? = null
+)
+
 class DoctorViewModel(private val doctorRepository: DoctorRepository) : ViewModel()  {
-    var doctorUiState: DoctorUiState by mutableStateOf(DoctorUiState.Loading)
-        private set
+    private val _uiState = MutableStateFlow(VisionUiState())
+    val uiState: StateFlow<VisionUiState> = _uiState
 
     private val _doctors = MutableStateFlow<List<Doctor>>(emptyList())
     val doctors: StateFlow<List<Doctor>> get() = _doctors
 
     init {
+        initializeUIState()
+    }
+    fun updateUiState(updatedUiState: VisionUiState) {
+        _uiState.value = updatedUiState
+    }
+    private fun initializeUIState() {
         getDoctors()
+        Log.d("DoctorViewModel", "Instance created")
     }
 
     private fun getDoctors() {
         viewModelScope.launch {
-            doctorUiState = DoctorUiState.Loading
-            doctorUiState = try {
+            _uiState.value = VisionUiState.Loading
+            try {
                 val token = GlobalDoctor.authedDoctor?.idToken ?: throw Exception("Token is null")
                 val doctorsFlow = doctorRepository.getAllDoctorsStream()
-                
+
                 doctorsFlow.collect { doc ->
-                   _doctors.value = doc
+                    _doctors.value = doc
                 }
 
-                DoctorUiState.Success(doctors = doctors.value)
+                _uiState.value = VisionUiState(loading = doctors.value.isEmpty(), success = doctors.value)
             } catch (e: IOException) {
                 Log.d("DoctorViewModel", "IOException")
                 Log.d("DoctorViewModel", e.message.toString())
                 Log.d("DoctorViewModel", e.stackTraceToString())
-                DoctorUiState.Error("IOException error: ${e.message}")
+                _uiState.value = VisionUiState(Error = "IOException error: ${e.message}")
             } catch (e: HttpException) {
                 Log.d("DoctorViewModel", "HttpException")
                 Log.d("DoctorViewModel", e.message.toString())
                 Log.d("DoctorViewModel", e.stackTraceToString())
-                DoctorUiState.Error("HttpException error: ${e.message}")
+                _uiState.value = VisionUiState(Error = "HttpException error: ${e.message}")
             } catch (e: Exception) {
                 Log.d("DoctorViewModel", "Exception")
                 Log.d("DoctorViewModel", e.message.toString())
                 Log.d("DoctorViewModel", e.stackTraceToString())
-                DoctorUiState.Error("Exception error: ${e.message}")
+                _uiState.value = VisionUiState(Error = "Exception error: ${e.message}")
             }
         }
     }

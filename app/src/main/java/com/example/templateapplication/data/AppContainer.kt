@@ -41,7 +41,7 @@ interface AppContainer {
  * Variables are initialized lazily and the same instance is shared across the whole app.
  */
 class DefaultAppContainer(private val context: Context): AppContainer {
-    private val baseUrl = "http://192.168.100.101:5001/api/"
+    private val baseUrl = "http://10.0.2.2:5001/api/"
 
     /**
      * Use the Retrofit builder to build a retrofit object using a kotlinx.serialization converter
