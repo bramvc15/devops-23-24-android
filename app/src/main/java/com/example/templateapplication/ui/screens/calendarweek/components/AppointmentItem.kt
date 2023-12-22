@@ -104,8 +104,6 @@ fun AppointmentTypeDropdown(
     ) {
         Spacer(modifier = Modifier.height(4.dp))
         DropdownMenu(
-//            modifier = Modifier
-//                .background(Color.White),
             expanded = dropdownExpanded,
             onDismissRequest = { dropdownExpanded = false },
         ) {
