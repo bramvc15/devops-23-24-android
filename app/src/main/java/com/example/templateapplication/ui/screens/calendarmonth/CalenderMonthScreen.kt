@@ -7,21 +7,17 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material.ripple.RippleTheme
-import androidx.compose.material3.Divider
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -45,12 +41,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.templateapplication.R
-import com.example.templateapplication.data.GlobalDoctor
-import com.example.templateapplication.model.TimeSlot
 import com.example.templateapplication.shared.SimpleCalendarTitle
 import com.example.templateapplication.shared.StatusBarColorUpdateEffect
 import com.example.templateapplication.shared.displayText
 import com.example.templateapplication.shared.rememberFirstCompletelyVisibleMonth
+import com.example.templateapplication.ui.screens.calendarmonth.components.AppointmentInformation
+import com.example.templateapplication.ui.views.AppointmentViewModel
 import com.example.templateapplication.ui.views.TimeSlotViewModel
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
@@ -77,7 +73,8 @@ private val informationColor: Color @Composable get() = colorResource(R.color.bl
 
 @Composable
 fun CalenderMonthScreen(
-    timeslotViewModel : TimeSlotViewModel = viewModel(factory = TimeSlotViewModel.Factory)
+    timeslotViewModel : TimeSlotViewModel = viewModel(factory = TimeSlotViewModel.Factory),
+    appointmentViewModel: AppointmentViewModel = viewModel(factory = AppointmentViewModel.Factory),
 ) {
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth.minusMonths(500) }
@@ -86,6 +83,7 @@ fun CalenderMonthScreen(
     val daysOfWeek = remember { daysOfWeek() }
 
     val timeslots by timeslotViewModel.timeslots.collectAsState()
+    val appointments by appointmentViewModel.appointments.collectAsState()
 
     val appointmentsInSelectedDate = remember {
         derivedStateOf {
@@ -98,7 +96,6 @@ fun CalenderMonthScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-           // .background(MaterialTheme.colorScheme.primary)
     ) {
         val state = rememberCalendarState(
             startMonth = startMonth,
@@ -199,7 +196,15 @@ fun CalenderMonthScreen(
             }
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 items(items = appointmentsInSelectedDate.value) { timeslot ->
-                    AppointmentInformation(timeslot = timeslot)
+                    appointments.find { it.timeSlotId == timeslot.appointment?.timeSlotId }?.let { appointment ->
+                        AppointmentInformation(
+                            timeslot = timeslot,
+                            appointment = appointment,
+                            onCancelAppointment = {
+                                appointmentViewModel.deleteAppointment(timeslot.appointment!!)
+                            },
+                        )
+                    }
                 }
             }
         }
@@ -236,6 +241,9 @@ private fun Day(
                 width = if (isSelected) 1.dp else 0.dp,
                 color = if (isSelected) colorResource(id = R.color.noteColorPink) else boxBackgroundColorBorder)
             .padding(1.dp)
+            .background(color = daysColor)
+
+
             .clickable(
                 enabled = day.position == DayPosition.MonthDate,
                 onClick = { onClick(day) },
@@ -250,7 +258,7 @@ private fun Day(
                 .align(Alignment.TopEnd)
                 .padding(top = 3.dp, end = 4.dp),
             text = day.date.dayOfMonth.toString(),
-           color = textColor,
+            color = textColor,
             fontSize = 12.sp,
         )
         Column(
@@ -285,89 +293,6 @@ private fun MonthHeader(
                 fontSize = 12.sp,
                 color = Color.White,
                 text = dayOfWeek.displayText(uppercase = true),
-            )
-        }
-    }
-}
-
-@Composable
-private fun LazyItemScope.AppointmentInformation(timeslot: TimeSlot) {
-    Row(
-        modifier = Modifier
-            .fillParentMaxWidth()
-            .height(IntrinsicSize.Max),
-        horizontalArrangement = Arrangement.spacedBy(2.dp),
-    ) {
-        Box(
-            modifier = Modifier
-                //.background(color = colorResource(appointment.color))
-                .fillParentMaxWidth(1 / 7f)
-                .aspectRatio(1f),
-            contentAlignment = Alignment.Center,
-        ) {
-            Text(
-                text = timeslot.dateTime.format(DateTimeFormatter.ofPattern("HH:mm")),
-                textAlign = TextAlign.Center,
-                lineHeight = 17.sp,
-                fontSize = 12.sp,
-            )
-        }
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxHeight(),
-        ) {
-            AppointmentInformationDetails(timeslot)
-            Divider(/*color = toolbarColor*/)
-        }
-
-    }
-}
-@Composable
-private fun AppointmentInformationDetails(timeslot: TimeSlot) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(),
-    ) {
-        Box(
-            modifier = Modifier
-                .weight(0.3f)
-                .fillMaxHeight()
-                .fillMaxHeight(),
-            contentAlignment = Alignment.CenterEnd,
-        ) {
-        }
-        Column(
-            modifier = Modifier
-                .weight(0.7f)
-                .fillMaxHeight()
-                .fillMaxWidth(),
-            verticalArrangement = Arrangement.Center,
-        ) {
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = "${DateTimeFormatter.ofPattern("HH:mm").format(LocalDateTime.parse(timeslot.dateTime))} - ${DateTimeFormatter.ofPattern("HH:mm").format(LocalDateTime.parse(timeslot.dateTime).plusMinutes(timeslot.duration.toLong()))}",
-                textAlign = TextAlign.Center,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Black,
-                color = MaterialTheme.colorScheme.primary
-            )
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = timeslot.appointment?.patient?.name ?: "N/A",
-                textAlign = TextAlign.Center,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Black,
-                color = MaterialTheme.colorScheme.primary
-            )
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = GlobalDoctor.doctor?.name ?: "N/A",
-                textAlign = TextAlign.Center,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Light,
-                color = MaterialTheme.colorScheme.primary
             )
         }
     }

@@ -22,7 +22,7 @@ class OfflineFirstNoteRepository(private val noteDao: NoteDao, private val noteA
     private suspend fun updateNotesInBackground() {
         while (true) {
             refreshNotes()
-            delay(3000)
+            delay(300000)
         }
     }
 
