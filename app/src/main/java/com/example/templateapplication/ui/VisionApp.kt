@@ -17,7 +17,7 @@ fun VisionApp(
     modifier: Modifier = Modifier,
 ) {
     val viewModel: DoctorViewModel = viewModel(factory = DoctorViewModel.Factory)
-    val visionUiState = viewModel.doctorUiState.collectAsState().value
+    val visionUiState = viewModel.uiState.collectAsState().value
 
     val navigationType: VisionNavigationType = when (windowSize) {
         WindowWidthSizeClass.Compact -> {
@@ -39,5 +39,6 @@ fun VisionApp(
 
     AppNavigation(navigationType,
                 modifier = modifier,
-                visionUiState = visionUiState)
+                visionUiState = visionUiState,
+        doctorViewModel = viewModel)
 }

@@ -40,15 +40,18 @@ import com.example.templateapplication.ui.views.DoctorViewModel
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.ui.unit.dp
 import com.example.templateapplication.ui.views.VisionUiState
+import androidx.compose.foundation.layout.PaddingValues
+
 
 
 @Composable
-fun AppNavigation(navigationType: VisionNavigationType,
-                  modifier: Modifier = Modifier,
-                  visionUiState: VisionUiState,
-){
+fun AppNavigation(
+    navigationType: VisionNavigationType,
+    modifier: Modifier = Modifier,
+    visionUiState: VisionUiState,
+    doctorViewModel: DoctorViewModel
+) {
     val navController: NavHostController = rememberNavController()
-    val doctorViewModel: DoctorViewModel = viewModel(factory = DoctorViewModel.Factory)
 
     Scaffold(
         bottomBar = {
@@ -66,91 +69,104 @@ fun AppNavigation(navigationType: VisionNavigationType,
         }
     ) { paddingValues ->
 
-        NavHost(
+        VisionAppContent(
             navController = navController,
-            startDestination = Screens.DoctorSelectionScreen.name,
-            modifier = Modifier.padding(paddingValues)
-        ) {
-            composable(route = Screens.NoteScreen.name) {
-                LocalOnBackPressedDispatcherOwner.current?.let { it1 ->
-                    BackConfirmationDialog(
-                        onBackPressedDispatcher = it1.onBackPressedDispatcher,
-                        onConfirmed = {
-                            navController.navigate(Screens.DoctorSelectionScreen.name)
-                        },
-                        onCancel = {
+            doctorViewModel = doctorViewModel,
+            paddingValues = paddingValues,
+            visionUiState = visionUiState,
+            modifier = modifier,
+        )
+    }
+}
 
-                        }
-                    )
-                }
-                NoteScreen()
-            }
-            composable(route = Screens.CalenderMonthScreen.name) {
-                LocalOnBackPressedDispatcherOwner.current?.let { it1 ->
-                    BackConfirmationDialog(
-                        onBackPressedDispatcher = it1.onBackPressedDispatcher,
-                        onConfirmed = {
-                            navController.navigate(Screens.DoctorSelectionScreen.name)
-                        },
-                        onCancel = {
+@Composable
+fun VisionAppContent(
+    navController: NavHostController,
+    doctorViewModel: DoctorViewModel,
+    paddingValues: PaddingValues,
+    visionUiState: VisionUiState,
+    modifier: Modifier = Modifier,
+) {
+    NavHost(
+        navController = navController,
+        startDestination = Screens.DoctorSelectionScreen.name,
+        modifier = Modifier.padding(paddingValues)
+    ) {
+        composable(route = Screens.NoteScreen.name) {
 
-                        }
-                    )
-                }
-                CalenderMonthScreen()
-            }
+            LocalOnBackPressedDispatcherOwner.current?.let { it1 ->
+                BackConfirmationDialog(
+                    onBackPressedDispatcher = it1.onBackPressedDispatcher,
+                    onConfirmed = {
+                        navController.navigate(Screens.DoctorSelectionScreen.name)
+                    },
+                    onCancel = {
 
-            composable(route = Screens.CalenderWeekScreen.name) {
-                LocalOnBackPressedDispatcherOwner.current?.let { it1 ->
-                    BackConfirmationDialog(
-                        onBackPressedDispatcher = it1.onBackPressedDispatcher,
-                        onConfirmed = {
-                            navController.navigate(Screens.DoctorSelectionScreen.name)
-                        },
-                        onCancel = {
-
-                        }
-                    )
-                }
-                CalendarWeekScreen()
-            }
-
-            composable(route = Screens.DoctorSelectionScreen.name) {
-
-                DoctorSelectionScreen(
-                    doctorViewModel = doctorViewModel,
-                    onNextButtonClicked = { doctor ->
-
-                        doctorViewModel.selectDoctor(doctor)
-
-                        navController.navigate(
-                            "${Screens.PasswordScreen.name}/${Uri.encode(doctor.name)}/${
-                                Uri.encode(
-                                    doctor.imageLink
-                                )
-                            }"
-                        )
-                    } ,
-                    visionUiState = visionUiState,
-                    modifier = modifier,
-
-                )
-            }
-
-            composable(route = Screens.PasswordScreen.name + "/{doctorName}/{doctorImage}") { backStackEntry ->
-                val doctorName = backStackEntry.arguments?.getString("doctorName") ?: ""
-                val doctorImage = backStackEntry.arguments?.getString("doctorImage") ?: ""
-                PasswordScreen(
-                    doctorName = Uri.decode(doctorName),
-                    doctorImage = Uri.decode(doctorImage),
-                    onNextButtonClicked = {
-                        navController.navigate(Screens.CalenderWeekScreen.name)
                     }
                 )
+                NoteScreen()
             }
         }
-    }
+        composable(route = Screens.CalenderMonthScreen.name) {
+            LocalOnBackPressedDispatcherOwner.current?.let { it1 ->
+                BackConfirmationDialog(
+                    onBackPressedDispatcher = it1.onBackPressedDispatcher,
+                    onConfirmed = {
+                        navController.navigate(Screens.DoctorSelectionScreen.name)
+                    },
+                    onCancel = {
 
+                    }
+                )
+                CalenderMonthScreen()
+            }
+        }
+        composable(route = Screens.CalenderWeekScreen.name) {
+            LocalOnBackPressedDispatcherOwner.current?.let { it1 ->
+                BackConfirmationDialog(
+                    onBackPressedDispatcher = it1.onBackPressedDispatcher,
+                    onConfirmed = {
+                        navController.navigate(Screens.DoctorSelectionScreen.name)
+                    },
+                    onCancel = {
+
+                    }
+                )
+                CalendarWeekScreen()
+            }
+        }
+        composable(route = Screens.DoctorSelectionScreen.name) {
+            DoctorSelectionScreen(
+                doctorViewModel = doctorViewModel,
+                onNextButtonClicked = { doctor ->
+
+                    doctorViewModel.selectDoctor(doctor)
+
+                    navController.navigate(
+                        "${Screens.PasswordScreen.name}/${Uri.encode(doctor.name)}/${
+                            Uri.encode(
+                                doctor.imageLink
+                            )
+                        }"
+                    )
+                },
+                visionUiState = visionUiState,
+
+            )
+        }
+
+        composable(route = Screens.PasswordScreen.name + "/{doctorName}/{doctorImage}") { backStackEntry ->
+            val doctorName = backStackEntry.arguments?.getString("doctorName") ?: ""
+            val doctorImage = backStackEntry.arguments?.getString("doctorImage") ?: ""
+            PasswordScreen(
+                doctorName = Uri.decode(doctorName),
+                doctorImage = Uri.decode(doctorImage),
+                onNextButtonClicked = {
+                    navController.navigate(Screens.CalenderWeekScreen.name)
+                }
+            )
+        }
+    }
 }
 
 @Composable
@@ -161,7 +177,7 @@ fun VisionPermanentNavigationDrawer(navController: NavHostController) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
 
-        listOfNavItems.forEach { navItem ->
+        for (navItem in listOfNavItems) {
             NavigationRailItem(
                 selected = currentDestination?.hierarchy?.any { it.route == navItem.route } == true,
                 onClick = {
@@ -182,13 +198,13 @@ fun VisionPermanentNavigationDrawer(navController: NavHostController) {
     }
 }
 
-
 @Composable
 fun VisionNavigationRail(navController: NavHostController) {
     NavigationRail() {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
-        listOfNavItems.forEach { navItem ->
+
+        for (navItem in listOfNavItems) {
             NavigationRailItem(
                 selected = currentDestination?.hierarchy?.any { it.route == navItem.route } == true,
                 onClick = {
@@ -209,7 +225,6 @@ fun VisionNavigationRail(navController: NavHostController) {
             )
         }
     }
-
 }
 
 @Composable
@@ -218,7 +233,7 @@ fun VisionBottomNavigationBar(navController: NavHostController) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
 
-        listOfNavItems.forEach { navItem ->
+        for (navItem in listOfNavItems) {
             NavigationBarItem(
                 selected = currentDestination?.hierarchy?.any { it.route == navItem.route } == true,
                 onClick = {

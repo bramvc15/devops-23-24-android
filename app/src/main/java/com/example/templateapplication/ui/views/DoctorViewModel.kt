@@ -23,9 +23,6 @@ import java.io.IOException
 
 
 class DoctorViewModel(private val doctorRepository: DoctorRepository) : ViewModel()  {
-
-    var doctorUiState: DoctorUiState by mutableStateOf(DoctorUiState.Loading)
-        private set
     private val _uiState = MutableStateFlow(VisionUiState())
     val uiState: StateFlow<VisionUiState> = _uiState
 
@@ -35,35 +32,40 @@ class DoctorViewModel(private val doctorRepository: DoctorRepository) : ViewMode
     init {
         initializeUIState()
     }
-    private fun initializeUIState(){
+    fun updateUiState(updatedUiState: VisionUiState) {
+        _uiState.value = updatedUiState
+    }
+    private fun initializeUIState() {
         getDoctors()
     }
 
     private fun getDoctors() {
         viewModelScope.launch {
-            doctorUiState = DoctorUiState.Loading
+            _uiState.value = VisionUiState.Loading
             try {
                 val doctors = doctorRepository.getDoctors()
                 _doctors.value = doctors
-                doctorUiState = DoctorUiState.Success(doctors)
+                _uiState.value = VisionUiState(success = doctors)
             } catch (e: IOException) {
                 Log.d("DoctorViewModel", "IOException")
                 Log.d("DoctorViewModel", e.message.toString())
                 Log.d("DoctorViewModel", e.stackTraceToString())
-                doctorUiState = DoctorUiState.Error("IOException error: ${e.message}")
+                _uiState.value = VisionUiState(Error = "IOException error: ${e.message}")
             } catch (e: HttpException) {
                 Log.d("DoctorViewModel", "HttpException")
                 Log.d("DoctorViewModel", e.message.toString())
                 Log.d("DoctorViewModel", e.stackTraceToString())
-                doctorUiState = DoctorUiState.Error("HttpException error: ${e.message}")
+                _uiState.value = VisionUiState(Error = "HttpException error: ${e.message}")
             } catch (e: Exception) {
                 Log.d("DoctorViewModel", "Exception")
                 Log.d("DoctorViewModel", e.message.toString())
                 Log.d("DoctorViewModel", e.stackTraceToString())
-                doctorUiState = DoctorUiState.Error("Exception error: ${e.message}")
+                _uiState.value = VisionUiState(Error = "Exception error: ${e.message}")
             }
         }
     }
+
+    // Other methods...
 
     // Niet zeker of dit oke is
     fun selectDoctor(doctor: Doctor) {
@@ -83,6 +85,7 @@ class DoctorViewModel(private val doctorRepository: DoctorRepository) : ViewMode
         }
     }
 }
+
 
 
 

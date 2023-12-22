@@ -2,7 +2,6 @@ package com.example.templateapplication.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,12 +13,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationRail
-import androidx.compose.material3.NavigationRailItem
-import androidx.compose.material3.PermanentDrawerSheet
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -31,67 +24,45 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.example.templateapplication.model.Doctor
-import com.example.templateapplication.navigation.listOfNavItems
 import com.example.templateapplication.ui.views.DoctorViewModel
 import com.example.templateapplication.ui.views.VisionUiState
 
 
 @Composable
 fun DoctorSelectionScreen(
-    doctorViewModel: DoctorViewModel = viewModel(factory = DoctorViewModel.Factory),
+    doctorViewModel: DoctorViewModel,
     onNextButtonClicked: (Doctor) -> Unit,
-    modifier: Modifier = Modifier,
-    visionUiState: VisionUiState,
+    visionUiState: VisionUiState
 ) {
-    DoctorSelectionContent(
-        doctors = doctors,
-        onNextButtonClicked = onNextButtonClicked,
-        visionUiState = visionUiState,
-        modifier = modifier
-    )
 
-}
+    val doctors by doctorViewModel.doctors.collectAsState()
 
-@Composable
-fun DoctorSelectionContent(
-    doctors: List<Doctor>,
-    onNextButtonClicked: (Doctor) -> Unit,
-    visionUiState: VisionUiState,
-    modifier: Modifier = Modifier,
-) {
-    Box(modifier = modifier.fillMaxSize()) {
-        VisionNavigationRail(
-            navController = navController, // Added missing navController parameter
-            visionUiState = visionUiState,
-            modifier = Modifier.fillMaxSize()
-        )
-
-        LazyColumn {
-            items(doctors) { doctor ->
-                DoctorItem(
-                    doctor = doctor,
-                    onNextButtonClicked = onNextButtonClicked
-                )
-            }
+    LazyColumn(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        items(doctors) { doctor ->
+            DoctorItem(doctor = doctor, onNextButtonClicked, visionUiState, modifier = Modifier.fillMaxWidth(), viewModel = doctorViewModel)
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
 
+
 @Composable
-private fun DoctorItem(doctor: Doctor, onNextButtonClicked: (Doctor) -> Unit) {
+private fun DoctorItem(doctor : Doctor, onNextButtonClicked: (Doctor) -> Unit, visionUiState: VisionUiState, modifier: Modifier = Modifier, viewModel: DoctorViewModel) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
             .clickable {
                 onNextButtonClicked(doctor)
+                // Update VisionUiState with the selected doctor
+                // (Assuming VisionUiState has a property selectedDoctor)
+                val updatedUiState = visionUiState.copy(selectedDoctor = doctor)
+                viewModel.updateUiState(updatedUiState)
             },
         elevation = 8.dp,
     ) {
@@ -125,63 +96,7 @@ private fun DoctorItem(doctor: Doctor, onNextButtonClicked: (Doctor) -> Unit) {
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
             )
-        }
-    }
-}
 
-@Composable
-fun VisionNavigationRail(navController: NavHostController, visionUiState: VisionUiState, modifier: Modifier = Modifier) {
-    NavigationRail(modifier = modifier) {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentDestination = navBackStackEntry?.destination
-
-        listOfNavItems.forEach { navItem ->
-            NavigationRailItem(
-                selected = currentDestination?.hierarchy?.any { it.route == navItem.route } == true,
-                onClick = {
-                    navController.navigate(navItem.route) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                            inclusive = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                },
-                icon = {
-                    Icon(imageVector = navItem.icon, contentDescription = navItem.label)
-                }
-            )
-        }
-    }
-}
-
-@Composable
-fun VisionBottomNavigationBar(navController: NavHostController) {
-    NavigationBar {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentDestination = navBackStackEntry?.destination
-
-        listOfNavItems.forEach { navItem ->
-            NavigationBarItem(
-                selected = currentDestination?.hierarchy?.any { it.route == navItem.route } == true,
-                onClick = {
-                    navController.navigate(navItem.route) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                            inclusive = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                },
-                icon = {
-                    Icon(imageVector = navItem.icon, contentDescription = null)
-                },
-                label = {
-                    androidx.compose.material3.Text(text = navItem.label)
-                }
-            )
         }
     }
 }
