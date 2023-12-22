@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
@@ -22,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import com.example.templateapplication.data.GlobalDoctor
 import com.example.templateapplication.model.Appointment
 import com.example.templateapplication.model.TimeSlot
+import com.example.templateapplication.ui.components.CancelAppointmentDialog
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -103,35 +103,9 @@ fun AppointmentCard(
                 }
 
                 if (showDeleteDialog) {
-                    AlertDialog(
-                        onDismissRequest = {
-                            showDeleteDialog = false
-                        },
-                        title = {
-                            Text("Waarschuwing")
-                        },
-                        text = {
-                            Text("Weet je zeker dat je deze afspraak wilt annuleren?")
-                        },
-                        confirmButton = {
-                            Button(
-                                onClick = {
-                                    showDeleteDialog = false
-                                    onCancelAppointment()
-                                }
-                            ) {
-                                Text("Ja")
-                            }
-                        },
-                        dismissButton = {
-                            Button(
-                                onClick = {
-                                    showDeleteDialog = false
-                                }
-                            ) {
-                                Text("Nee")
-                            }
-                        }
+                    CancelAppointmentDialog(
+                        onDismiss = { showDeleteDialog = false },
+                        onCancelAppointment = { onCancelAppointment() }
                     )
                 }
             }
