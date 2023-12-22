@@ -1,13 +1,10 @@
 package com.example.templateapplication.data.Doctors
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import com.example.templateapplication.data.Doctors.dbDoctor
-import com.example.templateapplication.model.Doctor
 import kotlinx.coroutines.flow.Flow
 
 @Dao

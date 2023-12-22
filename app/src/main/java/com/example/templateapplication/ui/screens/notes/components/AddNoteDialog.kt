@@ -37,7 +37,7 @@ fun AddNoteDialog(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .alpha(0.95f) // Adjust the alpha value as needed
+            .alpha(0.95f)
     ) {
         Dialog(
             onDismissRequest = onDismiss,

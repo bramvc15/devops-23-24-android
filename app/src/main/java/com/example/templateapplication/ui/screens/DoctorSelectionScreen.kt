@@ -1,6 +1,5 @@
 package com.example.templateapplication.ui.screens
 
-import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -29,7 +28,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.example.templateapplication.model.Doctor
-import com.example.templateapplication.navigation.Screens
 import com.example.templateapplication.ui.views.DoctorViewModel
 import com.example.templateapplication.ui.views.VisionUiState
 

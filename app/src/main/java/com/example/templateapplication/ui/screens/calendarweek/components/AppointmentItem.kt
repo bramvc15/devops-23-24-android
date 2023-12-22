@@ -101,11 +101,6 @@ fun AppointmentTypeDropdown(
             .height(56.dp)
             .wrapContentHeight()
             .clickable { dropdownExpanded = true }
-//            .border(
-//                width = 1.dp,
-//                color = Color.Gray,
-//                shape = MaterialTheme.shapes.small
-//            )
     ) {
         Spacer(modifier = Modifier.height(4.dp))
         DropdownMenu(

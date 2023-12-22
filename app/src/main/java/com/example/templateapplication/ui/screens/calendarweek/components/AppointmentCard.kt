@@ -41,7 +41,6 @@ fun AppointmentCard(
             .padding(8.dp)
             .clickable { isExpanded = !isExpanded },
         shape = MaterialTheme.shapes.medium,
-       // backgroundColor = colorResource(id = R.color.lightgray)
     ) {
         Column(
             modifier = Modifier
@@ -51,7 +50,6 @@ fun AppointmentCard(
             Text(
                 text = appointment.patient.name,
                 fontSize = 16.sp,
-               // color = Color.Black
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
@@ -59,13 +57,10 @@ fun AppointmentCard(
                     LocalDateTime.parse(timeslot.dateTime).plusMinutes(timeslot.duration.toLong()).format(
                         DateTimeFormatter.ofPattern("HH:mm"))}",
                 fontSize = 16.sp,
-               // fontWeight = FontWeight.Bold,
-               // color = Color.Black
             )
             Text(
                 text = if(timeslot.appointmentType != 0) "Operation" else "Consultation",
                 fontSize = 13.sp,
-               // color = Color.Black
             )
 
             if (isExpanded) {
@@ -73,25 +68,21 @@ fun AppointmentCard(
                 Text(
                     text = "Duur: " + timeslot.duration.toString() + " minuten",
                     fontSize = 14.sp,
-                  //  color = Color.Black
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = "Doctor: " + GlobalDoctor.doctor?.name,
                     fontSize = 14.sp,
-                   // color = Color.Black
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = "Reden: ${appointment.reason}",
                     fontSize = 14.sp,
-                   // color = Color.Black
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = "Notitie: ${appointment.note ?: "N/A"}",
                     fontSize = 14.sp,
-                   // color = Color.Black
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(onClick = { onEdit() },
@@ -104,7 +95,6 @@ fun AppointmentCard(
                 Spacer(modifier = Modifier.height(4.dp))
                 Button(
                     onClick = { showDeleteDialog = true },
-                    //colors = ButtonDefaults.buttonColors(contentColor = Color.White /*, backgroundColor = Color.hsl(4f, 0.83f, 0.59f)*/),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp)

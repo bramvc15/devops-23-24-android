@@ -77,7 +77,6 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel,
     Column(
         modifier = Modifier
             .fillMaxSize()
-        // .background(Color.White),
     ) {
         val state = rememberWeekCalendarState(
             startDate = startDate,
@@ -218,13 +217,11 @@ private fun Day(date: LocalDate, isSelected: Boolean, onClick: (LocalDate) -> Un
                 text = date.dayOfWeek.displayText(),
                 fontSize = 12.sp,
                 color = Color.White,
-                //   fontWeight = FontWeight.Light,
             )
             Text(
                 text = dateFormatter.format(date),
                 fontSize = 14.sp,
                 color = if (isSelected) colorResource(R.color.noteColorYellow) else Color.White,
-                // fontWeight = FontWeight.Bold,
             )
         }
         if (isSelected) {

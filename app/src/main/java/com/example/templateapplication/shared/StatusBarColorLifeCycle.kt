@@ -13,7 +13,6 @@ class StatusBarColorLifecycleObserver(
     @ColorInt private val color: Int,
 ) : DefaultLifecycleObserver {
     private val isLightColor = ColorUtils.calculateLuminance(color) > 0.5
-   // private val defaultStatusBarColor = activity.getColorCompat(R.color.colorPrimaryDark)
     private val activity = WeakReference(activity)
 
     override fun onStart(owner: LifecycleOwner) {
@@ -27,7 +26,6 @@ class StatusBarColorLifecycleObserver(
 
     override fun onStop(owner: LifecycleOwner) {
         activity.get()?.window?.apply {
-           // statusBarColor = defaultStatusBarColor
             if (isLightColor) decorView.systemUiVisibility = 0
         }
     }

@@ -45,7 +45,6 @@ fun NoteScreen(
 ) {
 
     val notes by noteViewModel.notes.collectAsState()
-    //val scaffoldState = rememberScaffoldState()
     var isDialogOpen by remember { mutableStateOf(false) }
 
     Box(
@@ -63,7 +62,6 @@ fun NoteScreen(
                 "Your notes",
                 fontSize = 40.sp,
                 modifier = Modifier.padding(10.dp),
-               // color = MaterialTheme.colors.
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -101,9 +99,8 @@ fun NoteScreen(
         ) {
             Box(
                 modifier = Modifier
-                    //.background(MaterialTheme.colors.primaryVariant)
                     .fillMaxSize()
-                    .alpha(0.95f) // Adjust the alpha value as needed
+                    .alpha(0.95f)
             ) {
                 AddNoteDialog(
                     onDismiss = {

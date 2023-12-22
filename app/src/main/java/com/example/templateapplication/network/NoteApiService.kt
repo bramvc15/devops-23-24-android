@@ -27,7 +27,6 @@ interface NoteApiService {
         @Body note: Note
     ) : Note
 
-    // mag eigenlijk niet, zal later gefix worden danku victor XD
     @HTTP(method = "DELETE", path = "note", hasBody = true)
     suspend fun deleteNote(
         @Header("Authorization") headerValue: String,
