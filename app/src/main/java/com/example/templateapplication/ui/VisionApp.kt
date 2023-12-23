@@ -38,6 +38,7 @@ import com.example.templateapplication.ui.views.DoctorViewModel
 import com.example.templateapplication.R
 import com.example.templateapplication.ui.components.NavigationDrawerContent
 import com.example.templateapplication.ui.components.VisionNavigationRail
+import com.example.templateapplication.ui.components.VisionNavigationRail
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -124,30 +125,12 @@ fun VisionApp(
                 Log.d("VisionApp", "VisionNavigationType.NAVIGATION_RAIL")
                 val navigationRailContentDescription = stringResource(R.string.navigation_rail)
                 NavigationRail() {
-                    val navBackStackEntry by navController.currentBackStackEntryAsState()
-                    val currentDestination = navBackStackEntry?.destination
-                    listOfNavItems.forEach { navItem ->
+                    VisionNavigationRail(
+                        selectedDestination = navController.currentDestination,
+                        navController = navController,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
 
-                        NavigationRailItem(
-                            selected = currentDestination?.hierarchy?.any { it.route == navItem.route } == true,
-                            onClick = {
-                                navController.navigate(navItem.route) {
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
-                                        inclusive = true
-                                    }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
-                            },
-                            icon = {
-                                Icon(
-                                    imageVector = navItem.icon,
-                                    contentDescription = navItem.label,
-                                )
-                            },
-                        )
-                    }
                 }
             }
             Scaffold(
