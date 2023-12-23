@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.10"
     id("com.google.devtools.ksp")
+    id("org.jetbrains.dokka") version "1.9.10"
 }
 
 android {
@@ -60,6 +61,10 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+}
+
+subprojects {
+    apply(plugin = "org.jetbrains.dokka")
 }
 
 dependencies {
@@ -140,4 +145,6 @@ dependencies {
     //noinspection GradleDynamicVersion
     implementation("com.auth0.android:jwtdecode:+")
     implementation("io.coil-kt:coil-compose:2.5.0")
+
+    dokkaPlugin("org.jetbrains.dokka:android-documentation-plugin:1.9.10")
 }
