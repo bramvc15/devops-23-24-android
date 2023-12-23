@@ -1,5 +1,12 @@
 package com.example.templateapplication.ui.screens.calendarweek.components
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -7,6 +14,8 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.example.templateapplication.model.Appointment
 import com.example.templateapplication.model.TimeSlot
 import com.example.templateapplication.ui.views.AppointmentViewModel
@@ -32,44 +41,63 @@ fun AppointmentItem(
     var newReason by remember { mutableStateOf(selectedAppointment?.reason ?: "") }
     var newAppointmentType by remember { mutableIntStateOf(timeslot.appointmentType) }
 
-    if(!isEditing) {
-        AppointmentCard(
-            timeslot = timeslot,
-            appointment = appointment,
-            onEdit = {
-                isEditing = true
-            },
-            onCancelAppointment = {
-                onCancelAppointment(appointment)
+    var isExpanded by remember { mutableStateOf(false) }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .animateContentSize()
+            .padding(8.dp)
+            .clickable { isExpanded = !isExpanded },
+        shape = MaterialTheme.shapes.medium,
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            if (!isEditing) {
+                AppointmentCard(
+                    timeslot = timeslot,
+                    appointment = appointment,
+                    onEdit = {
+                        isEditing = true
+                    },
+                    onCancelAppointment = {
+                        onCancelAppointment(appointment)
+                    },
+                    isExpanded = isExpanded
+                )
+            } else {
+                EditAppointmentCard(
+                    timeslot = timeslot,
+                    newNote = newNote,
+                    newReason = newReason,
+                    onNoteChange = { newNote = it },
+                    onReasonChange = { newReason = it },
+                    onAppointmentTypeChange = { newAppointmentType = it },
+                    onSaveClick = {
+                        isEditing = false
+                        updatedAppointment = appointment.copy(
+                            note = newNote,
+                            reason = newReason
+                        )
+
+                        updatedTimeSlot = timeslot.copy(
+                            appointmentType = newAppointmentType
+                        )
+
+                        onUpdateAppointment(updatedAppointment!!)
+                        onUpdateTimeSlot(updatedTimeSlot)
+                    },
+                    onCancelClick = {
+                        isEditing = false
+                        newNote = appointment.note ?: ""
+                        newReason = appointment.reason
+                        newAppointmentType = timeslot.appointmentType
+                    })
             }
-        )
-    } else {
-        EditAppointmentCard(
-            timeslot = timeslot,
-            newNote = newNote,
-            newReason = newReason,
-            onNoteChange = { newNote = it },
-            onReasonChange = { newReason = it },
-            onAppointmentTypeChange = { newAppointmentType = it },
-            onSaveClick = {
-                isEditing = false
-                updatedAppointment = appointment.copy(
-                    note = newNote,
-                    reason = newReason
-                )
 
-                updatedTimeSlot = timeslot.copy(
-                    appointmentType = newAppointmentType
-                )
-
-                onUpdateAppointment(updatedAppointment!!)
-                onUpdateTimeSlot(updatedTimeSlot)
-            },
-            onCancelClick = {
-                isEditing = false
-                newNote = appointment.note ?: ""
-                newReason = appointment.reason
-                newAppointmentType = timeslot.appointmentType
-            })
+        }
     }
 }
