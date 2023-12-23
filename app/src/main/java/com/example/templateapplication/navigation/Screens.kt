@@ -4,6 +4,5 @@ enum class Screens {
     NoteScreen,
     CalenderWeekScreen,
     CalenderMonthScreen,
-    DoctorSelectionScreen,
-    PasswordScreen
+    DoctorSelectionScreen
 }

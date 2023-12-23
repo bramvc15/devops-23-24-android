@@ -1,32 +1,30 @@
-package com.example.templateapplication.ui.screens
+package com.example.templateapplication.ui.screens.calendarmonth
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Divider
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.Text
-import androidx.compose.material.darkColors
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material.ripple.RippleTheme
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,14 +39,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.templateapplication.R
-import com.example.templateapplication.shared.Appointment
 import com.example.templateapplication.shared.SimpleCalendarTitle
 import com.example.templateapplication.shared.StatusBarColorUpdateEffect
-import com.example.templateapplication.shared.appointmentDateTimeFormatter
 import com.example.templateapplication.shared.displayText
-import com.example.templateapplication.shared.generateAppointments
 import com.example.templateapplication.shared.rememberFirstCompletelyVisibleMonth
+import com.example.templateapplication.ui.screens.calendarmonth.components.AppointmentInformation
+import com.example.templateapplication.ui.views.AppointmentViewModel
+import com.example.templateapplication.ui.views.TimeSlotViewModel
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
@@ -59,31 +58,37 @@ import com.kizitonwose.calendar.core.nextMonth
 import com.kizitonwose.calendar.core.previousMonth
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
+import java.time.LocalDateTime
 import java.time.YearMonth
-import java.util.Locale
-
-private val appointments = generateAppointments().groupBy { it.time.toLocalDate() }
+import java.time.format.DateTimeFormatter
 private val toolbarColor: Color @Composable get() = colorResource(R.color.colorPrimary)
 private val topAppColor: Color @Composable get() = colorResource(R.color.colorPrimary)
 private val backgroundColor: Color @Composable get() = colorResource(R.color.white)
-private val daysOfweekFontColor: Color @Composable get() = colorResource(R.color.black)
-private val daysColor: Color @Composable get() = colorResource(R.color.lightgray)
-private val selectedItemColor: Color @Composable get() = colorResource(R.color.purple_200)
+private val daysOfweekFontColor: Color @Composable get() = colorResource(R.color.noteColorPink)
+private val daysColor: Color @Composable get() = colorResource(R.color.dark_gray)
+private val selectedItemColor: Color @Composable get() = colorResource(R.color.noteColorYellow)
 private val appointmentField: Color @Composable get() = colorResource(R.color.white7)
 private val informationColor: Color @Composable get() = colorResource(R.color.black)
 
 
 @Composable
-fun CalenderMonthScreen() {
+fun CalenderMonthScreen(
+    timeslotViewModel : TimeSlotViewModel = viewModel(factory = TimeSlotViewModel.Factory),
+    appointmentViewModel: AppointmentViewModel = viewModel(factory = AppointmentViewModel.Factory),
+) {
     val currentMonth = remember { YearMonth.now() }
     val startMonth = remember { currentMonth.minusMonths(500) }
     val endMonth = remember { currentMonth.plusMonths(500) }
     var selection by remember { mutableStateOf<CalendarDay?>(null) }
     val daysOfWeek = remember { daysOfWeek() }
+
+    val timeslots by timeslotViewModel.timeslots.collectAsState()
+    val appointments by appointmentViewModel.appointments.collectAsState()
+
     val appointmentsInSelectedDate = remember {
         derivedStateOf {
             val date = selection?.date
-            if (date == null) emptyList() else appointments[date].orEmpty()
+            if (date == null) emptyList() else timeslots.filter { LocalDateTime.parse(it.dateTime).toLocalDate() == date && it.appointment != null }
         }
     }
 
@@ -91,7 +96,6 @@ fun CalenderMonthScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(backgroundColor)
     ) {
         val state = rememberCalendarState(
             startMonth = startMonth,
@@ -106,7 +110,7 @@ fun CalenderMonthScreen() {
             selection = null
         }
 
-        CompositionLocalProvider(LocalContentColor provides darkColors().onSurface) {
+        CompositionLocalProvider(LocalContentColor provides LocalContentColor.current.copy(alpha = 0.4f)) {
             SimpleCalendarTitle(
                 modifier = Modifier
                     .background(toolbarColor)
@@ -129,7 +133,7 @@ fun CalenderMonthScreen() {
                 dayContent = { day ->
                     CompositionLocalProvider(LocalRippleTheme provides Example3RippleTheme) {
                         val colors = if (day.position == DayPosition.MonthDate) {
-                            appointments[day.date].orEmpty().map { colorResource(it.color) }
+                            timeslots.filter { it.appointment != null && LocalDateTime.parse(it.dateTime).toLocalDate() == day.date }.map { colorResource(R.color.purple_200) }
                         } else {
                             emptyList()
                         }
@@ -144,14 +148,63 @@ fun CalenderMonthScreen() {
                 },
                 monthHeader = {
                     MonthHeader(
-                        modifier = Modifier.padding(vertical = 8.dp),
+                        modifier = Modifier
+                            .background(
+                                color = colorResource(
+                                    id = R.color.colorPrimary
+                                )
+                            ),
                         daysOfWeek = daysOfWeek,
                     )
                 },
             )
+
+            selection?.let { selectedDate ->
+                if(appointmentsInSelectedDate.value.isEmpty()){
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    ) {
+                        Text(
+                            text = "Geen afspraken op ${selectedDate.date.format(DateTimeFormatter.ofPattern("dd MMMM"))}",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                } else {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    ) {
+                        Text(
+                            text = "Afspraken op ${
+                                selectedDate.date.format(
+                                    DateTimeFormatter.ofPattern(
+                                        "dd MMMM"
+                                    )
+                                )
+                            }",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
+            }
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                items(items = appointmentsInSelectedDate.value) { appointment ->
-                    AppointmentInformation(appointment = appointment)
+                items(items = appointmentsInSelectedDate.value) { timeslot ->
+                    appointments.find { it.timeSlotId == timeslot.appointment?.timeSlotId }?.let { appointment ->
+                        AppointmentInformation(
+                            timeslot = timeslot,
+                            appointment = appointment,
+                            onCancelAppointment = {
+                                appointmentViewModel.deleteAppointment(timeslot.appointment!!)
+                            },
+                        )
+                    }
                 }
             }
         }
@@ -165,13 +218,28 @@ private fun Day(
     colors: List<Color> = emptyList(),
     onClick: (CalendarDay) -> Unit = {},
 ) {
+
+    val isDarkTheme = isSystemInDarkTheme()
+
+    val boxBackgroundColor = if (isDarkTheme) {
+        colorResource(id = R.color.lightgray)
+    } else {
+        colorResource(id = R.color.calLight)
+    }
+
+    val boxBackgroundColorBorder = if (isDarkTheme) {
+        colorResource(id = R.color.black)
+    } else {
+        colorResource(id = R.color.white)
+    }
+
     Box(
         modifier = Modifier
+            .background(boxBackgroundColor)
             .aspectRatio(1f)
             .border(
                 width = if (isSelected) 1.dp else 0.dp,
-                color = if (isSelected) selectedItemColor else Color.White,
-            )
+                color = if (isSelected) colorResource(id = R.color.noteColorPink) else boxBackgroundColorBorder)
             .padding(1.dp)
             .background(color = daysColor)
 
@@ -182,8 +250,8 @@ private fun Day(
             ),
     ) {
         val textColor = when (day.position) {
-            DayPosition.MonthDate -> Color.Black
-            DayPosition.InDate, DayPosition.OutDate -> Color.Gray
+            DayPosition.MonthDate -> MaterialTheme.colorScheme.onPrimaryContainer
+            DayPosition.InDate, DayPosition.OutDate -> colorResource(id = R.color.dark_gray)
         }
         Text(
             modifier = Modifier
@@ -223,85 +291,8 @@ private fun MonthHeader(
                 modifier = Modifier.weight(1f),
                 textAlign = TextAlign.Center,
                 fontSize = 12.sp,
-                color = daysOfweekFontColor,
+                color = Color.White,
                 text = dayOfWeek.displayText(uppercase = true),
-                fontWeight = FontWeight.Black,
-            )
-        }
-    }
-}
-
-@Composable
-private fun LazyItemScope.AppointmentInformation(appointment: Appointment) {
-    Row(
-        modifier = Modifier
-            .fillParentMaxWidth()
-            .height(IntrinsicSize.Max),
-        horizontalArrangement = Arrangement.spacedBy(2.dp),
-    ) {
-        Box(
-            modifier = Modifier
-                .background(color = colorResource(appointment.color))
-                .fillParentMaxWidth(1 / 7f)
-                .aspectRatio(1f),
-            contentAlignment = Alignment.Center,
-        ) {
-            Text(
-                text = appointmentDateTimeFormatter.format(appointment.time).uppercase(Locale.ENGLISH),
-                textAlign = TextAlign.Center,
-                lineHeight = 17.sp,
-                fontSize = 12.sp,
-            )
-        }
-        Box(
-            modifier = Modifier
-                .background(color = appointmentField)
-                .weight(1f)
-                .fillMaxHeight(),
-        ) {
-            AppointmentInformation(appointment.doctor, appointment.patient)
-            Divider(color = toolbarColor)
-        }
-
-    }
-}
-@Composable
-private fun AppointmentInformation(doctor: Appointment.Doctor, patient: Appointment.Patient) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(),
-    ) {
-        Box(
-            modifier = Modifier
-                .weight(0.3f)
-                .fillMaxHeight()
-                .fillMaxHeight(),
-            contentAlignment = Alignment.CenterEnd,
-        ) {
-        }
-        Column(
-            modifier = Modifier
-                .weight(0.7f)
-                .fillMaxHeight()
-                .fillMaxWidth(),
-            verticalArrangement = Arrangement.Center,
-        ) {
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = patient.name,
-                textAlign = TextAlign.Center,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Black,
-                color = informationColor
-            )
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = doctor.name,
-                textAlign = TextAlign.Center,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Light,
-                color = informationColor
             )
         }
     }

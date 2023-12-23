@@ -8,9 +8,9 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -54,7 +54,7 @@ fun Modifier.clickable(
 
 @Composable
 fun StatusBarColorUpdateEffect(color: Color) {
-    if (LocalInspectionMode.current) return // findActivity() will not work in preview.
+    if (LocalInspectionMode.current) return
     val activity = LocalContext.current.findActivity()
     val lifecycleOwner = LocalLifecycleOwner.current
     val observer = remember {
@@ -93,8 +93,6 @@ fun NavigationIcon(onBackClick: () -> Unit) {
 @Composable
 fun rememberFirstCompletelyVisibleMonth(state: CalendarState): CalendarMonth {
     val visibleMonth = remember(state) { mutableStateOf(state.firstVisibleMonth) }
-    // Only take non-null values as null will be produced when the
-    // list is mid-scroll as no index will be completely visible.
     LaunchedEffect(state) {
         snapshotFlow { state.layoutInfo.completelyVisibleMonths.firstOrNull() }
             .filterNotNull()
