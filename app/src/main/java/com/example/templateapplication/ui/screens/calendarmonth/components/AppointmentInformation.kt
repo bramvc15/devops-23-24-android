@@ -1,11 +1,13 @@
 package com.example.templateapplication.ui.screens.calendarmonth.components
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,7 +33,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.templateapplication.R
-import com.example.templateapplication.data.GlobalDoctor
 import com.example.templateapplication.model.Appointment
 import com.example.templateapplication.model.TimeSlot
 import com.example.templateapplication.shared.clickable
@@ -49,9 +50,13 @@ fun LazyItemScope.AppointmentInformation(
     appointment: Appointment,
     onCancelAppointment: () -> Unit,
 ) {
+    var isShowingDetails by remember { mutableStateOf(false) }
+
     Row(
         modifier = Modifier
             .fillParentMaxWidth()
+            .animateContentSize()
+            .clickable { isShowingDetails = !isShowingDetails }
             .height(IntrinsicSize.Max),
         horizontalArrangement = Arrangement.spacedBy(2.dp),
     ) {
@@ -61,7 +66,11 @@ fun LazyItemScope.AppointmentInformation(
                 .weight(1f)
                 .fillMaxHeight(),
         ) {
-            AppointmentInformationDetails(timeslot, appointment, onCancelAppointment)
+            AppointmentInformationDetails(
+                timeslot = timeslot,
+                appointment = appointment,
+                onCancelAppointment = onCancelAppointment,
+                isShowingDetails = isShowingDetails)
             Divider(color = toolbarColor)
         }
 
@@ -71,9 +80,9 @@ fun LazyItemScope.AppointmentInformation(
 private fun AppointmentInformationDetails(
     timeslot: TimeSlot,
     appointment: Appointment,
+    isShowingDetails: Boolean,
     onCancelAppointment: () -> Unit
 ) {
-    var isShowingOperations by remember { mutableStateOf(false) }
     var isShowingDeleteDialog by remember { mutableStateOf(false) }
 
     Row(
@@ -85,8 +94,7 @@ private fun AppointmentInformationDetails(
             modifier = Modifier
                 .weight(0.7f)
                 .fillMaxHeight()
-                .fillMaxWidth()
-                .clickable { isShowingOperations = !isShowingOperations },
+                .fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
         ) {
             Text(
@@ -104,24 +112,45 @@ private fun AppointmentInformationDetails(
                 text = appointment.patient.name,
                 textAlign = TextAlign.Center,
                 fontSize = 16.sp,
-                fontWeight = FontWeight.Black,
                 color = informationColor
             )
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = GlobalDoctor.doctor?.name ?: "N/A",
-                textAlign = TextAlign.Center,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Light,
-                color = informationColor
-            )
+            if(isShowingDetails) {
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = if(timeslot.appointmentType != 0) "Operatie" else "Consultatie",
+                    textAlign = TextAlign.Center,
+                    fontSize = 16.sp,
+                    color = informationColor
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "Reden: ${appointment.reason}",
+                    textAlign = TextAlign.Center,
+                    fontSize = 16.sp,
+                    color = informationColor
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "Notitie: ${appointment.note ?: "N/A"}",
+                    textAlign = TextAlign.Center,
+                    fontSize = 16.sp,
+                    color = informationColor
+                )
+            }
         }
-        if(isShowingOperations) {
+        if(isShowingDetails) {
             Button(
                 modifier = Modifier
-                    .weight(0.2f)
-                    .fillMaxHeight()
-                    .fillMaxWidth(),
+                    .align(Alignment.CenterVertically)
+                    .weight(0.2f),
                 onClick = {
                     isShowingDeleteDialog = true
                 }

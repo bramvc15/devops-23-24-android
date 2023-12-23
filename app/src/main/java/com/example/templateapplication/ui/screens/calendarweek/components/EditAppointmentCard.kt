@@ -3,7 +3,6 @@ package com.example.templateapplication.ui.screens.calendarweek.components
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
@@ -43,71 +41,58 @@ fun EditAppointmentCard(
     onSaveClick: () -> Unit,
     onCancelClick: () -> Unit
 ) {
-    Card(
+    Text(
+        text = "Bewerk afspraak",
+        fontSize = 16.sp,
+        fontWeight = FontWeight.Bold,
+    )
+    Spacer(modifier = Modifier.height(8.dp))
+
+    OutlinedTextField(
+        value = newNote,
+        onValueChange = { onNoteChange(it) },
+        label = { Text(text = "Notitie") },
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
-        shape = MaterialTheme.shapes.medium,
+            .height(64.dp)
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    OutlinedTextField(
+        value = newReason,
+        onValueChange = { onReasonChange(it) },
+        label = { Text(text = "Reden") },
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(64.dp)
+    )
+    Spacer(modifier = Modifier.height(8.dp))
+    AppointmentTypeDropdown(timeslot, onAppointmentTypeSelected = { onAppointmentTypeChange(it) })
+
+    Spacer(modifier = Modifier.height(16.dp))
+    Button(
+        onClick = {
+            onSaveClick()
+        },
+        colors = ButtonDefaults.buttonColors(contentColor = Color.White),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(50.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            Text(
-                text = "Bewerk afspraak",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-
-            OutlinedTextField(
-                value = newNote,
-                onValueChange = { onNoteChange(it) },
-                label = { Text(text = "Notitie") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(64.dp)
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            OutlinedTextField(
-                value = newReason,
-                onValueChange = { onReasonChange(it) },
-                label = { Text(text = "Reden") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(64.dp)
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            AppointmentTypeDropdown(timeslot, onAppointmentTypeSelected = { onAppointmentTypeChange(it) })
-
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(
-                onClick = {
-                    onSaveClick()
-                },
-                colors = ButtonDefaults.buttonColors(contentColor = Color.White),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp)
-            ) {
-                Text(text = "Opslaan")
-            }
-            Spacer(modifier = Modifier.height(4.dp))
-            Button(
-                onClick = {
-                          onCancelClick()
-                },
-                colors = ButtonDefaults.buttonColors(contentColor = Color.White),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp)
-            ) {
-                Text(text = "Annuleren")
-            }
-        }
+        Text(text = "Opslaan")
+    }
+    Spacer(modifier = Modifier.height(4.dp))
+    Button(
+        onClick = {
+                  onCancelClick()
+        },
+        colors = ButtonDefaults.buttonColors(contentColor = Color.White),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(50.dp)
+    ) {
+        Text(text = "Annuleren")
     }
 }
 
