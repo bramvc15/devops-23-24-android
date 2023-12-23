@@ -36,6 +36,7 @@ import com.example.templateapplication.ui.utils.VisionContentType
 import com.example.templateapplication.ui.utils.VisionNavigationType
 import com.example.templateapplication.ui.views.DoctorViewModel
 import com.example.templateapplication.R
+import com.example.templateapplication.navigation.Screens
 import com.example.templateapplication.ui.components.NavigationDrawerContent
 import com.example.templateapplication.ui.components.VisionNavigationRail
 import com.example.templateapplication.ui.components.VisionNavigationRail
@@ -46,97 +47,122 @@ fun VisionApp(
     navigationType: VisionNavigationType,
     navController: NavHostController = rememberNavController(),
 ) {
+    val backStackEntry by navController.currentBackStackEntryAsState()
 
-    if (navigationType == VisionNavigationType.PERMANENT_NAVIGATION_DRAWER) {
-        Log.d("VisionApp", "VisionNavigationType.PERMANENT_NAVIGATION_DRAWER")
-        PermanentNavigationDrawer(drawerContent = {
-            PermanentDrawerSheet(Modifier.width(dimensionResource(R.dimen.drawer_width))) {
-                NavigationDrawerContent(
-                    selectedDestination = navController.currentDestination,
-                    navController = navController,
-                    modifier = Modifier.fillMaxWidth(),
-                )
+    val currentScreenTitle = try {
+        val screen = backStackEntry?.destination?.route?.let { route ->
+            Screens.values().find { it.name == route } ?: Screens.DoctorSelectionScreen
+        } ?: Screens.DoctorSelectionScreen
 
-        }
-
-    }) {
-            Scaffold(
-                containerColor = Color.Transparent,
-
-        ) { innerPadding ->
-
-                AppNavigation(
-                    modifier = Modifier.padding(innerPadding),
-                    navController = navController,
-                )
-            }
-
+        screen.name
+    } catch (e: IllegalArgumentException) {
+        Screens.DoctorSelectionScreen.name
     }
-    } else if (navigationType == VisionNavigationType.BOTTOM_NAVIGATION) {
-        Log.d("VisionApp", "VisionNavigationType.BOTTOM_NAVIGATION")
-
-
-    Scaffold(
+    Log.d("screen", "currentScreenTitle: $currentScreenTitle")
+    if (currentScreenTitle == "DoctorSelectionScreen") {
+        Scaffold(
             containerColor = Color.Transparent,
-            bottomBar = {
-                NavigationBar {
-                    val navBackStackEntry by navController.currentBackStackEntryAsState()
-                    val currentDestination = navBackStackEntry?.destination
-                    listOfNavItems.forEach { navItem ->
-                        NavigationBarItem(
-                            selected = currentDestination?.hierarchy?.any { it.route == navItem.route } == true,
-                            onClick = {
-                                navController.navigate(navItem.route) {
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
-                                        inclusive = true
-                                    }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
-                            },
-                            icon = {
-                                Icon(imageVector = navItem.icon, contentDescription = null)
-                            },
-                            label = {
-                                Text(text = navItem.label)
-                            }
-                        )
-                    }
-                }
-            }
-        ) { innerPadding ->
+
+            ) { innerPadding ->
 
             AppNavigation(
                 modifier = Modifier.padding(innerPadding),
                 navController = navController,
-
             )
         }
-    }
-    else {
-
-        Row {
-            AnimatedVisibility(visible = navigationType == VisionNavigationType.NAVIGATION_RAIL) {
-                Log.d("VisionApp", "VisionNavigationType.NAVIGATION_RAIL")
-                val navigationRailContentDescription = stringResource(R.string.navigation_rail)
-                NavigationRail() {
-                    VisionNavigationRail(
+    } else {
+        if (navigationType == VisionNavigationType.PERMANENT_NAVIGATION_DRAWER) {
+            Log.d("VisionApp", "VisionNavigationType.PERMANENT_NAVIGATION_DRAWER")
+            PermanentNavigationDrawer(drawerContent = {
+                PermanentDrawerSheet(Modifier.width(dimensionResource(R.dimen.drawer_width))) {
+                    NavigationDrawerContent(
                         selectedDestination = navController.currentDestination,
                         navController = navController,
                         modifier = Modifier.fillMaxWidth(),
                     )
 
                 }
+
+            }) {
+                Scaffold(
+                    containerColor = Color.Transparent,
+
+                    ) { innerPadding ->
+
+                    AppNavigation(
+                        modifier = Modifier.padding(innerPadding),
+                        navController = navController,
+                    )
+                }
+
             }
+        } else if (navigationType == VisionNavigationType.BOTTOM_NAVIGATION) {
+            Log.d("VisionApp", "VisionNavigationType.BOTTOM_NAVIGATION")
+
+
             Scaffold(
                 containerColor = Color.Transparent,
+                bottomBar = {
+                    NavigationBar {
+                        val navBackStackEntry by navController.currentBackStackEntryAsState()
+                        val currentDestination = navBackStackEntry?.destination
+                        listOfNavItems.forEach { navItem ->
+                            NavigationBarItem(
+                                selected = currentDestination?.hierarchy?.any { it.route == navItem.route } == true,
+                                onClick = {
+                                    navController.navigate(navItem.route) {
+                                        popUpTo(navController.graph.findStartDestination().id) {
+                                            saveState = true
+                                            inclusive = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
+                                },
+                                icon = {
+                                    Icon(imageVector = navItem.icon, contentDescription = null)
+                                },
+                                label = {
+                                    Text(text = navItem.label)
+                                }
+                            )
+                        }
+                    }
+                }
             ) { innerPadding ->
 
                 AppNavigation(
+                    modifier = Modifier.padding(innerPadding),
                     navController = navController,
-                    modifier = Modifier.padding(innerPadding))
+
+                    )
+            }
+        } else {
+
+            Row {
+                AnimatedVisibility(visible = navigationType == VisionNavigationType.NAVIGATION_RAIL) {
+                    Log.d("VisionApp", "VisionNavigationType.NAVIGATION_RAIL")
+                    val navigationRailContentDescription = stringResource(R.string.navigation_rail)
+                    NavigationRail() {
+                        VisionNavigationRail(
+                            selectedDestination = navController.currentDestination,
+                            navController = navController,
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+
+                    }
+                }
+                Scaffold(
+                    containerColor = Color.Transparent,
+                ) { innerPadding ->
+
+                    AppNavigation(
+                        navController = navController,
+                        modifier = Modifier.padding(innerPadding)
+                    )
+                }
             }
         }
     }
 }
+
