@@ -3,6 +3,19 @@ package com.example.visionapplication.model
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * Doctor
+ *
+ * @property id
+ * @property name
+ * @property specialization
+ * @property gender
+ * @property biograph
+ * @property isAvailable
+ * @property imageLink
+ * @property auth0Id
+ * @constructor Create empty Doctor
+ */
 @Serializable
 data class Doctor(
     @SerialName(value = "id")

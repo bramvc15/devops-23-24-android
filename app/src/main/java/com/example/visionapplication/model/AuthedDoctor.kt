@@ -3,6 +3,12 @@ package com.example.visionapplication.model
 import android.util.Log
 import com.auth0.android.jwt.JWT
 
+/**
+ * Authed doctor
+ *
+ * @property idToken
+ * @constructor Create empty Authed doctor
+ */
 data class AuthedDoctor(val idToken: String? = null) {
 
     private val TAG = "AuthedDoctor"
