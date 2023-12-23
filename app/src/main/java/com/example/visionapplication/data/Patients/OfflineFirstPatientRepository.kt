@@ -11,6 +11,13 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
+/**
+ * Offline first patient repository
+ *
+ * @property patientDao
+ * @property patientApi
+ * @constructor Create empty Offline first patient repository
+ */
 class OfflineFirstPatientRepository(private val patientDao: PatientDao, private val patientApi: PatientApiService) : PatientRepository {
 
     init {

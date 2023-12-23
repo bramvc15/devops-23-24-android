@@ -12,6 +12,13 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
+/**
+ * Offline first time slot repository
+ *
+ * @property timeSlotDao
+ * @property timeSlotApi
+ * @constructor Create empty Offline first time slot repository
+ */
 class OfflineFirstTimeSlotRepository(private val timeSlotDao: TimeSlotDao, private val timeSlotApi: TimeSlotApiService) : TimeSlotRepository {
 
     init {
@@ -59,6 +66,11 @@ class OfflineFirstTimeSlotRepository(private val timeSlotDao: TimeSlotDao, priva
         }
     }
 
+    /**
+     * Get selected doctor
+     *
+     * @return
+     */
     fun getSelectedDoctor(): Doctor? {
         return GlobalDoctor.doctor
     }

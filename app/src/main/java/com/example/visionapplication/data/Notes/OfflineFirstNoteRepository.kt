@@ -11,6 +11,13 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
+/**
+ * Offline first note repository
+ *
+ * @property noteDao
+ * @property noteApi
+ * @constructor Create empty Offline first note repository
+ */
 class OfflineFirstNoteRepository(private val noteDao: NoteDao, private val noteApi: NoteApiService) : NoteRepository {
 
     init {

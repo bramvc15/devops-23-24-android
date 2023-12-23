@@ -5,6 +5,18 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.visionapplication.model.Patient
 
+/**
+ * Db patient
+ *
+ * @property id
+ * @property name
+ * @property email
+ * @property phoneNumber
+ * @property dateOfBirth
+ * @property gender
+ * @property bloodType
+ * @constructor Create empty Db patient
+ */
 @Entity(tableName = "patients")
 data class dbPatient (
     @PrimaryKey
@@ -18,6 +30,11 @@ data class dbPatient (
     val bloodType: Int,
 )
 
+/**
+ * As domain patient
+ *
+ * @return
+ */
 fun dbPatient.asDomainPatient(): Patient {
     return Patient(id = this.id,
         name = this.name,
@@ -28,6 +45,11 @@ fun dbPatient.asDomainPatient(): Patient {
         bloodType = this.bloodType)
 }
 
+/**
+ * As db patient
+ *
+ * @return
+ */
 fun Patient.asDbPatient(): dbPatient {
     return dbPatient(id = this.id,
         name = this.name,
@@ -38,6 +60,11 @@ fun Patient.asDbPatient(): dbPatient {
         bloodType = this.bloodType)
 }
 
+/**
+ * As domain patients
+ *
+ * @return
+ */
 fun List<dbPatient>.asDomainPatients(): List<Patient> {
     var patientList = this.map {
         Patient(it.id, it.name, it.email, it.phoneNumber, it.dateOfBirth, it.gender, it.bloodType)

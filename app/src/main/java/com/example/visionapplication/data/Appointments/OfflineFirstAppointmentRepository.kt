@@ -11,6 +11,13 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
+/**
+ * Offline first appointment repository
+ *
+ * @property appointmentDao
+ * @property appointmentApi
+ * @constructor Create empty Offline first appointment repository
+ */
 class OfflineFirstAppointmentRepository(private val appointmentDao: AppointmentDao, private val appointmentApi: AppointmentApiService): AppointmentRepository {
 
     init {

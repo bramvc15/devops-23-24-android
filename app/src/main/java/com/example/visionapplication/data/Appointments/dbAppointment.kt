@@ -9,6 +9,15 @@ import com.example.visionapplication.data.Patients.asDomainPatient
 import com.example.visionapplication.data.Patients.dbPatient
 import com.example.visionapplication.model.Appointment
 
+/**
+ * Db appointment
+ *
+ * @property timeSlotId
+ * @property reason
+ * @property note
+ * @property patient
+ * @constructor Create empty Db appointment
+ */
 @Entity(tableName = "appointments")
 data class dbAppointment (
     @PrimaryKey
@@ -19,6 +28,11 @@ data class dbAppointment (
     @Embedded val patient: dbPatient,
 )
 
+/**
+ * As domain appointment
+ *
+ * @return
+ */
 fun dbAppointment.asDomainAppointment(): Appointment {
     return Appointment(timeSlotId = this.timeSlotId,
         reason = this.reason,
@@ -26,6 +40,11 @@ fun dbAppointment.asDomainAppointment(): Appointment {
         patient = this.patient.asDomainPatient())
 }
 
+/**
+ * As db appointment
+ *
+ * @return
+ */
 fun Appointment.asDbAppointment(): dbAppointment {
     return dbAppointment(timeSlotId = this.timeSlotId,
         reason = this.reason,
@@ -33,6 +52,11 @@ fun Appointment.asDbAppointment(): dbAppointment {
         patient = this.patient.asDbPatient())
 }
 
+/**
+ * As domain appointments
+ *
+ * @return
+ */
 fun List<dbAppointment>.asDomainAppointments(): List<Appointment> {
     var appointmentList = this.map {
         Appointment(it.timeSlotId, it.reason, it.note, it.patient.asDomainPatient())

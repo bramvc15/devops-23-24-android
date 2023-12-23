@@ -15,12 +15,46 @@ import com.example.visionapplication.data.Patients.dbPatient
 import com.example.visionapplication.data.TimeSlots.TimeSlotDao
 import com.example.visionapplication.data.TimeSlots.dbTimeSlot
 
+/**
+ * Vision database
+ *
+ * @constructor Create empty Vision database
+ */
 @Database(entities = [dbDoctor::class, dbNote::class, dbAppointment::class, dbPatient::class, dbTimeSlot::class], version = 5, exportSchema = false)
 abstract class VisionDatabase : RoomDatabase() {
+    /**
+     * Doctor dao
+     *
+     * @return
+     */
     abstract fun doctorDao(): DoctorDao
+
+    /**
+     * Note dao
+     *
+     * @return
+     */
     abstract fun noteDao(): NoteDao
+
+    /**
+     * Appointment dao
+     *
+     * @return
+     */
     abstract fun appointmentDao(): AppointmentDao
+
+    /**
+     * Patient dao
+     *
+     * @return
+     */
     abstract fun patientDao(): PatientDao
+
+    /**
+     * Time slot dao
+     *
+     * @return
+     */
     abstract fun timeSlotDao(): TimeSlotDao
     companion object {
         @Volatile

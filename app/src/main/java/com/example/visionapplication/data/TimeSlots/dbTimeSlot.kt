@@ -9,6 +9,17 @@ import com.example.visionapplication.data.Appointments.dbAppointment
 import com.example.visionapplication.model.Appointment
 import com.example.visionapplication.model.TimeSlot
 
+/**
+ * Db time slot
+ *
+ * @property timeslotId
+ * @property doctorId
+ * @property appointmentType
+ * @property dateTime
+ * @property duration
+ * @property appointment
+ * @constructor Create empty Db time slot
+ */
 @Entity(tableName = "timeslots")
 data class dbTimeSlot (
     @PrimaryKey
@@ -20,6 +31,11 @@ data class dbTimeSlot (
     @Embedded val appointment: dbAppointment?,
 )
 
+/**
+ * As domain time slot
+ *
+ * @return
+ */
 fun dbTimeSlot.asDomainTimeSlot(): TimeSlot {
 
     // check if appointment is not null
@@ -35,6 +51,11 @@ fun dbTimeSlot.asDomainTimeSlot(): TimeSlot {
         appointment = a)
 }
 
+/**
+ * As db time slot
+ *
+ * @return
+ */
 fun TimeSlot.asDbTimeSlot(): dbTimeSlot? {
 
     // check if appointment is not null
@@ -53,6 +74,11 @@ fun TimeSlot.asDbTimeSlot(): dbTimeSlot? {
     }
 }
 
+/**
+ * As domain time slots
+ *
+ * @return
+ */
 fun List<dbTimeSlot>.asDomainTimeSlots(): List<TimeSlot> {
     var timeSlotList = this.map {
 

@@ -22,7 +22,9 @@ import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
 
 /**
- * Dependency Injection container at the application level.
+ * App container
+ *
+ * @constructor Create empty App container
  */
 interface AppContainer {
     val doctorRepository: DoctorRepository
@@ -33,9 +35,10 @@ interface AppContainer {
 }
 
 /**
- * Implementation for the Dependency Injection container at the application level.
+ * Default app container
  *
- * Variables are initialized lazily and the same instance is shared across the whole app.
+ * @property context
+ * @constructor Create empty Default app container
  */
 class DefaultAppContainer(private val context: Context): AppContainer {
     private val baseUrl = "http://192.168.0.37:5002/api/"
