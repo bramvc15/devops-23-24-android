@@ -12,6 +12,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 
 
+/**
+ * Back confirmation dialog
+ *
+ * @param onBackPressedDispatcher
+ * @param onConfirmed
+ * @param onCancel
+ * @receiver
+ * @receiver
+ */
 @Composable
 fun BackConfirmationDialog(
     onBackPressedDispatcher: OnBackPressedDispatcher,
