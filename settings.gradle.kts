@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Template Application"
+rootProject.name = "Vision Application"
 include(":app")

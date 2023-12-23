@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.templateapplication"
+    namespace = "com.example.visionapplication"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.templateapplication"
+        applicationId = "com.example.visionapplication"
         minSdk = 31
         targetSdk = 34
         versionCode = 1
