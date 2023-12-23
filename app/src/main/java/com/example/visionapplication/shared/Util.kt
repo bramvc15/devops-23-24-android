@@ -35,6 +35,17 @@ import com.kizitonwose.calendar.core.Week
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNotNull
 
+/**
+ * Clickable
+ *
+ * @param enabled
+ * @param showRipple
+ * @param onClickLabel
+ * @param role
+ * @param onClick
+ * @receiver
+ * @return
+ */
 fun Modifier.clickable(
     enabled: Boolean = true,
     showRipple: Boolean = true,
@@ -52,6 +63,11 @@ fun Modifier.clickable(
     )
 }
 
+/**
+ * Status bar color update effect
+ *
+ * @param color
+ */
 @Composable
 fun StatusBarColorUpdateEffect(color: Color) {
     if (LocalInspectionMode.current) return
@@ -65,6 +81,12 @@ fun StatusBarColorUpdateEffect(color: Color) {
     }
 }
 
+/**
+ * Navigation icon
+ *
+ * @param onBackClick
+ * @receiver
+ */
 @Composable
 fun NavigationIcon(onBackClick: () -> Unit) {
     Box(
@@ -85,10 +107,10 @@ fun NavigationIcon(onBackClick: () -> Unit) {
 }
 
 /**
- * Alternative way to find the first fully visible month in the layout.
+ * Remember first completely visible month
  *
- * @see [rememberFirstVisibleMonthAfterScroll]
- * @see [rememberFirstMostVisibleMonth]
+ * @param state
+ * @return
  */
 @Composable
 fun rememberFirstCompletelyVisibleMonth(state: CalendarState): CalendarMonth {
@@ -102,10 +124,10 @@ fun rememberFirstCompletelyVisibleMonth(state: CalendarState): CalendarMonth {
 }
 
 /**
- * Returns the first visible month in a paged calendar **after** scrolling stops.
+ * Remember first visible month after scroll
  *
- * @see [rememberFirstCompletelyVisibleMonth]
- * @see [rememberFirstMostVisibleMonth]
+ * @param state
+ * @return
  */
 @Composable
 fun rememberFirstVisibleMonthAfterScroll(state: CalendarState): CalendarMonth {
@@ -119,7 +141,10 @@ fun rememberFirstVisibleMonthAfterScroll(state: CalendarState): CalendarMonth {
 }
 
 /**
- * Find first visible week in a paged week calendar **after** scrolling stops.
+ * Remember first visible week after scroll
+ *
+ * @param state
+ * @return
  */
 @Composable
 fun rememberFirstVisibleWeekAfterScroll(state: WeekCalendarState): Week {
@@ -133,10 +158,11 @@ fun rememberFirstVisibleWeekAfterScroll(state: WeekCalendarState): Week {
 }
 
 /**
- * Find the first month on the calendar visible up to the given [viewportPercent] size.
+ * Remember first most visible month
  *
- * @see [rememberFirstCompletelyVisibleMonth]
- * @see [rememberFirstVisibleMonthAfterScroll]
+ * @param state
+ * @param viewportPercent
+ * @return
  */
 @Composable
 fun rememberFirstMostVisibleMonth(

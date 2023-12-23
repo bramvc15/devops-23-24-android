@@ -27,6 +27,16 @@ import androidx.compose.ui.unit.sp
 import com.example.visionapplication.R
 import java.time.YearMonth
 
+/**
+ * Simple calendar title
+ *
+ * @param modifier
+ * @param currentMonth
+ * @param goToPrevious
+ * @param goToNext
+ * @receiver
+ * @receiver
+ */
 @Composable
 fun SimpleCalendarTitle(
     modifier: Modifier,

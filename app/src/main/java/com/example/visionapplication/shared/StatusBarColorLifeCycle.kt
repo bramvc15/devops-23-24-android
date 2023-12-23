@@ -8,6 +8,14 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import java.lang.ref.WeakReference
 
+/**
+ * Status bar color lifecycle observer
+ *
+ * @property color
+ * @constructor
+ *
+ * @param activity
+ */
 class StatusBarColorLifecycleObserver(
     activity: Activity,
     @ColorInt private val color: Int,

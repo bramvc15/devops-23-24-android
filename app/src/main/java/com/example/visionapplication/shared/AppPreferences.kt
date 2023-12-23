@@ -3,6 +3,13 @@ package com.example.visionapplication.shared
 import android.content.Context
 import android.content.SharedPreferences
 
+/**
+ * App preferences
+ *
+ * @constructor
+ *
+ * @param context
+ */
 class AppPreferences(context: Context) {
     private val preferences: SharedPreferences =
         context.getSharedPreferences("DoctorAppPrefs", Context.MODE_PRIVATE)

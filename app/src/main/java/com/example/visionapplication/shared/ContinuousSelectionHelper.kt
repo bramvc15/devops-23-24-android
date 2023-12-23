@@ -9,6 +9,13 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import kotlin.LazyThreadSafetyMode.NONE
 
+/**
+ * Date selection
+ *
+ * @property startDate
+ * @property endDate
+ * @constructor Create empty Date selection
+ */
 data class DateSelection(val startDate: LocalDate? = null, val endDate: LocalDate? = null) {
     val daysBetween by lazy(NONE) {
         if (startDate == null || endDate == null) null else {
@@ -18,6 +25,14 @@ data class DateSelection(val startDate: LocalDate? = null, val endDate: LocalDat
 }
 
 private val rangeFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
+
+/**
+ * Date range display text
+ *
+ * @param startDate
+ * @param endDate
+ * @return
+ */
 fun dateRangeDisplayText(startDate: LocalDate, endDate: LocalDate): String {
     return "Selected: ${rangeFormatter.format(startDate)} - ${rangeFormatter.format(endDate)}"
 }
