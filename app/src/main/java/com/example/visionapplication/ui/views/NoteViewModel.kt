@@ -18,12 +18,36 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.io.IOException
 
+/**
+ * Note ui state
+ *
+ * @constructor Create empty Note ui state
+ */
 sealed interface NoteUiState {
+    /**
+     * Success
+     *
+     * @property notes
+     * @constructor Create empty Success
+     */
     data class Success(val notes: List<Note>) : NoteUiState
+
+    /**
+     * Error
+     *
+     * @property errorMessage
+     * @constructor Create empty Error
+     */
     data class Error(val errorMessage: String) : NoteUiState
     object Loading : NoteUiState
 }
 
+/**
+ * Note view model
+ *
+ * @property noteRepository
+ * @constructor Create empty Note view model
+ */
 class NoteViewModel(private val noteRepository: NoteRepository) : ViewModel() {
     var noteUiState: NoteUiState by mutableStateOf(NoteUiState.Loading)
         private set
@@ -65,6 +89,11 @@ class NoteViewModel(private val noteRepository: NoteRepository) : ViewModel() {
         }
     }
 
+    /**
+     * Insert note
+     *
+     * @param note
+     */
     fun insertNote(note : Note){
         viewModelScope.launch {
             try {
@@ -78,6 +107,11 @@ class NoteViewModel(private val noteRepository: NoteRepository) : ViewModel() {
         }
     }
 
+    /**
+     * Delete note
+     *
+     * @param note
+     */
     fun deleteNote(note : Note) {
         viewModelScope.launch {
             try {

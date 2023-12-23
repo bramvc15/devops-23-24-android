@@ -21,12 +21,36 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 
+/**
+ * Time slot ui state
+ *
+ * @constructor Create empty Time slot ui state
+ */
 sealed interface TimeSlotUiState {
+    /**
+     * Success
+     *
+     * @property timeslots
+     * @constructor Create empty Success
+     */
     data class Success(val timeslots: List<TimeSlot>) : TimeSlotUiState
+
+    /**
+     * Error
+     *
+     * @property errorMessage
+     * @constructor Create empty Error
+     */
     data class Error(val errorMessage: String) : TimeSlotUiState
     object Loading : TimeSlotUiState
 }
 
+/**
+ * Time slot view model
+ *
+ * @property timeSlotRepository
+ * @constructor Create empty Time slot view model
+ */
 class TimeSlotViewModel(private val timeSlotRepository: TimeSlotRepository) : ViewModel() {
     var timeSlotUiState: TimeSlotUiState by mutableStateOf(TimeSlotUiState.Loading)
         private set
@@ -70,6 +94,11 @@ class TimeSlotViewModel(private val timeSlotRepository: TimeSlotRepository) : Vi
         }
     }
 
+    /**
+     * Update time slot
+     *
+     * @param timeSlot
+     */
     fun updateTimeSlot(timeSlot: TimeSlot) {
         viewModelScope.launch {
             try {
@@ -90,6 +119,11 @@ class TimeSlotViewModel(private val timeSlotRepository: TimeSlotRepository) : Vi
         }
     }
 
+    /**
+     * Select doctor
+     *
+     * @param doctor
+     */
     fun selectDoctor(doctor: Doctor) {
         GlobalDoctor.doctor = doctor
         getTimeSlots(doctor)

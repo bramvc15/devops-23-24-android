@@ -19,12 +19,36 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 
+/**
+ * Patient ui state
+ *
+ * @constructor Create empty Patient ui state
+ */
 sealed interface PatientUiState {
+    /**
+     * Success
+     *
+     * @property patients
+     * @constructor Create empty Success
+     */
     data class Success(val patients: List<Patient>) : PatientUiState
+
+    /**
+     * Error
+     *
+     * @property errorMessage
+     * @constructor Create empty Error
+     */
     data class Error(val errorMessage: String) : PatientUiState
     object Loading : PatientUiState
 }
 
+/**
+ * Patient view model
+ *
+ * @property patientRepository
+ * @constructor Create empty Patient view model
+ */
 class PatientViewModel(private val patientRepository: PatientRepository) : ViewModel() {
     var patientUiState: PatientUiState by mutableStateOf(PatientUiState.Loading)
         private set

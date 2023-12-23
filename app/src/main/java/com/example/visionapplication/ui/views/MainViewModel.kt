@@ -16,6 +16,11 @@ import com.example.visionapplication.data.GlobalDoctor
 import com.example.visionapplication.model.AuthedDoctor
 
 
+/**
+ * Main view model
+ *
+ * @constructor Create empty Main view model
+ */
 class MainViewModel: ViewModel() {
     var appJustLaunched by mutableStateOf(true)
     var userIsAuthenticated by mutableStateOf(false)
@@ -26,6 +31,11 @@ class MainViewModel: ViewModel() {
     private lateinit var account: Auth0
     private lateinit var context: Context
 
+    /**
+     * Set context
+     *
+     * @param activityContext
+     */
     fun setContext(activityContext: Context) {
         context = activityContext
         account = Auth0(
@@ -34,6 +44,10 @@ class MainViewModel: ViewModel() {
         )
     }
 
+    /**
+     * Login
+     *
+     */
     fun login() {
         WebAuthProvider
             .login(account)
@@ -63,6 +77,10 @@ class MainViewModel: ViewModel() {
             })
     }
 
+    /**
+     * Logout
+     *
+     */
     fun logout() {
         WebAuthProvider
             .logout(account)
