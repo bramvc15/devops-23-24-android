@@ -1,5 +1,6 @@
 package com.example.templateapplication.ui.components
 
+import android.util.Log
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
@@ -14,18 +15,8 @@ fun VisionNavigationRail(
     onTabPressed: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    NavigationRail(modifier = modifier) {
-        for (navItem in listOfNavItems) {
-            NavigationRailItem(
-                selected = selectedDestination?.route == navItem.label,
-                onClick = { onTabPressed(navItem.label) },
-                icon = {
-                    Icon(
-                        imageVector = navItem.icon,
-                        contentDescription = navItem.label,
-                    )
-                },
-            )
-        }
-    }
+
+
+
+
 }

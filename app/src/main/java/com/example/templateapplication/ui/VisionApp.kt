@@ -11,6 +11,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationRail
+import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.PermanentDrawerSheet
 import androidx.compose.material3.PermanentNavigationDrawer
 import androidx.compose.material3.Scaffold
@@ -52,8 +54,6 @@ fun VisionApp(
         Log.d("VisionApp", "VisionNavigationType.PERMANENT_NAVIGATION_DRAWER")
         PermanentNavigationDrawer(drawerContent = {
             PermanentDrawerSheet(Modifier.width(dimensionResource(R.dimen.drawer_width))) {
-            val navBackStackEntry by navController.currentBackStackEntryAsState()
-
                 NavigationDrawerContent(
                     selectedDestination = navController.currentDestination,
                     navController = navController,
@@ -118,14 +118,37 @@ fun VisionApp(
         }
     }
     else {
-        Log.d("VisionApp", "VisionNavigationType.NAVIGATION_RAIL")
+
         Row {
             AnimatedVisibility(visible = navigationType == VisionNavigationType.NAVIGATION_RAIL) {
+                Log.d("VisionApp", "VisionNavigationType.NAVIGATION_RAIL")
                 val navigationRailContentDescription = stringResource(R.string.navigation_rail)
-                VisionNavigationRail(
-                    selectedDestination = navController.currentDestination,
-                    onTabPressed = { node: String -> navController.navigate(node) },
-                )
+                NavigationRail() {
+                    val navBackStackEntry by navController.currentBackStackEntryAsState()
+                    val currentDestination = navBackStackEntry?.destination
+                    listOfNavItems.forEach { navItem ->
+
+                        NavigationRailItem(
+                            selected = currentDestination?.hierarchy?.any { it.route == navItem.route } == true,
+                            onClick = {
+                                navController.navigate(navItem.route) {
+                                    popUpTo(navController.graph.findStartDestination().id) {
+                                        saveState = true
+                                        inclusive = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
+                            },
+                            icon = {
+                                Icon(
+                                    imageVector = navItem.icon,
+                                    contentDescription = navItem.label,
+                                )
+                            },
+                        )
+                    }
+                }
             }
             Scaffold(
                 containerColor = Color.Transparent,
