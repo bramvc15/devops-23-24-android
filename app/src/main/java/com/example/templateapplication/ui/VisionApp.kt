@@ -46,10 +46,6 @@ fun VisionApp(
     navigationType: VisionNavigationType,
     navController: NavHostController = rememberNavController(),
 ) {
-    val backStackEntry by navController.currentBackStackEntryAsState()
-    val contentType: VisionContentType = VisionContentType.LIST_ONLY
-    val viewModel: DoctorViewModel = viewModel(factory = DoctorViewModel.Factory)
-    val visionUiState = viewModel.uiState.collectAsState().value
 
     if (navigationType == VisionNavigationType.PERMANENT_NAVIGATION_DRAWER) {
         Log.d("VisionApp", "VisionNavigationType.PERMANENT_NAVIGATION_DRAWER")
