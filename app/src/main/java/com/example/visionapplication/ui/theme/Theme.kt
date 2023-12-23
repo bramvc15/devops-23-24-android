@@ -27,6 +27,14 @@ private val LightColorScheme = lightColorScheme(
     tertiary = Pink40
 )
 
+/**
+ * Vision application theme
+ *
+ * @param darkTheme
+ * @param dynamicColor
+ * @param content
+ * @receiver
+ */
 @Composable
 fun VisionApplicationTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),

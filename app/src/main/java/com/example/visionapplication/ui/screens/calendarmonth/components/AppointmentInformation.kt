@@ -44,6 +44,15 @@ import java.time.format.DateTimeFormatter
 private val appointmentField: Color @Composable get() = colorResource(R.color.white7)
 private val informationColor: Color @Composable get() = colorResource(R.color.black)
 private val toolbarColor: Color @Composable get() = colorResource(R.color.colorPrimary)
+
+/**
+ * Appointment information
+ *
+ * @param timeslot
+ * @param appointment
+ * @param onCancelAppointment
+ * @receiver
+ */
 @Composable
 fun LazyItemScope.AppointmentInformation(
     timeslot: TimeSlot,

@@ -18,6 +18,13 @@ import androidx.navigation.NavHostController
 import com.example.visionapplication.R
 import com.example.visionapplication.navigation.listOfNavItems
 
+/**
+ * Navigation drawer content
+ *
+ * @param selectedDestination
+ * @param modifier
+ * @param navController
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavigationDrawerContent(

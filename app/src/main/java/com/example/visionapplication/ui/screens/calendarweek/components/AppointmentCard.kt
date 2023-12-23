@@ -28,6 +28,17 @@ import com.example.visionapplication.ui.components.CancelAppointmentDialog
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
+/**
+ * Appointment card
+ *
+ * @param timeslot
+ * @param appointment
+ * @param isExpanded
+ * @param onEdit
+ * @param onCancelAppointment
+ * @receiver
+ * @receiver
+ */
 @Composable
 fun AppointmentCard(
     timeslot: TimeSlot,

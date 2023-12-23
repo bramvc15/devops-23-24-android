@@ -25,6 +25,11 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.visionapplication.R
 import com.example.visionapplication.ui.views.MainViewModel
 
+/**
+ * Auth screen
+ *
+ * @param mainViewModel
+ */
 @Composable
 fun AuthScreen(mainViewModel: MainViewModel) {
     Column(
@@ -74,6 +79,11 @@ fun AuthScreen(mainViewModel: MainViewModel) {
     }
 }
 
+/**
+ * Title
+ *
+ * @param text
+ */
 @Composable
 fun Title(
     text: String,
@@ -89,6 +99,12 @@ fun Title(
     )
 }
 
+/**
+ * User info row
+ *
+ * @param label
+ * @param value
+ */
 @Composable
 fun UserInfoRow(
     label: String,
@@ -116,6 +132,12 @@ fun UserInfoRow(
     }
 }
 
+/**
+ * User picture
+ *
+ * @param url
+ * @param description
+ */
 @Composable
 fun UserPicture(
     url: String,
@@ -136,6 +158,13 @@ fun UserPicture(
     }
 }
 
+/**
+ * Log button
+ *
+ * @param text
+ * @param onClick
+ * @receiver
+ */
 @Composable
 fun LogButton(
     text: String,

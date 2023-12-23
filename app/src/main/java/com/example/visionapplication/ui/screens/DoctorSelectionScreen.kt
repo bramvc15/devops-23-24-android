@@ -32,6 +32,13 @@ import com.example.visionapplication.ui.views.DoctorViewModel
 import com.example.visionapplication.ui.views.VisionUiState
 
 
+/**
+ * Doctor selection screen
+ *
+ * @param doctorViewModel
+ * @param onNextButtonClicked
+ * @receiver
+ */
 @Composable
 fun DoctorSelectionScreen(
     doctorViewModel: DoctorViewModel = viewModel(factory = DoctorViewModel.Factory),

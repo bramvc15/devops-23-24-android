@@ -71,6 +71,12 @@ private val appointmentField: Color @Composable get() = colorResource(R.color.wh
 private val informationColor: Color @Composable get() = colorResource(R.color.black)
 
 
+/**
+ * Calender month screen
+ *
+ * @param timeslotViewModel
+ * @param appointmentViewModel
+ */
 @Composable
 fun CalenderMonthScreen(
     timeslotViewModel : TimeSlotViewModel = viewModel(factory = TimeSlotViewModel.Factory),

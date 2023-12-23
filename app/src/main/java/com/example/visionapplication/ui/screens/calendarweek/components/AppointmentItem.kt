@@ -20,6 +20,19 @@ import com.example.visionapplication.model.Appointment
 import com.example.visionapplication.model.TimeSlot
 import com.example.visionapplication.ui.views.AppointmentViewModel
 
+/**
+ * Appointment item
+ *
+ * @param timeslot
+ * @param appointment
+ * @param appointmentViewModel
+ * @param onUpdateAppointment
+ * @param onUpdateTimeSlot
+ * @param onCancelAppointment
+ * @receiver
+ * @receiver
+ * @receiver
+ */
 @Composable
 fun AppointmentItem(
     timeslot: TimeSlot,

@@ -30,6 +30,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.visionapplication.model.TimeSlot
 
+/**
+ * Edit appointment card
+ *
+ * @param timeslot
+ * @param newNote
+ * @param newReason
+ * @param onNoteChange
+ * @param onReasonChange
+ * @param onAppointmentTypeChange
+ * @param onSaveClick
+ * @param onCancelClick
+ * @receiver
+ * @receiver
+ * @receiver
+ * @receiver
+ * @receiver
+ */
 @Composable
 fun EditAppointmentCard(
     timeslot: TimeSlot,
@@ -96,6 +113,13 @@ fun EditAppointmentCard(
     }
 }
 
+/**
+ * Appointment type dropdown
+ *
+ * @param timeSlot
+ * @param onAppointmentTypeSelected
+ * @receiver
+ */
 @Composable
 fun AppointmentTypeDropdown(
     timeSlot: TimeSlot,

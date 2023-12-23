@@ -12,6 +12,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.visionapplication.navigation.listOfNavItems
 
+/**
+ * Vision navigation rail
+ *
+ * @param selectedDestination
+ * @param modifier
+ * @param navController
+ */
 @Composable
 fun VisionNavigationRail(
     selectedDestination: NavDestination?,

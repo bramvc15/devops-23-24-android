@@ -5,6 +5,14 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 
+/**
+ * Cancel appointment dialog
+ *
+ * @param onDismiss
+ * @param onCancelAppointment
+ * @receiver
+ * @receiver
+ */
 @Composable
 fun CancelAppointmentDialog(
     onDismiss: () -> Unit,

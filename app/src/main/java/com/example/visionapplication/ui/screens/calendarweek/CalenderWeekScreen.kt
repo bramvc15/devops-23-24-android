@@ -59,6 +59,13 @@ import java.time.format.DateTimeFormatter
 private val topAppColor: Color @Composable get() = colorResource(R.color.colorPrimary)
 
 
+/**
+ * Calendar week screen
+ *
+ * @param doctorViewModel
+ * @param timeslotViewModel
+ * @param appointmentViewModel
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CalendarWeekScreen(doctorViewModel: DoctorViewModel,

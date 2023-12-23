@@ -38,6 +38,11 @@ import com.example.visionapplication.model.Note
 import com.example.visionapplication.ui.screens.notes.components.AddNoteDialog
 import com.example.visionapplication.ui.views.NoteViewModel
 
+/**
+ * Note screen
+ *
+ * @param noteViewModel
+ */
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun NoteScreen(
@@ -135,8 +140,13 @@ private fun AnimatedNoteItem(note : Note, onDeleteClicked: () -> Unit) {
 }
 
 
-
-
+/**
+ * Note item
+ *
+ * @param note
+ * @param onDeleteClicked
+ * @receiver
+ */
 @Composable
 fun NoteItem(note : Note, onDeleteClicked: () -> Unit){
 

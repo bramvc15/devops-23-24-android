@@ -27,6 +27,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 
 
+/**
+ * Add note dialog
+ *
+ * @param onDismiss
+ * @param onNoteAdded
+ * @receiver
+ * @receiver
+ */
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun AddNoteDialog(
