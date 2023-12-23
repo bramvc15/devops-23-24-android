@@ -16,6 +16,12 @@ import com.example.visionapplication.ui.screens.notes.NoteScreen
 import com.example.visionapplication.ui.views.DoctorViewModel
 import com.example.visionapplication.ui.views.NoteViewModel
 
+/**
+ * App navigation
+ *
+ * @param modifier
+ * @param navController
+ */
 @Composable
 fun AppNavigation(
     modifier: Modifier = Modifier,

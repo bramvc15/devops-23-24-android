@@ -5,6 +5,15 @@ import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.ui.graphics.vector.ImageVector
+
+/**
+ * Nav item
+ *
+ * @property label
+ * @property icon
+ * @property route
+ * @constructor Create empty Nav item
+ */
 data class NavItem(
     val label: String,
     val icon: ImageVector,
