@@ -111,7 +111,7 @@ class DoctorViewModel(private val doctorRepository: DoctorRepository) : ViewMode
         viewModelScope.launch {
             _uiState.value = VisionUiState.Loading
             try {
-                val token = GlobalDoctor.authedDoctor?.idToken ?: throw Exception("Token is null")
+                // val token = GlobalDoctor.authedDoctor?.idToken ?: throw Exception("Token is null")
                 val doctorsFlow = doctorRepository.getAllDoctorsStream()
 
                 doctorsFlow.collect { doc ->

@@ -36,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -96,7 +97,7 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel,
             modifier = Modifier.height(IntrinsicSize.Min),
             title = {
                 Column {
-                    Text(text = getWeekPageTitle(visibleWeek), fontSize = 25.sp)
+                    Text(modifier = Modifier.testTag("maand"), text = getWeekPageTitle(visibleWeek), fontSize = 25.sp)
                     Text(
                         text = "${GlobalDoctor.doctor?.name}",
                         fontSize = 16.sp,
