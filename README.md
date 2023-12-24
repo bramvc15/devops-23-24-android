@@ -14,3 +14,4 @@ Please enumerate the Dev-team members here:
 | Guillaume De Craene | [Guippyyy](https://github.com/Guippyyy) |
 
 ## Repo contents
+Android App for doctors of "Oogcentrum Vision Gent"
