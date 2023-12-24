@@ -59,7 +59,7 @@ fun EditAppointmentCard(
     onCancelClick: () -> Unit
 ) {
     Text(
-        text = "Bewerk afspraak",
+        text = "Edit appointment",
         fontSize = 16.sp,
         fontWeight = FontWeight.Bold,
     )
@@ -68,7 +68,7 @@ fun EditAppointmentCard(
     OutlinedTextField(
         value = newNote,
         onValueChange = { onNoteChange(it) },
-        label = { Text(text = "Notitie") },
+        label = { Text(text = "Note") },
         modifier = Modifier
             .fillMaxWidth()
             .height(64.dp)
@@ -79,7 +79,7 @@ fun EditAppointmentCard(
     OutlinedTextField(
         value = newReason,
         onValueChange = { onReasonChange(it) },
-        label = { Text(text = "Reden") },
+        label = { Text(text = "Reason") },
         modifier = Modifier
             .fillMaxWidth()
             .height(64.dp)
@@ -97,7 +97,7 @@ fun EditAppointmentCard(
             .fillMaxWidth()
             .height(50.dp)
     ) {
-        Text(text = "Opslaan")
+        Text(text = "Save")
     }
     Spacer(modifier = Modifier.height(4.dp))
     Button(
@@ -109,7 +109,7 @@ fun EditAppointmentCard(
             .fillMaxWidth()
             .height(50.dp)
     ) {
-        Text(text = "Annuleren")
+        Text(text = "Cancel")
     }
 }
 

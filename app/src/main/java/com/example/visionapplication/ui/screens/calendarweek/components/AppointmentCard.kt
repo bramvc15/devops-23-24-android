@@ -19,6 +19,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.visionapplication.data.GlobalDoctor
@@ -69,22 +72,42 @@ fun AppointmentCard(
     if (isExpanded) {
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "Duur: " + timeslot.duration.toString() + " minuten",
+            text = buildAnnotatedString {
+                withStyle(style = SpanStyle(fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)) {
+                    append("Duration: ")
+                }
+                append("${timeslot.duration} minutes")
+            },
             fontSize = 14.sp,
         )
         Spacer(modifier = Modifier.height(2.dp))
         Text(
-            text = "Doctor: " + GlobalDoctor.doctor?.name,
+            text = buildAnnotatedString {
+                withStyle(style = SpanStyle(fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)) {
+                    append("Doctor: ")
+                }
+                append(GlobalDoctor.doctor?.name)
+            },
             fontSize = 14.sp,
         )
         Spacer(modifier = Modifier.height(2.dp))
         Text(
-            text = "Reden: ${appointment.reason}",
+            text = buildAnnotatedString {
+                withStyle(style = SpanStyle(fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)) {
+                    append("Reason: ")
+                }
+                append(appointment.reason)
+            },
             fontSize = 14.sp,
         )
         Spacer(modifier = Modifier.height(2.dp))
         Text(
-            text = "Notitie: ${appointment.note ?: "N/A"}",
+            text = buildAnnotatedString {
+                withStyle(style = SpanStyle(fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)) {
+                    append("Note: ")
+                }
+                append(appointment.note ?: "")
+            },
             fontSize = 14.sp,
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -93,7 +116,7 @@ fun AppointmentCard(
                 .fillMaxWidth()
                 .height(50.dp)
         ) {
-            Text(text = "Bewerk")
+            Text(text = "Edit")
         }
         Spacer(modifier = Modifier.height(4.dp))
         Button(
@@ -106,7 +129,7 @@ fun AppointmentCard(
             try {
                 ctx.startActivity(i)
             } catch (s: SecurityException) {
-                Toast.makeText(ctx, "Er is een fout opgetreden", Toast.LENGTH_LONG).show()
+                Toast.makeText(ctx, "An error occured", Toast.LENGTH_LONG).show()
             }
         }) {
             Icon(
@@ -122,7 +145,7 @@ fun AppointmentCard(
                 .fillMaxWidth()
                 .height(50.dp)
         ) {
-            Text(text = "Annuleer")
+            Text(text = "Cancel")
         }
 
         if (showDeleteDialog) {

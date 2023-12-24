@@ -28,8 +28,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.visionapplication.R
@@ -97,11 +100,13 @@ private fun AppointmentInformationDetails(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(),
+            .fillMaxHeight()
+            .padding(4.dp),
     ) {
         Column(
             modifier = Modifier
                 .weight(0.7f)
+                .padding(8.dp)
                 .fillMaxHeight()
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
@@ -128,8 +133,22 @@ private fun AppointmentInformationDetails(
 
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = if(timeslot.appointmentType != 0) "Operatie" else "Consultatie",
-                    textAlign = TextAlign.Center,
+                    text = if(timeslot.appointmentType != 0) "Operation" else "Consultation",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = informationColor
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = buildAnnotatedString {
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                            append("Reason: ")
+                        }
+                        append(appointment.reason)
+                    },
                     fontSize = 16.sp,
                     color = informationColor
                 )
@@ -138,18 +157,12 @@ private fun AppointmentInformationDetails(
 
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = "Reden: ${appointment.reason}",
-                    textAlign = TextAlign.Center,
-                    fontSize = 16.sp,
-                    color = informationColor
-                )
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = "Notitie: ${appointment.note ?: "N/A"}",
-                    textAlign = TextAlign.Center,
+                    text = buildAnnotatedString {
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                            append("Note: ")
+                        }
+                        append(appointment.note ?: "N/A")
+                    },
                     fontSize = 16.sp,
                     color = informationColor
                 )
