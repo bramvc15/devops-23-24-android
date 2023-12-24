@@ -1,27 +1,52 @@
-package com.example.visionapplication.data.Appointments
+package com.example.visionapplication
 
-import com.example.visionapplication.model.Appointment
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 
-class FakeAppointmentRepository(private val appointmentList : MutableList<Appointment>) : AppointmentRepository {
-    override fun getAppointments(): Flow<List<Appointment>> = flow {
-        emit(appointmentList)
+import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.visionapplication.data.Doctors.FakeDoctorRepository
+import com.example.visionapplication.model.Doctor
+import com.example.visionapplication.ui.screens.DoctorSelectionScreen
+import com.example.visionapplication.ui.views.DoctorViewModel
+import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
+
+@RunWith(AndroidJUnit4::class)
+class DoctorSelectionScreenTest {
+
+    @get:Rule
+    val composeTestRule = createComposeRule()
+
+
+    @Test
+    fun doctorsVisible_verify(){
+
+
+        val doctor1 = Doctor(1, "Guillaume", " tester", 1, "not liking this", true, ",", "")
+        val doctor2 = Doctor(2, "tester", " tester", 1, "not liking this", true, ",", "")
+        val doctorList = mutableListOf(doctor1, doctor2)
+
+        val doctorViewModel = DoctorViewModel(FakeDoctorRepository(doctorList))
+
+
+        composeTestRule.setContent {
+            DoctorSelectionScreen(
+                doctorViewModel= doctorViewModel,
+                onNextButtonClicked = {
+
+                    doctorViewModel.selectDoctor(doctor1)
+
+                }
+            )
+        }
+
+        composeTestRule.waitForIdle()
+
+            //composeTestRule.onNodeWithText("Doctors").assertExists()
+        composeTestRule.onNodeWithTag("Guillaume")
+
+        Thread.sleep(3000)
     }
 
-    override suspend fun insertAppointment(appointment: Appointment) {
-    }
-
-    override suspend fun updateAppointment(appointment: Appointment) {
-
-        appointmentList.remove(appointmentList[0])
-        appointmentList.add(appointment)
-    }
-
-    override suspend fun deleteAppointment(appointment: Appointment) {
-        appointmentList.remove(appointment)
-    }
-
-    override suspend fun refreshAppointments() {
-    }
 }

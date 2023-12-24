@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 
@@ -75,6 +76,7 @@ fun AddNoteDialog(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(8.dp)
+                                        .testTag("Title")
                                 )
 
                                 OutlinedTextField(
@@ -84,11 +86,13 @@ fun AddNoteDialog(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(8.dp)
+                                        .testTag("Content")
                                 )
 
                                 Spacer(modifier = Modifier.height(16.dp))
 
                                 Button(
+                                    modifier = Modifier.testTag("Add Button"),
                                     onClick = {
                                         if (title.isNotBlank() || content.isNotBlank()) {
                                             onNoteAdded(title, content)

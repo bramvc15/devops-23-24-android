@@ -36,12 +36,12 @@ class CalenderWeekScreenTest {
         val doctor1 = Doctor(1, "Guillaume", " tester", 1, "not liking this", true, ",", "")
         val patient1 = Patient(1, "The Cure", "mail","696969", "11-12",1,1)
         val appointment1 = Appointment(1,"reason", "note", patient1 )
-        val timeSlot1 = TimeSlot(1,1,0, "2023-12-23T08:00:00.0000000",15 ,appointment1 )
+        val timeSlot1 = TimeSlot(1,1,0, "2023-12-24T08:00:00.0000000",15 ,appointment1 )
 
         val doctor2 = Doctor(2, "tester", " tester", 1, "not liking this", true, ",", "")
         val patient2 = Patient(2, "Depeche Mode", "mail","696969", "11-12",1,1)
         val appointment2 = Appointment(2,"reason", "note", patient2 )
-        val timeSlot2 = TimeSlot(2,2,0, "2023-12-23T08:00:00.0000000",15 ,appointment2 )
+        val timeSlot2 = TimeSlot(2,2,0, "2023-12-24T08:00:00.0000000",15 ,appointment2 )
 
         val doctorList = mutableListOf(doctor1, doctor2)
         val doctorViewModel = DoctorViewModel(FakeDoctorRepository(doctorList))
@@ -78,8 +78,6 @@ class CalenderWeekScreenTest {
         composeTestRule.onNodeWithText("Depeche Mode").assertExists()
     }
 
-    //doesnt work
-
     @Test
     fun calenderWeekScreen_EditAppointment_verify(){
         composeTestRule.onNodeWithContentDescription("Dropdown").performClick()
@@ -89,20 +87,20 @@ class CalenderWeekScreenTest {
         composeTestRule.onNodeWithText("The Cure").performClick()
         composeTestRule.waitForIdle()
 
-        composeTestRule.onNodeWithText("bewerk", ignoreCase = true).performClick()
+        composeTestRule.onNodeWithText("Edit", ignoreCase = true).performClick()
         composeTestRule.waitForIdle()
 
-        composeTestRule.onNodeWithText("Notitie").performTextInput("Test Edit Title")
-        composeTestRule.onNodeWithText("Reden").performTextInput("Test Edit Content")
+        composeTestRule.onNodeWithText("Note").performTextInput("Test")
+        composeTestRule.onNodeWithText("Reason").performTextInput("Test")
 
-        composeTestRule.onNodeWithText("Opslaan").performClick()
+        composeTestRule.onNodeWithText("Save").performClick()
 
         composeTestRule.waitForIdle()
         composeTestRule.onNodeWithText("The Cure").performClick()
         composeTestRule.waitForIdle()
         Thread.sleep(5000)
-        composeTestRule.onNodeWithText("Test Edit Titlenote").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Test Edit Contentreason").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Testnote").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Testreason").assertIsDisplayed()
 
     }
     @Test
@@ -112,14 +110,10 @@ class CalenderWeekScreenTest {
         composeTestRule.onNodeWithContentDescription("Dropdown").performClick()
         composeTestRule.onNodeWithText("Guillaume").assertExists().performClick()
 
-
         composeTestRule.onNodeWithText("The Cure").performClick()
         composeTestRule.waitForIdle()
 
-
-
-
-        composeTestRule.onNodeWithText("annuleer", ignoreCase = true).performClick()
+        composeTestRule.onNodeWithText("Cancel", ignoreCase = true).performClick()
         composeTestRule.waitForIdle()
 
         Thread.sleep(4000)
@@ -133,7 +127,6 @@ class CalenderWeekScreenTest {
 
     }
 
-    //doesnt work
     @Test
     fun calenderWeekScreen_DeleteAppointment_Verify(){
 
@@ -145,7 +138,7 @@ class CalenderWeekScreenTest {
         composeTestRule.onNodeWithText("The Cure").performClick()
         composeTestRule.waitForIdle()
 
-        composeTestRule.onNodeWithText("annuleer", ignoreCase = true).performClick()
+        composeTestRule.onNodeWithText("Cancel", ignoreCase = true).performClick()
         composeTestRule.waitForIdle()
 
         Thread.sleep(4000)

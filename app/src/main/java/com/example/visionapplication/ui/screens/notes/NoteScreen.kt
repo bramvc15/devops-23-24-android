@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -93,7 +94,7 @@ fun NoteScreen(
                 .align(Alignment.BottomEnd)
                 .padding(16.dp)
         ) {
-            Icon(imageVector = Icons.Default.Add, contentDescription = "Add note")
+            Icon(imageVector = Icons.Default.Add, contentDescription = "Add_note")
         }
 
 
@@ -174,10 +175,11 @@ fun NoteItem(note : Note, onDeleteClicked: () -> Unit){
         ) {
                 IconButton(
                     onClick = onDeleteClicked,
+                    modifier = Modifier.testTag("knop "+note.title),
                 ) {
                     Icon(
                         imageVector = Icons.Default.Delete,
-                        contentDescription = "Delete note"
+                        contentDescription = "Delete note ${note.title}"
                     )
                 }
             }

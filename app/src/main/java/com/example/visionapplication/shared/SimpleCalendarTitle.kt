@@ -61,7 +61,7 @@ fun SimpleCalendarTitle(
             color = colorResource(id = R.color.white),
             fontSize = 22.sp,
             textAlign = TextAlign.Center,
-            //fontWeight = FontWeight.Medium,
+
         )
         CalendarNavigationIcon(
             icon = painterResource(id = R.drawable.ic_launcher_foreground),
