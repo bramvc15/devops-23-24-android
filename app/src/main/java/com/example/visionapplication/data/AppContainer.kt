@@ -41,7 +41,7 @@ interface AppContainer {
  * @constructor Create empty Default app container
  */
 class DefaultAppContainer(private val context: Context): AppContainer {
-    private val baseUrl = "http://192.168.0.37:5002/api/"
+    private val baseUrl = "https://vichogent.be:40157/api/"
 
     /**
      * Use the Retrofit builder to build a retrofit object using a kotlinx.serialization converter
