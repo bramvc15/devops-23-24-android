@@ -22,7 +22,7 @@ data class NavItem(
 
 val listOfNavItems : List<NavItem> = listOf(
     NavItem(
-        label = "Notities",
+        label = "Notes",
         icon = Icons.Default.Create,
         route = Screens.NoteScreen.name
     ),
@@ -32,7 +32,7 @@ val listOfNavItems : List<NavItem> = listOf(
         route = Screens.CalenderWeekScreen.name
     ),
     NavItem(
-        label = "Maand",
+        label = "Month",
         icon = Icons.Filled.DateRange,
         route = Screens.CalenderMonthScreen.name
     ),

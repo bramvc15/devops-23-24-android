@@ -173,7 +173,7 @@ fun CalenderMonthScreen(
                             .padding(16.dp)
                     ) {
                         Text(
-                            text = "Geen afspraken op ${selectedDate.date.format(DateTimeFormatter.ofPattern("dd MMMM"))}",
+                            text = "No appointments on ${selectedDate.date.format(DateTimeFormatter.ofPattern("dd MMMM"))}",
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp,
                             color = MaterialTheme.colorScheme.primary
@@ -186,7 +186,7 @@ fun CalenderMonthScreen(
                             .padding(16.dp)
                     ) {
                         Text(
-                            text = "Afspraken op ${
+                            text = "Appointments on ${
                                 selectedDate.date.format(
                                     DateTimeFormatter.ofPattern(
                                         "dd MMMM"
@@ -259,14 +259,6 @@ private fun Day(
             DayPosition.MonthDate -> MaterialTheme.colorScheme.onPrimaryContainer
             DayPosition.InDate, DayPosition.OutDate -> colorResource(id = R.color.dark_gray)
         }
-        Text(
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(top = 3.dp, end = 4.dp),
-            text = day.date.dayOfMonth.toString(),
-            color = textColor,
-            fontSize = 12.sp,
-        )
         Column(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
@@ -283,6 +275,14 @@ private fun Day(
                 )
             }
         }
+        Text(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(top = 3.dp, end = 4.dp),
+            text = day.date.dayOfMonth.toString(),
+            color = textColor,
+            fontSize = 12.sp,
+        )
     }
 }
 

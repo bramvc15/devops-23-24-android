@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.visionapplication.R
+import com.example.visionapplication.data.GlobalDoctor
 import com.example.visionapplication.shared.StatusBarColorUpdateEffect
 import com.example.visionapplication.shared.displayText
 import com.example.visionapplication.shared.getWeekPageTitle
@@ -94,7 +95,13 @@ fun CalendarWeekScreen(doctorViewModel: DoctorViewModel,
         TopAppBar(
             modifier = Modifier.height(IntrinsicSize.Min),
             title = {
-                Text(text = getWeekPageTitle(visibleWeek), fontSize = 25.sp)
+                Column {
+                    Text(text = getWeekPageTitle(visibleWeek), fontSize = 25.sp)
+                    Text(
+                        text = "${GlobalDoctor.doctor?.name}",
+                        fontSize = 16.sp,
+                    )
+                }
             },
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = colorResource(id = R.color.colorPrimary),
